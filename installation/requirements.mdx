@@ -1,72 +1,72 @@
 ---
-title: 'Requisitos del Sistema'
-description: 'Requisitos técnicos para instalar LatePoint API Extension'
+title: 'System Requirements'
+description: 'Technical requirements for installing LatePoint API Extension'
 ---
 
-## Requisitos Mínimos
+## Minimum Requirements
 
 ### WordPress
-- **Versión mínima**: WordPress 5.0
-- **Versión recomendada**: WordPress 6.0 o superior
-- **Multisite**: Compatible con instalaciones multisite
+- **Minimum version**: WordPress 5.0
+- **Recommended**: WordPress 6.0 or higher
+- **Multisite**: Compatible with multisite installations
 
 ### PHP
-- **Versión mínima**: PHP 7.4
-- **Versión recomendada**: PHP 8.1 o superior
-- **Extensiones requeridas**:
+- **Minimum version**: PHP 7.4
+- **Recommended**: PHP 8.1 or higher
+- **Required extensions**:
   - `json`
   - `curl`
   - `mbstring`
   - `openssl`
 
-### Base de Datos
-- **MySQL**: 5.6 o superior
-- **MariaDB**: 10.1 o superior
-- **Permisos**: CREATE, ALTER, INSERT, UPDATE, DELETE, SELECT
+### Database
+- **MySQL**: 5.6 or higher
+- **MariaDB**: 10.1 or higher
+- **Permissions**: CREATE, ALTER, INSERT, UPDATE, DELETE, SELECT
 
-### Servidor Web
-- **Apache**: 2.4 o superior con mod_rewrite
-- **Nginx**: 1.18 o superior
-- **IIS**: 10.0 o superior (con URL Rewrite Module)
+### Web Server
+- **Apache**: 2.4 or higher with mod_rewrite
+- **Nginx**: 1.18 or higher
+- **IIS**: 10.0 or higher (with URL Rewrite Module)
 
-## Dependencias
+## Dependencies
 
-### Plugin Principal
+### Core Plugin
 <Warning>
-  LatePoint API Extension requiere que el plugin principal de LatePoint esté instalado y activado.
+  LatePoint API Extension requires the main LatePoint plugin to be installed and activated.
 </Warning>
 
-- **LatePoint**: Versión 4.0 o superior
-- **Estado**: Debe estar activado y configurado
-- **Licencia**: Licencia válida de LatePoint
+- **LatePoint**: Version 4.0 or higher
+- **Status**: Must be activated and configured
+- **License**: Valid LatePoint license
 
-### Plugins Compatibles
+### Compatible Plugins
 
-LatePoint API Extension es compatible con:
+LatePoint API Extension is compatible with:
 
-- **LatePoint Pro Features**: Todas las versiones
-- **LatePoint Payments**: Todas las versiones
-- **LatePoint SMS**: Todas las versiones
-- **LatePoint Email**: Todas las versiones
+- **LatePoint Pro Features**: All versions
+- **LatePoint Payments**: All versions
+- **LatePoint SMS**: All versions
+- **LatePoint Email**: All versions
 
-## Configuración del Servidor
+## Server Configuration
 
 ### Permalinks
 
-Los permalinks de WordPress deben estar configurados para que la API funcione correctamente:
+WordPress permalinks must be configured for the API to work:
 
-1. Ve a **Configuración > Enlaces permanentes**
-2. Selecciona cualquier opción excepto "Simple"
-3. Guarda los cambios
+1. Go to **Settings > Permalinks**
+2. Select any option except "Plain"
+3. Save changes
 
-**Estructura recomendada:**
+**Recommended structure:**
 ```
 /%postname%/
 ```
 
-### Límites de PHP
+### PHP Limits
 
-Configura los siguientes límites en tu `php.ini`:
+Configure these limits in your `php.ini`:
 
 ```ini
 memory_limit = 256M
@@ -76,196 +76,108 @@ post_max_size = 64M
 upload_max_filesize = 64M
 ```
 
-### Configuración de Apache
-
-Si usas Apache, asegúrate de que el archivo `.htaccess` tenga:
-
-```apache
-# BEGIN WordPress
-<IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.php [L]
-</IfModule>
-# END WordPress
-```
-
-### Configuración de Nginx
-
-Para Nginx, añade esta configuración:
-
-```nginx
-location / {
-    try_files $uri $uri/ /index.php?$args;
-}
-
-location ~ \.php$ {
-    include fastcgi_params;
-    fastcgi_intercept_errors on;
-    fastcgi_pass php;
-    fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-}
-```
-
-## Verificación de Requisitos
+## Requirements Verification
 
 ### Plugin Health Check
 
-Una vez instalado, LatePoint API Extension incluye una herramienta de verificación:
+Once installed, LatePoint API Extension includes a verification tool:
 
-1. Ve a **LatePoint > API Settings**
-2. Haz clic en **"System Check"**
-3. Revisa que todos los elementos muestren ✅
+1. Go to **LatePoint > API Settings**
+2. Click **"System Check"**
+3. Verify all items show ✅
 
-### Elementos Verificados
+### Verified Elements
 
 <AccordionGroup>
   <Accordion title="WordPress Core">
-    - Versión de WordPress
-    - Estado de los permalinks
-    - Capacidades de usuario
-    - Configuración de timezone
+    - WordPress version
+    - Permalinks status
+    - User capabilities
+    - Timezone configuration
   </Accordion>
   
   <Accordion title="PHP Environment">
-    - Versión de PHP
-    - Extensiones requeridas
-    - Límites de memoria y tiempo
-    - Configuración de errores
+    - PHP version
+    - Required extensions
+    - Memory and time limits
+    - Error configuration
   </Accordion>
   
   <Accordion title="Database">
-    - Conexión a la base de datos
-    - Permisos de usuario
-    - Charset y collation
-    - Espacio disponible
+    - Database connection
+    - User permissions
+    - Charset and collation
+    - Available space
   </Accordion>
   
   <Accordion title="LatePoint Core">
-    - Plugin principal instalado
-    - Versión compatible
-    - Estado de activación
-    - Configuración básica
+    - Main plugin installed
+    - Compatible version
+    - Activation status
+    - Basic configuration
   </Accordion>
 </AccordionGroup>
 
-## Problemas Comunes
+## Common Issues
 
 ### Error: "LatePoint not found"
 
-**Causa**: El plugin principal de LatePoint no está instalado o activado.
+**Cause**: The main LatePoint plugin is not installed or activated.
 
-**Solución**:
-1. Instala LatePoint desde [latepoint.com](https://latepoint.com)
-2. Activa el plugin
-3. Completa la configuración inicial
+**Solution**:
+1. Install LatePoint from [latepoint.com](https://latepoint.com)
+2. Activate the plugin
+3. Complete initial setup
 
 ### Error: "Permalinks not configured"
 
-**Causa**: Los permalinks están configurados como "Simple".
+**Cause**: Permalinks are set to "Plain".
 
-**Solución**:
-1. Ve a **Configuración > Enlaces permanentes**
-2. Selecciona "Nombre de la entrada" o cualquier otra opción
-3. Guarda los cambios
+**Solution**:
+1. Go to **Settings > Permalinks**
+2. Select "Post name" or any other option
+3. Save changes
 
 ### Error: "PHP version too old"
 
-**Causa**: Tu servidor usa PHP 7.3 o inferior.
+**Cause**: Your server uses PHP 7.3 or lower.
 
-**Solución**:
-1. Contacta a tu proveedor de hosting
-2. Solicita actualización a PHP 8.1 o superior
-3. Verifica que todas las extensiones estén disponibles
+**Solution**:
+1. Contact your hosting provider
+2. Request upgrade to PHP 8.1 or higher
+3. Verify all extensions are available
 
-### Error: "Database permissions insufficient"
 
-**Causa**: El usuario de la base de datos no tiene permisos suficientes.
 
-**Solución**:
-1. Contacta a tu administrador de base de datos
-2. Solicita permisos CREATE y ALTER
-3. Verifica la conexión en **Herramientas > Salud del sitio**
-
-## Entornos de Desarrollo
-
-### Local Development
-
-Para desarrollo local, recomendamos:
-
-- **Local by Flywheel**: Configuración automática optimizada
-- **XAMPP**: Control completo del entorno
-- **Docker**: Entornos reproducibles
-- **MAMP**: Solución simple para Mac
-
-### Staging Environment
-
-Antes de producción, prueba en un entorno de staging:
-
-1. **Copia exacta** de tu sitio de producción
-2. **Misma versión** de PHP y WordPress
-3. **Datos de prueba** similares a producción
-4. **SSL configurado** para pruebas de API
-
-## Optimización de Rendimiento
-
-### Caché
-
-LatePoint API Extension es compatible con:
-
-- **WP Rocket**: Configuración automática
-- **W3 Total Cache**: Excluir endpoints de API
-- **WP Super Cache**: Configuración manual requerida
-- **LiteSpeed Cache**: Compatible sin configuración
-
-### CDN
-
-Si usas un CDN, asegúrate de excluir:
-
-```
-/wp-json/latepoint/*
-```
-
-### Object Cache
-
-Para mejor rendimiento, considera:
-
-- **Redis**: Recomendado para sitios de alto tráfico
-- **Memcached**: Alternativa sólida
-- **APCu**: Para servidores compartidos
-
-## Próximos Pasos
+## Next Steps
 
 <CardGroup cols={2}>
   <Card
-    title="Instalación"
+    title="Installation"
     icon="download"
     href="/installation/setup"
   >
-    Procede con la instalación del plugin
+    Proceed with plugin installation
   </Card>
   <Card
-    title="Configuración"
+    title="Configuration"
     icon="gear"
     href="/installation/configuration"
   >
-    Configura el plugin después de la instalación
+    Configure the plugin after installation
   </Card>
   <Card
-    title="Inicio Rápido"
+    title="Quick Start"
     icon="rocket"
     href="/quickstart"
   >
-    Realiza tu primera llamada a la API
+    Make your first API call
   </Card>
   <Card
-    title="Soporte"
+    title="Support"
     icon="life-ring"
     href="https://wpdocs.latepoint.com"
   >
-    Obtén ayuda si encuentras problemas
+    Get help if you encounter issues
   </Card>
 </CardGroup>

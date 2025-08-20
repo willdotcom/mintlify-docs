@@ -1,84 +1,136 @@
 ---
-title: 'Configuración Post-Instalación'
-description: 'Configura LatePoint API Extension después de la instalación'
+title: 'Post-Installation Configuration'
+description: 'Configure LatePoint API Extension after installation'
 ---
 
-## Configuración Inicial
+## Initial Configuration
 
-### Acceso a la Configuración
+### Access Configuration
 
-Después de activar el plugin, accede a la configuración:
+After activating the plugin, access the configuration:
 
-1. Ve a **LatePoint > API Settings** en tu panel de WordPress
-2. Verás el panel de configuración de la API
-3. Si es la primera vez, se ejecutará el asistente de configuración
+1. Go to **LatePoint > API Settings** in your WordPress dashboard
+2. You'll see the API configuration panel
+3. If it's your first time, the setup wizard will run
 
-### Panel de Configuración
+### Configuration Panel
 
-El panel principal incluye las siguientes secciones:
+The main panel includes the following sections:
 
 <AccordionGroup>
   <Accordion title="General Settings">
-    - Estado de la API (Activada/Desactivada)
-    - URL base de la API
-    - Versión actual del plugin
-    - Información de licencia
+    - API status (Enabled/Disabled)
+    - API base URL
+    - Current plugin version
+    - License information
   </Accordion>
   
   <Accordion title="API Keys Management">
-    - Lista de API Keys activas
-    - Generación de nuevas claves
-    - Configuración de permisos
-    - Revocación de claves
+    - List of active API Keys
+    - Generate new keys
+    - Configure permissions
+    - Revoke keys
   </Accordion>
   
   <Accordion title="Security Settings">
     - Rate limiting
-    - Restricciones de IP
-    - Configuración de CORS
-    - Logs de auditoría
+    - IP restrictions
+    - CORS configuration
+    - Audit logs
   </Accordion>
   
   <Accordion title="System Status">
-    - Verificación de requisitos
-    - Estado de la base de datos
-    - Información del servidor
-    - Diagnósticos
+    - Requirements verification
+    - Database status
+    - Server information
+    - Diagnostics
   </Accordion>
 </AccordionGroup>
 
-## Configuración de Seguridad
+## API Keys Management
+
+### Create a New API Key
+
+<Steps>
+  <Step title="Access Key Management">
+    Go to **LatePoint > API Settings > API Keys**
+  </Step>
+  
+  <Step title="Generate New Key">
+    1. Click **"Generate New API Key"**
+    2. Assign a descriptive name (e.g., "iOS Mobile App")
+    3. Select environment (Test/Live)
+  </Step>
+  
+  <Step title="Configure Permissions">
+    Select necessary permissions:
+    - **Bookings**: Read, Create, Update, Delete
+    - **Customers**: Read, Create, Update
+    - **Agents**: Read
+    - **Services**: Read
+    - **Availability**: Read
+  </Step>
+  
+  <Step title="Save and Copy">
+    1. Click **"Generate"**
+    2. **Copy the API Key immediately**
+    3. Store it in a secure location
+  </Step>
+</Steps>
+
+### Permission Types
+
+<AccordionGroup>
+  <Accordion title="Bookings">
+    - **Read**: Query existing bookings
+    - **Create**: Create new bookings
+    - **Update**: Modify existing bookings
+    - **Delete**: Delete bookings
+  </Accordion>
+  
+  <Accordion title="Customers">
+    - **Read**: Query customer information
+    - **Create**: Register new customers
+    - **Update**: Update customer data
+  </Accordion>
+  
+  <Accordion title="Agents">
+    - **Read**: Query agent list
+    - **Schedule**: Query agent schedules
+  </Accordion>
+  
+  <Accordion title="Services">
+    - **Read**: Query available services
+    - **Pricing**: Access pricing information
+  </Accordion>
+  
+  <Accordion title="Availability">
+    - **Read**: Check schedule availability
+  </Accordion>
+</AccordionGroup>
+
+## Security Configuration
 
 ### Rate Limiting
 
-Configura límites de solicitudes para proteger tu servidor:
+Configure request limits to protect your server:
 
 ```json
 {
   "requests_per_minute": 60,
   "requests_per_hour": 3600,
-  "requests_per_day": 86400,
-  "burst_limit": 10
+  "requests_per_day": 86400
 }
 ```
 
-**Configuración recomendada por tipo de uso:**
+### IP Restrictions
 
-| Tipo de Aplicación | Por Minuto | Por Hora | Por Día |
-|-------------------|------------|----------|---------|
-| Aplicación Móvil  | 30         | 1800     | 43200   |
-| Sitio Web         | 60         | 3600     | 86400   |
-| Sistema Interno   | 120        | 7200     | 172800  |
-| Integración CRM   | 20         | 1200     | 28800   |
-
-### Restricciones de IP
-
-Para mayor seguridad, puedes restringir el acceso por IP:
+For additional security, you can restrict access by IP:
 
 <Tabs>
   <Tab title="Whitelist">
     ```
-    # Permitir solo estas IPs
+    # Allow only these IPs
     192.168.1.100
     10.0.0.0/8
     203.0.113.0/24
@@ -87,7 +139,7 @@ Para mayor seguridad, puedes restringir el acceso por IP:
   
   <Tab title="Blacklist">
     ```
-    # Bloquear estas IPs
+    # Block these IPs
     192.168.1.50
     172.16.0.0/12
     198.51.100.0/24
@@ -95,286 +147,45 @@ Para mayor seguridad, puedes restringir el acceso por IP:
   </Tab>
 </Tabs>
 
-### Configuración CORS
+## Database Configuration
 
-Para aplicaciones web que consuman la API desde el navegador:
+### Verify Tables
 
-```json
-{
-  "allowed_origins": [
-    "https://tu-app.com",
-    "https://staging.tu-app.com",
-    "http://localhost:3000"
-  ],
-  "allowed_methods": ["GET", "POST", "PUT", "DELETE"],
-  "allowed_headers": ["Content-Type", "X-API-Key"],
-  "max_age": 86400
-}
-```
-
-## Gestión de API Keys
-
-### Crear una Nueva API Key
-
-<Steps>
-  <Step title="Acceder a la Gestión de Claves">
-    Ve a **LatePoint > API Settings > API Keys**
-  </Step>
-  
-  <Step title="Generar Nueva Clave">
-    1. Haz clic en **"Generate New API Key"**
-    2. Asigna un nombre descriptivo (ej: "App Móvil iOS")
-    3. Selecciona el entorno (Test/Live)
-  </Step>
-  
-  <Step title="Configurar Permisos">
-    Selecciona los permisos necesarios:
-    - **Bookings**: Read, Create, Update, Delete
-    - **Customers**: Read, Create, Update
-    - **Agents**: Read
-    - **Services**: Read
-    - **Availability**: Read
-  </Step>
-  
-  <Step title="Configurar Restricciones">
-    - Rate limiting personalizado
-    - Restricciones de IP
-    - Fecha de expiración (opcional)
-  </Step>
-  
-  <Step title="Guardar y Copiar">
-    1. Haz clic en **"Generate"**
-    2. **Copia la API Key inmediatamente**
-    3. Guárdala en un lugar seguro
-  </Step>
-</Steps>
-
-### Tipos de Permisos
-
-<AccordionGroup>
-  <Accordion title="Bookings (Reservas)">
-    - **Read**: Consultar reservas existentes
-    - **Create**: Crear nuevas reservas
-    - **Update**: Modificar reservas existentes
-    - **Delete**: Eliminar reservas
-    - **Status**: Cambiar estado de reservas
-  </Accordion>
-  
-  <Accordion title="Customers (Clientes)">
-    - **Read**: Consultar información de clientes
-    - **Create**: Registrar nuevos clientes
-    - **Update**: Actualizar datos de clientes
-    - **Delete**: Eliminar clientes (con restricciones)
-  </Accordion>
-  
-  <Accordion title="Agents (Agentes)">
-    - **Read**: Consultar lista de agentes
-    - **Schedule**: Consultar horarios de agentes
-  </Accordion>
-  
-  <Accordion title="Services (Servicios)">
-    - **Read**: Consultar servicios disponibles
-    - **Pricing**: Acceder a información de precios
-  </Accordion>
-  
-  <Accordion title="Availability (Disponibilidad)">
-    - **Read**: Verificar disponibilidad de horarios
-    - **Block**: Bloquear horarios (si está habilitado)
-  </Accordion>
-</AccordionGroup>
-
-## Configuración de Base de Datos
-
-### Verificar Tablas
-
-Verifica que todas las tablas se hayan creado correctamente:
+Verify all tables were created correctly:
 
 ```sql
--- Verificar tablas de la API
+-- Check API tables
 SELECT table_name 
 FROM information_schema.tables 
-WHERE table_schema = 'tu_base_de_datos' 
+WHERE table_schema = 'your_database' 
 AND table_name LIKE 'wp_latepoint_api_%';
 ```
 
-**Tablas esperadas:**
+**Expected tables:**
 - `wp_latepoint_api_keys`
 - `wp_latepoint_api_logs`
 - `wp_latepoint_api_rate_limits`
 - `wp_latepoint_license_info`
 
-### Configuración de Índices
+## Final Verification
 
-Para mejor rendimiento, verifica que existan estos índices:
+### Checklist
 
-```sql
--- Índices para logs de API
-CREATE INDEX idx_api_logs_timestamp ON wp_latepoint_api_logs(timestamp);
-CREATE INDEX idx_api_logs_api_key ON wp_latepoint_api_logs(api_key_id);
+- ✅ API Keys generated and saved
+- ✅ Permissions configured correctly
+- ✅ Rate limiting established
+- ✅ Database tables created
 
--- Índices para rate limiting
-CREATE INDEX idx_rate_limits_window ON wp_latepoint_api_rate_limits(time_window);
-```
+### Connectivity Test
 
-## Configuración de Logs
-
-### Niveles de Log
-
-Configura qué eventos registrar:
-
-- **Error**: Solo errores críticos
-- **Warning**: Errores y advertencias
-- **Info**: Información general de uso
-- **Debug**: Información detallada (solo para desarrollo)
-
-### Retención de Logs
-
-Configura cuánto tiempo mantener los logs:
-
-```json
-{
-  "retention_days": 30,
-  "max_log_size_mb": 100,
-  "auto_cleanup": true,
-  "compress_old_logs": true
-}
-```
-
-### Exportación de Logs
-
-Puedes exportar logs para análisis:
-
-1. Ve a **LatePoint > API Settings > Logs**
-2. Selecciona el rango de fechas
-3. Elige el formato (CSV, JSON, XML)
-4. Haz clic en **"Export"**
-
-## Configuración de Notificaciones
-
-### Alertas de Seguridad
-
-Configura alertas para eventos importantes:
-
-- **Intentos de acceso no autorizados**
-- **Límites de rate limiting excedidos**
-- **Errores críticos de la API**
-- **Uso inusual de API Keys**
-
-### Métodos de Notificación
-
-<Tabs>
-  <Tab title="Email">
-    ```json
-    {
-      "enabled": true,
-      "recipients": [
-        "admin@tu-sitio.com",
-        "dev@tu-sitio.com"
-      ],
-      "threshold": "high"
-    }
-    ```
-  </Tab>
-  
-  <Tab title="Webhook">
-    ```json
-    {
-      "enabled": true,
-      "url": "https://tu-sistema.com/webhook/latepoint",
-      "secret": "tu_webhook_secret",
-      "events": ["security_alert", "rate_limit_exceeded"]
-    }
-    ```
-  </Tab>
-  
-  <Tab title="Slack">
-    ```json
-    {
-      "enabled": true,
-      "webhook_url": "https://hooks.slack.com/services/...",
-      "channel": "#latepoint-alerts",
-      "username": "LatePoint API"
-    }
-    ```
-  </Tab>
-</Tabs>
-
-## Configuración de Caché
-
-### Caché de Respuestas
-
-Para mejorar el rendimiento, habilita el caché:
-
-```json
-{
-  "enabled": true,
-  "ttl_seconds": 300,
-  "cache_endpoints": [
-    "services",
-    "agents",
-    "availability"
-  ],
-  "exclude_endpoints": [
-    "bookings",
-    "customers"
-  ]
-}
-```
-
-### Invalidación de Caché
-
-El caché se invalida automáticamente cuando:
-- Se crean/modifican servicios
-- Se actualizan horarios de agentes
-- Se cambian configuraciones de disponibilidad
-
-## Configuración de Backup
-
-### Backup Automático
-
-Configura backups automáticos de la configuración:
-
-```json
-{
-  "enabled": true,
-  "frequency": "daily",
-  "retention_days": 30,
-  "include_logs": false,
-  "storage_location": "wp-content/uploads/latepoint-backups/"
-}
-```
-
-### Restauración
-
-Para restaurar una configuración:
-
-1. Ve a **LatePoint > API Settings > Backup**
-2. Selecciona el backup a restaurar
-3. Haz clic en **"Restore"**
-4. Confirma la acción
-
-## Verificación Final
-
-### Lista de Verificación
-
-- ✅ API Keys generadas y guardadas
-- ✅ Permisos configurados correctamente
-- ✅ Rate limiting establecido
-- ✅ Logs habilitados
-- ✅ Notificaciones configuradas
-- ✅ Caché optimizado
-- ✅ Backup programado
-
-### Test de Conectividad
-
-Realiza una prueba final:
+Perform a final test:
 
 ```bash
-curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/status" \
-  -H "X-API-Key: tu_api_key_aqui"
+curl -X GET "https://your-site.com/wp-json/latepoint/v1/status" \
+  -H "X-API-Key: your_api_key_here"
 ```
 
-**Respuesta esperada:**
+**Expected response:**
 ```json
 {
   "status": "success",
@@ -384,44 +195,44 @@ curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/status" \
 }
 ```
 
-## Próximos Pasos
+## Next Steps
 
 <CardGroup cols={2}>
   <Card
-    title="Autenticación"
+    title="Authentication"
     icon="key"
     href="/authentication"
   >
-    Aprende sobre seguridad y API Keys
+    Learn about security and API Keys
   </Card>
   <Card
-    title="Inicio Rápido"
+    title="Quick Start"
     icon="rocket"
     href="/quickstart"
   >
-    Realiza tu primera llamada a la API
+    Make your first API call
   </Card>
   <Card
-    title="Referencia de API"
+    title="API Reference"
     icon="book"
     href="/api-reference/introduction"
   >
-    Explora todos los endpoints disponibles
+    Explore all available endpoints
   </Card>
   <Card
-    title="Monitoreo"
+    title="System Status"
     icon="chart-line"
-    href="/api-reference/rate-limiting"
+    href="/development"
   >
-    Aprende a monitorear el uso de la API
+    Monitor API usage and performance
   </Card>
 </CardGroup>
 
-## Soporte
+## Support
 
-Si necesitas ayuda con la configuración:
+If you need help with configuration:
 
-1. **Documentación**: [wpdocs.latepoint.com](https://wpdocs.latepoint.com)
-2. **Soporte técnico**: A través de tu cuenta de LatePoint
-3. **Comunidad**: Foros de WordPress y LatePoint
-4. **System Check**: Usa la herramienta integrada en **API Settings > System Status**
+1. **Documentation**: [wpdocs.latepoint.com](https://wpdocs.latepoint.com)
+2. **Technical support**: Through your LatePoint account
+3. **Community**: WordPress and LatePoint forums
+4. **System Check**: Use the integrated tool in **API Settings > System Status**

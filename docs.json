@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "LatePoint API Extension",
+  "name": "REST API for Latepoint",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -134,19 +134,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "LatePoint Plugin",
-          "href": "https://latepoint.com",
+          "anchor": "REST API for Latepoint",
+          "href": "https://wplimit.com",
           "icon": "calendar"
         },
         {
           "anchor": "Support",
-          "href": "https://wpdocs.latepoint.com",
+          "href": "https://wplimit.com",
           "icon": "life-ring"
-        },
-        {
-          "anchor": "GitHub",
-          "href": "https://github.com",
-          "icon": "github"
         }
       ]
     }
@@ -159,13 +154,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://wpdocs.latepoint.com"
+        "href": "https://wplimit.com"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Download Plugin",
-      "href": "https://latepoint.com"
+      "label": "Buy REST API",
+      "href": "https://wplimit.com"
     }
   },
   "contextual": {
@@ -183,7 +178,7 @@
   "footer": {
     "socials": {
       "github": "https://github.com",
-      "website": "https://latepoint.com"
+      "website": "https://wplimit.com"
     }
   }
 }
