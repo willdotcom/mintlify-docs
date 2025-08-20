@@ -2,10 +2,6 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "REST API for Latepoint",
-  "logo": {
-    "dark": "/logo/dark.png",
-    "light": "/logo/dark.png"
-  },
   "colors": {
     "primary": "#2563EB",
     "light": "#3B82F6",
@@ -147,8 +143,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/dark.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [
