@@ -3,8 +3,8 @@
   "theme": "mint",
   "name": "REST API for Latepoint",
   "logo": {
-    "dark": "/logo/dark.svg",
-    "light": "/logo/light.svg"
+    "dark": "/logo/dark.png",
+    "light": "/logo/dark.png"
   },
   "colors": {
     "primary": "#2563EB",

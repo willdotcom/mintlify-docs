@@ -1,288 +1,288 @@
 ---
-title: 'Crear Cliente'
-api: 'POST https://tu-sitio.com/wp-json/latepoint/v1/customers'
-description: 'Crea un nuevo cliente en el sistema'
+title: 'Create Customer'
+api: 'POST https://your-site.com/wp-json/latepoint-api/v1/customers'
+description: 'Create a new customer in the system'
 ---
 
-## Descripción
+## Description
 
-Este endpoint permite crear un nuevo cliente en el sistema LatePoint. Puedes proporcionar información básica o completa del cliente, incluyendo datos de contacto, dirección, preferencias y campos personalizados.
+This endpoint allows you to create a new customer in the LatePoint system. You can provide basic or complete customer information, including contact details, address, preferences, and custom fields.
 
-## Autenticación
+## Authentication
 
 <ParamField header="X-API-Key" type="string" required>
-  Tu API Key de LatePoint con permisos de escritura
+  Your LatePoint API Key with write permissions
 </ParamField>
 
-## Cuerpo de la Solicitud
+## Request Body
 
-### Campos Requeridos
+### Required Fields
 
 <ParamField body="first_name" type="string" required>
-  Nombre del cliente
+  Customer's first name
   
-  **Validaciones:**
-  - Mínimo 2 caracteres
-  - Máximo 50 caracteres
-  - Solo letras, espacios y guiones
+  **Validations:**
+  - Minimum 2 characters
+  - Maximum 50 characters
+  - Only letters, spaces, and hyphens
 </ParamField>
 
 <ParamField body="last_name" type="string" required>
-  Apellido del cliente
+  Customer's last name
   
-  **Validaciones:**
-  - Mínimo 2 caracteres
-  - Máximo 50 caracteres
-  - Solo letras, espacios y guiones
+  **Validations:**
+  - Minimum 2 characters
+  - Maximum 50 characters
+  - Only letters, spaces, and hyphens
 </ParamField>
 
 <ParamField body="email" type="string" required>
-  Email del cliente (debe ser único)
+  Customer's email (must be unique)
   
-  **Validaciones:**
-  - Formato de email válido
-  - Único en el sistema
-  - Máximo 100 caracteres
+  **Validations:**
+  - Valid email format
+  - Unique in the system
+  - Maximum 100 characters
 </ParamField>
 
-### Campos Opcionales
+### Optional Fields
 
 <ParamField body="phone" type="string">
-  Número de teléfono del cliente
+  Customer's phone number
   
-  **Validaciones:**
-  - Formato de teléfono válido
-  - Puede incluir código de país
-  - Máximo 20 caracteres
+  **Validations:**
+  - Valid phone format
+  - Can include country code
+  - Maximum 20 characters
 </ParamField>
 
 <ParamField body="status" type="string" default="active">
-  Estado inicial del cliente
+  Initial customer status
   
-  **Valores posibles:**
-  - `active` - Cliente activo (por defecto)
-  - `inactive` - Cliente inactivo
-  - `pending` - Pendiente de verificación
+  **Possible values:**
+  - `active` - Active customer (default)
+  - `inactive` - Inactive customer
+  - `pending` - Pending verification
 </ParamField>
 
 <ParamField body="date_of_birth" type="string">
-  Fecha de nacimiento del cliente (formato: YYYY-MM-DD)
+  Customer's date of birth (format: YYYY-MM-DD)
 </ParamField>
 
 <ParamField body="gender" type="string">
-  Género del cliente
+  Customer's gender
   
-  **Valores posibles:**
-  - `male` - Masculino
-  - `female` - Femenino
-  - `other` - Otro
-  - `prefer_not_to_say` - Prefiere no decir
+  **Possible values:**
+  - `male` - Male
+  - `female` - Female
+  - `other` - Other
+  - `prefer_not_to_say` - Prefer not to say
 </ParamField>
 
-### Información de Dirección
+### Address Information
 
 <ParamField body="address" type="object">
-  Dirección completa del cliente
+  Customer's complete address
   
-  <Expandable title="Campos de Dirección">
+  <Expandable title="Address Fields">
     <ParamField body="address.street" type="string">
-      Calle y número
+      Street and number
     </ParamField>
     
     <ParamField body="address.city" type="string">
-      Ciudad
+      City
     </ParamField>
     
     <ParamField body="address.state" type="string">
-      Estado o provincia
+      State or province
     </ParamField>
     
     <ParamField body="address.postal_code" type="string">
-      Código postal
+      Postal code
     </ParamField>
     
     <ParamField body="address.country" type="string">
-      País (código ISO de 2 letras)
+      Country (2-letter ISO code)
     </ParamField>
   </Expandable>
 </ParamField>
 
-### Preferencias del Cliente
+### Customer Preferences
 
 <ParamField body="preferences" type="object">
-  Preferencias del cliente
+  Customer preferences
   
-  <Expandable title="Preferencias Disponibles">
+  <Expandable title="Available Preferences">
     <ParamField body="preferences.preferred_agent_id" type="integer">
-      ID del agente preferido
+      Preferred agent ID
     </ParamField>
     
     <ParamField body="preferences.preferred_location_id" type="integer">
-      ID de la ubicación preferida
+      Preferred location ID
     </ParamField>
     
     <ParamField body="preferences.preferred_time_slots" type="array">
-      Horarios preferidos (formato: ["09:00-12:00", "14:00-17:00"])
+      Preferred time slots (format: ["09:00-12:00", "14:00-17:00"])
     </ParamField>
     
-    <ParamField body="preferences.language" type="string" default="es">
-      Idioma preferido (código ISO de 2 letras)
+    <ParamField body="preferences.language" type="string" default="en">
+      Preferred language (2-letter ISO code)
     </ParamField>
     
     <ParamField body="preferences.communication_preferences" type="object">
-      Preferencias de comunicación
+      Communication preferences
       
-      <Expandable title="Comunicación">
+      <Expandable title="Communication">
         <ParamField body="preferences.communication_preferences.email_notifications" type="boolean" default="true">
-          Recibir notificaciones por email
+          Receive email notifications
         </ParamField>
         
         <ParamField body="preferences.communication_preferences.sms_notifications" type="boolean" default="false">
-          Recibir notificaciones por SMS
+          Receive SMS notifications
         </ParamField>
         
         <ParamField body="preferences.communication_preferences.reminder_hours" type="integer" default="24">
-          Horas antes para recordatorios
+          Hours before for reminders
         </ParamField>
         
         <ParamField body="preferences.communication_preferences.marketing_emails" type="boolean" default="false">
-          Recibir emails de marketing
+          Receive marketing emails
         </ParamField>
       </Expandable>
     </ParamField>
   </Expandable>
 </ParamField>
 
-### Campos Personalizados
+### Custom Fields
 
 <ParamField body="custom_fields" type="object">
-  Campos personalizados definidos en tu configuración
+  Custom fields defined in your configuration
   
-  **Ejemplo:**
+  **Example:**
   ```json
   {
-    "emergency_contact": "María Pérez - +52 555 987 6543",
-    "insurance_provider": "Seguros Monterrey",
+    "emergency_contact": "Mary Smith - +1 555 987 6543",
+    "insurance_provider": "Health Insurance Co",
     "referral_source": "Google",
-    "medical_notes": "Alérgico a la penicilina"
+    "medical_notes": "Allergic to penicillin"
   }
   ```
 </ParamField>
 
 <ParamField body="notes" type="string">
-  Notas adicionales sobre el cliente
+  Additional notes about the customer
   
-  **Validaciones:**
-  - Máximo 1000 caracteres
+  **Validations:**
+  - Maximum 1000 characters
 </ParamField>
 
-### Configuración de Cuenta
+### Account Configuration
 
 <ParamField body="send_welcome_email" type="boolean" default="true">
-  Enviar email de bienvenida al cliente
+  Send welcome email to customer
 </ParamField>
 
 <ParamField body="create_wp_user" type="boolean" default="false">
-  Crear usuario de WordPress asociado
+  Create associated WordPress user
 </ParamField>
 
 <ParamField body="wp_user_role" type="string" default="customer">
-  Rol del usuario de WordPress (si se crea)
+  WordPress user role (if created)
   
-  **Valores posibles:**
-  - `customer` - Cliente (por defecto)
-  - `subscriber` - Suscriptor
+  **Possible values:**
+  - `customer` - Customer (default)
+  - `subscriber` - Subscriber
 </ParamField>
 
-## Respuesta
+## Response
 
-### Respuesta Exitosa (201 Created)
+### Successful Response (201 Created)
 
 <ResponseField name="status" type="string">
-  Estado de la respuesta ("success")
+  Response status ("success")
 </ResponseField>
 
 <ResponseField name="message" type="string">
-  Mensaje de confirmación
+  Confirmation message
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  Información del cliente creado
+  Created customer information
   
-  <Expandable title="Cliente Creado">
+  <Expandable title="Created Customer">
     <ResponseField name="id" type="integer">
-      ID único del cliente creado
+      Unique ID of the created customer
     </ResponseField>
     
     <ResponseField name="first_name" type="string">
-      Nombre del cliente
+      Customer's first name
     </ResponseField>
     
     <ResponseField name="last_name" type="string">
-      Apellido del cliente
+      Customer's last name
     </ResponseField>
     
     <ResponseField name="email" type="string">
-      Email del cliente
+      Customer's email
     </ResponseField>
     
     <ResponseField name="phone" type="string">
-      Teléfono del cliente
+      Customer's phone number
     </ResponseField>
     
     <ResponseField name="status" type="string">
-      Estado del cliente
+      Customer status
     </ResponseField>
     
     <ResponseField name="customer_code" type="string">
-      Código único del cliente generado automáticamente
+      Automatically generated unique customer code
     </ResponseField>
     
     <ResponseField name="avatar_url" type="string">
-      URL del avatar por defecto
+      Default avatar URL
     </ResponseField>
     
     <ResponseField name="created_at" type="string">
-      Fecha y hora de creación
+      Creation date and time
     </ResponseField>
     
     <ResponseField name="wp_user_id" type="integer">
-      ID del usuario de WordPress (si se creó)
+      WordPress user ID (if created)
     </ResponseField>
     
     <ResponseField name="welcome_email_sent" type="boolean">
-      Indica si se envió el email de bienvenida
+      Indicates if welcome email was sent
     </ResponseField>
   </Expandable>
 </ResponseField>
 
-## Ejemplos
+## Examples
 
-### Cliente Básico
+### Basic Customer
 
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://tu-sitio.com/wp-json/latepoint/v1/customers" \
+curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/customers" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: lp_live_1234567890abcdef" \
   -d '{
-    "first_name": "Juan",
-    "last_name": "Pérez",
-    "email": "juan.perez@email.com",
-    "phone": "+52 555 123 4567"
+    "first_name": "John",
+    "last_name": "Doe",
+    "email": "john.doe@email.com",
+    "phone": "+1 555 123 4567"
   }'
 ```
 
 ```javascript JavaScript
 const newCustomer = {
-  first_name: 'Juan',
-  last_name: 'Pérez',
-  email: 'juan.perez@email.com',
-  phone: '+52 555 123 4567'
+  first_name: 'John',
+  last_name: 'Doe',
+  email: 'john.doe@email.com',
+  phone: '+1 555 123 4567'
 };
 
-const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/customers', {
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/customers', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -292,7 +292,7 @@ const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/customer
 });
 
 const result = await response.json();
-console.log('Cliente creado:', result.data);
+console.log('Customer created:', result.data);
 ```
 
 ```python Python
@@ -300,14 +300,14 @@ import requests
 import json
 
 new_customer = {
-    'first_name': 'Juan',
-    'last_name': 'Pérez',
-    'email': 'juan.perez@email.com',
-    'phone': '+52 555 123 4567'
+    'first_name': 'John',
+    'last_name': 'Doe',
+    'email': 'john.doe@email.com',
+    'phone': '+1 555 123 4567'
 }
 
 response = requests.post(
-    'https://tu-sitio.com/wp-json/latepoint/v1/customers',
+    'https://your-site.com/wp-json/latepoint-api/v1/customers',
     headers={
         'Content-Type': 'application/json',
         'X-API-Key': 'lp_live_1234567890abcdef'
@@ -316,22 +316,22 @@ response = requests.post(
 )
 
 result = response.json()
-print('Cliente creado:', result['data'])
+print('Customer created:', result['data'])
 ```
 
 ```php PHP
 <?php
 $new_customer = [
-    'first_name' => 'Juan',
-    'last_name' => 'Pérez',
-    'email' => 'juan.perez@email.com',
-    'phone' => '+52 555 123 4567'
+    'first_name' => 'John',
+    'last_name' => 'Doe',
+    'email' => 'john.doe@email.com',
+    'phone' => '+1 555 123 4567'
 ];
 
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-    CURLOPT_URL => 'https://tu-sitio.com/wp-json/latepoint/v1/customers',
+    CURLOPT_URL => 'https://your-site.com/wp-json/latepoint-api/v1/customers',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
     CURLOPT_HTTPHEADER => [
@@ -351,33 +351,33 @@ print_r($result['data']);
 
 </CodeGroup>
 
-### Cliente Completo con Preferencias
+### Complete Customer with Preferences
 
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://tu-sitio.com/wp-json/latepoint/v1/customers" \
+curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/customers" \
   -H "Content-Type: application/json" \
   -H "X-API-Key: lp_live_1234567890abcdef" \
   -d '{
-    "first_name": "María",
-    "last_name": "González",
-    "email": "maria.gonzalez@email.com",
-    "phone": "+52 555 987 6543",
+    "first_name": "Sarah",
+    "last_name": "Johnson",
+    "email": "sarah.johnson@email.com",
+    "phone": "+1 555 987 6543",
     "date_of_birth": "1990-05-15",
     "gender": "female",
     "address": {
-      "street": "Av. Reforma 456, Col. Roma",
-      "city": "Ciudad de México",
-      "state": "CDMX",
-      "postal_code": "06700",
-      "country": "MX"
+      "street": "123 Main Street, Apt 4B",
+      "city": "New York",
+      "state": "NY",
+      "postal_code": "10001",
+      "country": "US"
     },
     "preferences": {
       "preferred_agent_id": 3,
       "preferred_location_id": 1,
       "preferred_time_slots": ["09:00-12:00", "14:00-17:00"],
-      "language": "es",
+      "language": "en",
       "communication_preferences": {
         "email_notifications": true,
         "sms_notifications": true,
@@ -386,11 +386,11 @@ curl -X POST "https://tu-sitio.com/wp-json/latepoint/v1/customers" \
       }
     },
     "custom_fields": {
-      "emergency_contact": "Carlos González - +52 555 111 2222",
-      "insurance_provider": "Seguros Monterrey",
-      "referral_source": "Recomendación"
+      "emergency_contact": "John Johnson - +1 555 111 2222",
+      "insurance_provider": "Blue Cross Blue Shield",
+      "referral_source": "Referral"
     },
-    "notes": "Cliente VIP, prefiere citas por la mañana",
+    "notes": "VIP customer, prefers morning appointments",
     "send_welcome_email": true,
     "create_wp_user": true
   }'
@@ -398,24 +398,24 @@ curl -X POST "https://tu-sitio.com/wp-json/latepoint/v1/customers" \
 
 ```javascript JavaScript
 const completeCustomer = {
-  first_name: 'María',
-  last_name: 'González',
-  email: 'maria.gonzalez@email.com',
-  phone: '+52 555 987 6543',
+  first_name: 'Sarah',
+  last_name: 'Johnson',
+  email: 'sarah.johnson@email.com',
+  phone: '+1 555 987 6543',
   date_of_birth: '1990-05-15',
   gender: 'female',
   address: {
-    street: 'Av. Reforma 456, Col. Roma',
-    city: 'Ciudad de México',
-    state: 'CDMX',
-    postal_code: '06700',
-    country: 'MX'
+    street: '123 Main Street, Apt 4B',
+    city: 'New York',
+    state: 'NY',
+    postal_code: '10001',
+    country: 'US'
   },
   preferences: {
     preferred_agent_id: 3,
     preferred_location_id: 1,
     preferred_time_slots: ['09:00-12:00', '14:00-17:00'],
-    language: 'es',
+    language: 'en',
     communication_preferences: {
       email_notifications: true,
       sms_notifications: true,
@@ -424,16 +424,16 @@ const completeCustomer = {
     }
   },
   custom_fields: {
-    emergency_contact: 'Carlos González - +52 555 111 2222',
-    insurance_provider: 'Seguros Monterrey',
-    referral_source: 'Recomendación'
+    emergency_contact: 'John Johnson - +1 555 111 2222',
+    insurance_provider: 'Blue Cross Blue Shield',
+    referral_source: 'Referral'
   },
-  notes: 'Cliente VIP, prefiere citas por la mañana',
+  notes: 'VIP customer, prefers morning appointments',
   send_welcome_email: true,
   create_wp_user: true
 };
 
-const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/customers', {
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/customers', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -445,19 +445,19 @@ const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/customer
 const result = await response.json();
 
 if (result.status === 'success') {
-  console.log('Cliente creado exitosamente:', result.data);
-  console.log('ID del cliente:', result.data.id);
-  console.log('Código del cliente:', result.data.customer_code);
+  console.log('Customer created successfully:', result.data);
+  console.log('Customer ID:', result.data.id);
+  console.log('Customer code:', result.data.customer_code);
   
   if (result.data.wp_user_id) {
-    console.log('Usuario de WordPress creado con ID:', result.data.wp_user_id);
+    console.log('WordPress user created with ID:', result.data.wp_user_id);
   }
   
   if (result.data.welcome_email_sent) {
-    console.log('Email de bienvenida enviado');
+    console.log('Welcome email sent');
   }
 } else {
-  console.error('Error al crear cliente:', result.error);
+  console.error('Error creating customer:', result.error);
 }
 ```
 
@@ -466,24 +466,24 @@ import requests
 import json
 
 complete_customer = {
-    'first_name': 'María',
-    'last_name': 'González',
-    'email': 'maria.gonzalez@email.com',
-    'phone': '+52 555 987 6543',
+    'first_name': 'Sarah',
+    'last_name': 'Johnson',
+    'email': 'sarah.johnson@email.com',
+    'phone': '+1 555 987 6543',
     'date_of_birth': '1990-05-15',
     'gender': 'female',
     'address': {
-        'street': 'Av. Reforma 456, Col. Roma',
-        'city': 'Ciudad de México',
-        'state': 'CDMX',
-        'postal_code': '06700',
-        'country': 'MX'
+        'street': '123 Main Street, Apt 4B',
+        'city': 'New York',
+        'state': 'NY',
+        'postal_code': '10001',
+        'country': 'US'
     },
     'preferences': {
         'preferred_agent_id': 3,
         'preferred_location_id': 1,
         'preferred_time_slots': ['09:00-12:00', '14:00-17:00'],
-        'language': 'es',
+        'language': 'en',
         'communication_preferences': {
             'email_notifications': True,
             'sms_notifications': True,
@@ -492,17 +492,17 @@ complete_customer = {
         }
     },
     'custom_fields': {
-        'emergency_contact': 'Carlos González - +52 555 111 2222',
-        'insurance_provider': 'Seguros Monterrey',
-        'referral_source': 'Recomendación'
+        'emergency_contact': 'John Johnson - +1 555 111 2222',
+        'insurance_provider': 'Blue Cross Blue Shield',
+        'referral_source': 'Referral'
     },
-    'notes': 'Cliente VIP, prefiere citas por la mañana',
+    'notes': 'VIP customer, prefers morning appointments',
     'send_welcome_email': True,
     'create_wp_user': True
 }
 
 response = requests.post(
-    'https://tu-sitio.com/wp-json/latepoint/v1/customers',
+    'https://your-site.com/wp-json/latepoint-api/v1/customers',
     headers={
         'Content-Type': 'application/json',
         'X-API-Key': 'lp_live_1234567890abcdef'
@@ -513,28 +513,28 @@ response = requests.post(
 result = response.json()
 
 if result['status'] == 'success':
-    print('Cliente creado exitosamente:', result['data'])
+    print('Customer created successfully:', result['data'])
 else:
-    print('Error al crear cliente:', result['error'])
+    print('Error creating customer:', result['error'])
 ```
 
 </CodeGroup>
 
-### Crear Cliente desde Formulario Web
+### Create Customer from Web Form
 
 <CodeGroup>
 
 ```javascript JavaScript
-// Función para crear cliente desde formulario
+// Function to create customer from form
 async function createCustomerFromForm(formData) {
   try {
-    // Validar datos del formulario
+    // Validate form data
     const validation = validateCustomerData(formData);
     if (!validation.isValid) {
-      throw new Error('Datos inválidos: ' + validation.errors.join(', '));
+      throw new Error('Invalid data: ' + validation.errors.join(', '));
     }
     
-    // Preparar datos del cliente
+    // Prepare customer data
     const customerData = {
       first_name: formData.firstName.trim(),
       last_name: formData.lastName.trim(),
@@ -543,7 +543,7 @@ async function createCustomerFromForm(formData) {
       date_of_birth: formData.dateOfBirth,
       gender: formData.gender,
       preferences: {
-        language: formData.language || 'es',
+        language: formData.language || 'en',
         communication_preferences: {
           email_notifications: formData.emailNotifications !== false,
           sms_notifications: formData.smsNotifications === true,
@@ -554,34 +554,34 @@ async function createCustomerFromForm(formData) {
       create_wp_user: formData.createAccount === true
     };
     
-    // Agregar dirección si está completa
+    // Add address if complete
     if (formData.street && formData.city) {
       customerData.address = {
         street: formData.street,
         city: formData.city,
         state: formData.state,
         postal_code: formData.postalCode,
-        country: formData.country || 'MX'
+        country: formData.country || 'US'
       };
     }
     
-    // Agregar campos personalizados
+    // Add custom fields
     if (formData.customFields) {
       customerData.custom_fields = formData.customFields;
     }
     
-    // Crear cliente
-    const response = await fetch('/wp-json/latepoint/v1/customers', {
+    // Create customer
+    const response = await fetch('/wp-json/latepoint-api/v1/customers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': 'tu_api_key'
+        'X-API-Key': 'your_api_key'
       },
       body: JSON.stringify(customerData)
     });
     
     if (!response.ok) {
-      throw new Error(`Error HTTP: ${response.status}`);
+      throw new Error(`HTTP Error: ${response.status}`);
     }
     
     const result = await response.json();
@@ -590,13 +590,13 @@ async function createCustomerFromForm(formData) {
       return {
         success: true,
         customer: result.data,
-        message: 'Cliente creado exitosamente'
+        message: 'Customer created successfully'
       };
     } else {
       throw new Error(result.error.message);
     }
   } catch (error) {
-    console.error('Error al crear cliente:', error);
+    console.error('Error creating customer:', error);
     return {
       success: false,
       error: error.message
@@ -608,19 +608,19 @@ function validateCustomerData(data) {
   const errors = [];
   
   if (!data.firstName || data.firstName.trim().length < 2) {
-    errors.push('El nombre debe tener al menos 2 caracteres');
+    errors.push('First name must be at least 2 characters');
   }
   
   if (!data.lastName || data.lastName.trim().length < 2) {
-    errors.push('El apellido debe tener al menos 2 caracteres');
+    errors.push('Last name must be at least 2 characters');
   }
   
   if (!data.email || !isValidEmail(data.email)) {
-    errors.push('Email inválido');
+    errors.push('Invalid email');
   }
   
   if (data.phone && !isValidPhone(data.phone)) {
-    errors.push('Teléfono inválido');
+    errors.push('Invalid phone number');
   }
   
   return {
@@ -639,12 +639,12 @@ function isValidPhone(phone) {
   return phoneRegex.test(phone);
 }
 
-// Uso
+// Usage
 const formData = {
-  firstName: 'Ana',
-  lastName: 'Martínez',
-  email: 'ana.martinez@email.com',
-  phone: '+52 555 444 3333',
+  firstName: 'Anna',
+  lastName: 'Martinez',
+  email: 'anna.martinez@email.com',
+  phone: '+1 555 444 3333',
   emailNotifications: true,
   smsNotifications: false,
   sendWelcomeEmail: true,
@@ -654,47 +654,47 @@ const formData = {
 const result = await createCustomerFromForm(formData);
 
 if (result.success) {
-  console.log('Cliente creado:', result.customer);
-  // Redirigir o mostrar mensaje de éxito
+  console.log('Customer created:', result.customer);
+  // Redirect or show success message
 } else {
   console.error('Error:', result.error);
-  // Mostrar mensaje de error al usuario
+  // Show error message to user
 }
 ```
 
 </CodeGroup>
 
-## Respuesta de Ejemplo
+## Example Response
 
-### Cliente Creado Exitosamente
+### Customer Created Successfully
 
 ```json
 {
   "status": "success",
-  "message": "Cliente creado exitosamente",
+  "message": "Customer created successfully",
   "data": {
     "id": 47,
-    "first_name": "María",
-    "last_name": "González",
-    "email": "maria.gonzalez@email.com",
-    "phone": "+52 555 987 6543",
+    "first_name": "Sarah",
+    "last_name": "Johnson",
+    "email": "sarah.johnson@email.com",
+    "phone": "+1 555 987 6543",
     "status": "active",
     "customer_code": "CUST-2024-047",
-    "avatar_url": "https://tu-sitio.com/wp-content/plugins/latepoint/images/default-avatar.png",
+    "avatar_url": "https://your-site.com/wp-content/plugins/latepoint/images/default-avatar.png",
     "date_of_birth": "1990-05-15",
     "gender": "female",
     "address": {
-      "street": "Av. Reforma 456, Col. Roma",
-      "city": "Ciudad de México",
-      "state": "CDMX",
-      "postal_code": "06700",
-      "country": "MX"
+      "street": "123 Main Street, Apt 4B",
+      "city": "New York",
+      "state": "NY",
+      "postal_code": "10001",
+      "country": "US"
     },
     "preferences": {
       "preferred_agent_id": 3,
       "preferred_location_id": 1,
       "preferred_time_slots": ["09:00-12:00", "14:00-17:00"],
-      "language": "es",
+      "language": "en",
       "communication_preferences": {
         "email_notifications": true,
         "sms_notifications": true,
@@ -703,11 +703,11 @@ if (result.success) {
       }
     },
     "custom_fields": {
-      "emergency_contact": "Carlos González - +52 555 111 2222",
-      "insurance_provider": "Seguros Monterrey",
-      "referral_source": "Recomendación"
+      "emergency_contact": "John Johnson - +1 555 111 2222",
+      "insurance_provider": "Blue Cross Blue Shield",
+      "referral_source": "Referral"
     },
-    "notes": "Cliente VIP, prefiere citas por la mañana",
+    "notes": "VIP customer, prefers morning appointments",
     "created_at": "2024-01-20T15:30:00Z",
     "updated_at": "2024-01-20T15:30:00Z",
     "wp_user_id": 156,
@@ -716,69 +716,69 @@ if (result.success) {
 }
 ```
 
-## Códigos de Error
+## Error Codes
 
 <ResponseExample>
 
-```json Error 400 - Datos Inválidos
+```json Error 400 - Invalid Data
 {
   "status": "error",
   "error": {
     "code": "validation_failed",
-    "message": "Los datos proporcionados no son válidos",
+    "message": "The provided data is not valid",
     "details": {
-      "first_name": "El nombre es requerido y debe tener al menos 2 caracteres",
-      "email": "El formato del email no es válido",
-      "phone": "El formato del teléfono no es válido"
+      "first_name": "First name is required and must be at least 2 characters",
+      "email": "Email format is not valid",
+      "phone": "Phone format is not valid"
     }
   }
 }
 ```
 
-```json Error 409 - Email Duplicado
+```json Error 409 - Duplicate Email
 {
   "status": "error",
   "error": {
     "code": "email_already_exists",
-    "message": "Ya existe un cliente con este email",
+    "message": "A customer with this email already exists",
     "details": {
-      "email": "maria.gonzalez@email.com",
+      "email": "sarah.johnson@email.com",
       "existing_customer_id": 23
     }
   }
 }
 ```
 
-```json Error 422 - Datos Inconsistentes
+```json Error 422 - Inconsistent Data
 {
   "status": "error",
   "error": {
     "code": "data_inconsistency",
-    "message": "Los datos proporcionados son inconsistentes",
+    "message": "The provided data is inconsistent",
     "details": {
-      "preferred_agent_id": "El agente con ID 99 no existe",
-      "preferred_location_id": "La ubicación con ID 88 no está activa"
+      "preferred_agent_id": "Agent with ID 99 does not exist",
+      "preferred_location_id": "Location with ID 88 is not active"
     }
   }
 }
 ```
 
-```json Error 401 - No Autorizado
+```json Error 401 - Unauthorized
 {
   "status": "error",
   "error": {
     "code": "unauthorized",
-    "message": "API Key inválida o faltante"
+    "message": "Invalid or missing API Key"
   }
 }
 ```
 
-```json Error 403 - Permisos Insuficientes
+```json Error 403 - Insufficient Permissions
 {
   "status": "error",
   "error": {
     "code": "insufficient_permissions",
-    "message": "No tienes permisos para crear clientes",
+    "message": "You don't have permission to create customers",
     "details": {
       "required_permission": "create_customers"
     }
@@ -788,78 +788,78 @@ if (result.success) {
 
 </ResponseExample>
 
-## Validaciones Automáticas
+## Automatic Validations
 
-### Validaciones de Datos
+### Data Validations
 
-1. **Nombre y Apellido**:
-   - Mínimo 2 caracteres, máximo 50
-   - Solo letras, espacios, guiones y apostrofes
-   - Se eliminan espacios extra automáticamente
+1. **First and Last Name**:
+   - Minimum 2 characters, maximum 50
+   - Only letters, spaces, hyphens and apostrophes
+   - Extra spaces are automatically removed
 
 2. **Email**:
-   - Formato válido de email
-   - Único en el sistema
-   - Se convierte a minúsculas automáticamente
-   - Máximo 100 caracteres
+   - Valid email format
+   - Unique in the system
+   - Automatically converted to lowercase
+   - Maximum 100 characters
 
-3. **Teléfono**:
-   - Formato válido (puede incluir código de país)
-   - Se normalizan los espacios y caracteres especiales
-   - Máximo 20 caracteres
+3. **Phone**:
+   - Valid format (can include country code)
+   - Spaces and special characters are normalized
+   - Maximum 20 characters
 
-4. **Fecha de Nacimiento**:
-   - Formato YYYY-MM-DD
-   - No puede ser fecha futura
-   - Edad mínima configurable (por defecto 13 años)
+4. **Date of Birth**:
+   - YYYY-MM-DD format
+   - Cannot be future date
+   - Configurable minimum age (default 13 years)
 
-### Validaciones de Negocio
+### Business Validations
 
-1. **Referencias**:
-   - Los IDs de agente, ubicación y servicio deben existir y estar activos
-   - Las preferencias de horario deben ser válidas
+1. **References**:
+   - Agent, location and service IDs must exist and be active
+   - Time slot preferences must be valid
 
-2. **Campos Personalizados**:
-   - Deben coincidir con la configuración definida
-   - Validaciones específicas según el tipo de campo
+2. **Custom Fields**:
+   - Must match defined configuration
+   - Specific validations according to field type
 
-3. **Dirección**:
-   - Código de país debe ser válido (ISO 3166-1 alpha-2)
-   - Código postal debe coincidir con el formato del país
+3. **Address**:
+   - Country code must be valid (ISO 3166-1 alpha-2)
+   - Postal code must match country format
 
-## Flujo Recomendado
+## Recommended Flow
 
-### 1. Validación Previa
+### 1. Pre-validation
 
 ```javascript
-// Validar email antes de crear
+// Validate email before creating
 async function checkEmailAvailability(email) {
-  const response = await fetch(`/wp-json/latepoint/v1/customers?search=${email}&search_field=email`, {
-    headers: { 'X-API-Key': 'tu_api_key' }
+  const response = await fetch(`/wp-json/latepoint-api/v1/customers?search=${email}&search_field=email`, {
+    headers: { 'X-API-Key': 'your_api_key' }
   });
   
   const result = await response.json();
-  return result.data.length === 0; // true si está disponible
+  return result.data.length === 0; // true if available
 }
 
-const emailAvailable = await checkEmailAvailability('nuevo@email.com');
+const emailAvailable = await checkEmailAvailability('new@email.com');
 if (!emailAvailable) {
-  console.log('Email ya está en uso');
+  console.log('Email is already in use');
   return;
 }
 ```
 
-### 2. Crear Cliente
+### 2. Create Customer
 
 ```javascript
-// Crear cliente con manejo de errores
+// Create customer with error handling
 async function createCustomer(customerData) {
   try {
-    const response = await fetch('/wp-json/latepoint/v1/customers', {
+    const response = await fetch('/wp-json/latepoint-api/v1/customers', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-API-Key': 'tu_api_key'
+        'X-API-Key': 'your_api_key'
       },
       body: JSON.stringify(customerData)
     });
@@ -872,21 +872,21 @@ async function createCustomer(customerData) {
       throw new Error(result.error.message);
     }
   } catch (error) {
-    console.error('Error al crear cliente:', error);
+    console.error('Error creating customer:', error);
     throw error;
   }
 }
 ```
 
-### 3. Manejo Post-Creación
+### 3. Post-Creation Handling
 
 ```javascript
-// Acciones después de crear cliente
+// Actions after creating customer
 async function handleCustomerCreated(customer) {
-  console.log(`Cliente creado: ${customer.first_name} ${customer.last_name}`);
-  console.log(`ID: ${customer.id}, Código: ${customer.customer_code}`);
+  console.log(`Customer created: ${customer.first_name} ${customer.last_name}`);
+  console.log(`ID: ${customer.id}, Code: ${customer.customer_code}`);
   
-  // Registrar en analytics
+  // Register in analytics
   if (typeof gtag !== 'undefined') {
     gtag('event', 'customer_created', {
       customer_id: customer.id,
@@ -894,50 +894,50 @@ async function handleCustomerCreated(customer) {
     });
   }
   
-  // Mostrar mensaje de éxito
-  showSuccessMessage(`¡Bienvenido ${customer.first_name}! Tu cuenta ha sido creada exitosamente.`);
+  // Show success message
+  showSuccessMessage(`Welcome ${customer.first_name}! Your account has been created successfully.`);
   
-  // Redirigir o continuar flujo
+  // Redirect or continue flow
   if (customer.wp_user_id) {
-    // Usuario de WordPress creado, puede hacer login
-    window.location.href = '/mi-cuenta/';
+    // WordPress user created, can login
+    window.location.href = '/my-account/';
   } else {
-    // Continuar con proceso de reserva
+    // Continue with booking process
     window.location.href = `/booking?customer_id=${customer.id}`;
   }
 }
 ```
 
-## Casos de Uso Comunes
+## Common Use Cases
 
-### 1. Registro Rápido durante Reserva
+### 1. Quick Registration during Booking
 
 ```javascript
-// Crear cliente mínimo durante proceso de reserva
+// Create minimal customer during booking process
 const quickCustomer = {
-  first_name: 'Juan',
-  last_name: 'Pérez',
-  email: 'juan.perez@email.com',
-  phone: '+52 555 123 4567',
-  send_welcome_email: false, // No enviar email durante reserva
-  create_wp_user: false // No crear cuenta por ahora
+  first_name: 'John',
+  last_name: 'Smith',
+  email: 'john.smith@email.com',
+  phone: '+1 555 123 4567',
+  send_welcome_email: false, // Don't send email during booking
+  create_wp_user: false // Don't create account for now
 };
 
 const customer = await createCustomer(quickCustomer);
-console.log('Cliente creado para reserva:', customer.id);
+console.log('Customer created for booking:', customer.id);
 ```
 
-### 2. Registro Completo con Cuenta
+### 2. Full Registration with Account
 
 ```javascript
-// Registro completo con cuenta de usuario
+// Full registration with user account
 const fullCustomer = {
-  first_name: 'María',
-  last_name: 'González',
-  email: 'maria.gonzalez@email.com',
-  phone: '+52 555 987 6543',
+  first_name: 'Mary',
+  last_name: 'Johnson',
+  email: 'mary.johnson@email.com',
+  phone: '+1 555 987 6543',
   preferences: {
-    language: 'es',
+    language: 'en',
     communication_preferences: {
       email_notifications: true,
       sms_notifications: true,
@@ -950,13 +950,13 @@ const fullCustomer = {
 };
 
 const customer = await createCustomer(fullCustomer);
-console.log('Cliente y usuario creados:', customer);
+console.log('Customer and user created:', customer);
 ```
 
-### 3. Importación Masiva de Clientes
+### 3. Bulk Customer Import
 
 ```javascript
-// Importar múltiples clientes
+// Import multiple customers
 async function importCustomers(customersData) {
   const results = {
     success: [],
@@ -965,26 +965,26 @@ async function importCustomers(customersData) {
   
   for (const customerData of customersData) {
     try {
-      // Verificar si el email ya existe
+      // Check if email already exists
       const emailExists = await checkEmailAvailability(customerData.email);
       if (!emailExists) {
         results.errors.push({
           email: customerData.email,
-          error: 'Email ya existe'
+          error: 'Email already exists'
         });
         continue;
       }
       
-      // Crear cliente
+      // Create customer
       const customer = await createCustomer({
         ...customerData,
-        send_welcome_email: false, // No enviar emails masivos
-        create_wp_user: false // No crear usuarios masivamente
+        send_welcome_email: false, // Don't send bulk emails
+        create_wp_user: false // Don't create users in bulk
       });
       
       results.success.push(customer);
       
-      // Pausa para evitar rate limiting
+      // Pause to avoid rate limiting
       await new Promise(resolve => setTimeout(resolve, 100));
       
     } catch (error) {
@@ -998,42 +998,42 @@ async function importCustomers(customersData) {
   return results;
 }
 
-// Uso
+// Usage
 const customersToImport = [
-  { first_name: 'Ana', last_name: 'López', email: 'ana@email.com' },
-  { first_name: 'Carlos', last_name: 'Ruiz', email: 'carlos@email.com' },
-  // ... más clientes
+  { first_name: 'Anna', last_name: 'Williams', email: 'anna@email.com' },
+  { first_name: 'Charles', last_name: 'Brown', email: 'charles@email.com' },
+  // ... more customers
 ];
 
 const importResults = await importCustomers(customersToImport);
-console.log(`Importados: ${importResults.success.length}, Errores: ${importResults.errors.length}`);
+console.log(`Imported: ${importResults.success.length}, Errors: ${importResults.errors.length}`);
 ```
 
-## Mejores Prácticas
+## Best Practices
 
-### 1. Validación del Lado del Cliente
+### 1. Client-Side Validation
 
 ```javascript
-// Validar datos antes de enviar
+// Validate data before sending
 function validateCustomerForm(formData) {
   const errors = {};
   
-  // Validar nombre
+  // Validate name
   if (!formData.first_name || formData.first_name.trim().length < 2) {
-    errors.first_name = 'El nombre debe tener al menos 2 caracteres';
+    errors.first_name = 'Name must be at least 2 characters';
   }
   
-  // Validar email
+  // Validate email
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!formData.email || !emailRegex.test(formData.email)) {
-    errors.email = 'Email inválido';
+    errors.email = 'Invalid email';
   }
   
-  // Validar teléfono (opcional)
+  // Validate phone (optional)
   if (formData.phone) {
     const phoneRegex = /^[\+]?[1-9][\d\s\-\(\)]{7,15}$/;
     if (!phoneRegex.test(formData.phone)) {
-      errors.phone = 'Formato de teléfono inválido';
+      errors.phone = 'Invalid phone format';
     }
   }
   
@@ -1044,10 +1044,10 @@ function validateCustomerForm(formData) {
 }
 ```
 
-### 2. Manejo de Errores Robusto
+### 2. Robust Error Handling
 
 ```javascript
-// Función con reintentos automáticos
+// Function with automatic retries
 async function createCustomerWithRetry(customerData, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
@@ -1057,22 +1057,22 @@ async function createCustomerWithRetry(customerData, maxRetries = 3) {
         throw error;
       }
       
-      // Solo reintentar en errores de red, no en errores de validación
+      // Only retry on network errors, not validation errors
       if (error.message.includes('validation') || error.message.includes('already_exists')) {
         throw error;
       }
       
-      // Esperar antes del siguiente intento
+      // Wait before next attempt
       await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
     }
   }
 }
 ```
 
-### 3. Optimización de Performance
+### 3. Performance Optimization
 
 ```javascript
-// Crear múltiples clientes de forma eficiente
+// Create multiple customers efficiently
 async function createCustomersBatch(customersData, batchSize = 5) {
   const results = [];
   
@@ -1086,7 +1086,7 @@ async function createCustomersBatch(customersData, batchSize = 5) {
     const batchResults = await Promise.all(batchPromises);
     results.push(...batchResults);
     
-    // Pausa entre lotes para respetar rate limits
+    // Pause between batches to respect rate limits
     if (i + batchSize < customersData.length) {
       await new Promise(resolve => setTimeout(resolve, 500));
     }
@@ -1096,20 +1096,20 @@ async function createCustomersBatch(customersData, batchSize = 5) {
 }
 ```
 
-## Notas Importantes
+## Important Notes
 
 <Note>
-  **Email Único**: El email debe ser único en todo el sistema. Si intentas crear un cliente con un email existente, recibirás un error 409.
+  **Unique Email**: The email must be unique throughout the system. If you try to create a customer with an existing email, you will receive a 409 error.
 </Note>
 
 <Tip>
-  **Campos Personalizados**: Los campos personalizados deben estar configurados previamente en tu instalación de LatePoint para que sean aceptados.
+  **Custom Fields**: Custom fields must be previously configured in your LatePoint installation to be accepted.
 </Tip>
 
 <Warning>
-  **Rate Limiting**: Respeta los límites de velocidad de la API, especialmente al crear múltiples clientes. Implementa pausas entre solicitudes.
+  **Rate Limiting**: Respect API rate limits, especially when creating multiple customers. Implement pauses between requests.
 </Warning>
 
 <Info>
-  **Usuario de WordPress**: Si creas un usuario de WordPress asociado, el cliente podrá acceder al área de clientes y gestionar sus reservas.
+  **WordPress User**: If you create an associated WordPress user, the customer will be able to access the customer area and manage their bookings.
 </Info>

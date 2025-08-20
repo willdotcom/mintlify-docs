@@ -1,68 +1,68 @@
 ---
-title: 'Autenticación'
-description: 'Aprende cómo autenticarte de forma segura con la API de LatePoint'
+title: 'Authentication'
+description: 'Learn how to authenticate securely with the LatePoint API'
 ---
 
-## Introducción
+## Introduction
 
-LatePoint API Extension utiliza un sistema de autenticación basado en **API Keys** para garantizar la seguridad de tus datos. Cada solicitud a la API debe incluir una clave válida para ser procesada.
+LatePoint API Extension uses an **API Keys** based authentication system to ensure the security of your data. Each API request must include a valid key to be processed.
 
-## Generación de API Keys
+## API Key Generation
 
-### Crear una Nueva API Key
+### Create a New API Key
 
-1. Accede a **LatePoint > API Settings** en tu panel de WordPress
-2. Haz clic en **"Generate New API Key"**
-3. Asigna un nombre descriptivo (ej: "App Móvil", "Sistema CRM")
-4. Configura los permisos necesarios
-5. Copia y guarda la clave generada de forma segura
+1. Go to **LatePoint > API Settings** in your WordPress dashboard
+2. Click **"Generate New API Key"**
+3. Assign a descriptive name (e.g., "Mobile App", "CRM System")
+4. Configure the necessary permissions
+5. Copy and save the generated key securely
 
 <Warning>
-  **Importante**: La API Key solo se muestra una vez. Si la pierdes, deberás generar una nueva.
+  **Important**: The API Key is only shown once. If you lose it, you'll need to generate a new one.
 </Warning>
 
-### Configuración de Permisos
+### Permission Configuration
 
-Cada API Key puede tener permisos específicos para diferentes recursos:
+Each API Key can have specific permissions for different resources:
 
 <AccordionGroup>
-  <Accordion title="Bookings (Reservas)">
-    - **Read**: Consultar reservas existentes
-    - **Create**: Crear nuevas reservas
-    - **Update**: Modificar reservas existentes
-    - **Delete**: Eliminar reservas
+  <Accordion title="Bookings">
+    - **Read**: Query existing bookings
+    - **Create**: Create new bookings
+    - **Update**: Modify existing bookings
+    - **Delete**: Delete bookings
   </Accordion>
   
-  <Accordion title="Customers (Clientes)">
-    - **Read**: Consultar información de clientes
-    - **Create**: Registrar nuevos clientes
-    - **Update**: Actualizar datos de clientes
-    - **Delete**: Eliminar clientes (si no tienen reservas)
+  <Accordion title="Customers">
+    - **Read**: Query customer information
+    - **Create**: Register new customers
+    - **Update**: Update customer data
+    - **Delete**: Delete customers (if they have no bookings)
   </Accordion>
   
-  <Accordion title="Agents (Agentes)">
-    - **Read**: Consultar lista de agentes y sus horarios
+  <Accordion title="Agents">
+    - **Read**: Query agent list and their schedules
   </Accordion>
   
-  <Accordion title="Services (Servicios)">
-    - **Read**: Consultar servicios disponibles y sus configuraciones
+  <Accordion title="Services">
+    - **Read**: Query available services and their configurations
   </Accordion>
   
-  <Accordion title="Availability (Disponibilidad)">
-    - **Read**: Verificar disponibilidad de horarios
+  <Accordion title="Availability">
+    - **Read**: Check schedule availability
   </Accordion>
 </AccordionGroup>
 
-## Uso de la API Key
+## Using the API Key
 
-### Header de Autenticación
+### Authentication Header
 
-Incluye tu API Key en el header `X-API-Key` de cada solicitud:
+Include your API Key in the `X-API-Key` header of each request:
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/bookings" \
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings" \
   -H "X-API-Key: lp_live_1234567890abcdef" \
   -H "Content-Type: application/json"
 ```
@@ -70,7 +70,7 @@ curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/bookings" \
 ```javascript JavaScript
 const apiKey = 'lp_live_1234567890abcdef';
 
-const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/bookings', {
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/bookings', {
   method: 'GET',
   headers: {
     'X-API-Key': apiKey,
@@ -89,7 +89,7 @@ headers = {
 }
 
 response = requests.get(
-    'https://tu-sitio.com/wp-json/latepoint/v1/bookings',
+    'https://your-site.com/wp-json/latepoint-api/v1/bookings',
     headers=headers
 )
 ```
@@ -103,7 +103,7 @@ $headers = [
 ];
 
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'https://tu-sitio.com/wp-json/latepoint/v1/bookings');
+curl_setopt($ch, CURLOPT_URL, 'https://your-site.com/wp-json/latepoint-api/v1/bookings');
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
@@ -114,91 +114,91 @@ curl_close($ch);
 
 </CodeGroup>
 
-## Tipos de API Keys
+## API Key Types
 
-### Claves de Desarrollo (Test)
+### Development Keys (Test)
 
-Para desarrollo y pruebas, utiliza claves que comienzan con `lp_test_`:
+For development and testing, use keys that start with `lp_test_`:
 
 ```
 lp_test_1234567890abcdef
 ```
 
-**Características:**
-- Solo funcionan en entornos de desarrollo
-- Datos limitados o simulados
-- Rate limiting más permisivo
+**Features:**
+- Only work in development environments
+- Limited or simulated data
+- More permissive rate limiting
 
-### Claves de Producción (Live)
+### Production Keys (Live)
 
-Para entornos de producción, utiliza claves que comienzan con `lp_live_`:
+For production environments, use keys that start with `lp_live_`:
 
 ```
 lp_live_1234567890abcdef
 ```
 
-**Características:**
-- Acceso completo a datos reales
-- Rate limiting estricto
-- Logs de auditoría completos
+**Features:**
+- Full access to real data
+- Strict rate limiting
+- Complete audit logs
 
-## Seguridad y Mejores Prácticas
+## Security and Best Practices
 
-### Almacenamiento Seguro
+### Secure Storage
 
 <Tip>
-  **Nunca** hardcodees las API Keys en tu código fuente. Utiliza variables de entorno.
+  **Never** hardcode API Keys in your source code. Use environment variables.
 </Tip>
 
-**✅ Correcto:**
+**✅ Correct:**
 ```javascript
 const apiKey = process.env.LATEPOINT_API_KEY;
 ```
 
-**❌ Incorrecto:**
+**❌ Incorrect:**
 ```javascript
-const apiKey = 'lp_live_1234567890abcdef'; // ¡Nunca hagas esto!
+const apiKey = 'lp_live_1234567890abcdef'; // Never do this!
 ```
 
-### Variables de Entorno
+### Environment Variables
 
-Configura tus API Keys como variables de entorno:
+Configure your API Keys as environment variables:
 
 ```bash .env
 LATEPOINT_API_KEY=lp_live_1234567890abcdef
-LATEPOINT_BASE_URL=https://tu-sitio.com/wp-json/latepoint/v1
+LATEPOINT_BASE_URL=https://your-site.com/wp-json/latepoint-api/v1
 ```
 
-### Rotación de Claves
+### Key Rotation
 
-1. **Genera una nueva API Key** antes de que expire la actual
-2. **Actualiza tu aplicación** con la nueva clave
-3. **Prueba** que todo funcione correctamente
-4. **Revoca la clave anterior** una vez confirmado el cambio
+1. **Generate a new API Key** before the current one expires
+2. **Update your application** with the new key
+3. **Test** that everything works correctly
+4. **Revoke the previous key** once the change is confirmed
 
-### Monitoreo y Logs
+### Monitoring and Logs
 
-LatePoint API Extension registra automáticamente:
+LatePoint API Extension automatically logs:
 
-- Todas las solicitudes autenticadas
-- Intentos de acceso no autorizados
-- Uso por API Key
-- Errores de autenticación
+- All authenticated requests
+- Unauthorized access attempts
+- Usage by API Key
+- Authentication errors
 
-Accede a los logs en **LatePoint > API Settings > Activity Logs**.
+Access logs at **LatePoint > API Settings > Activity Logs**.
 
 ## Rate Limiting
 
-### Límites por Defecto
+### Default Limits
 
-| Tipo de Clave | Solicitudes por Minuto | Solicitudes por Hora |
-|---------------|------------------------|----------------------|
-| Test          | 100                    | 1,000                |
-| Live          | 60                     | 3,600                |
+| Key Type | Requests per Minute | Requests per Hour |
+|----------|--------------------|-----------------|
+| Test     | 100                | 1,000           |
+| Live     | 60                 | 3,600           |
 
-### Headers de Rate Limiting
+### Rate Limiting Headers
 
-Cada respuesta incluye información sobre tu uso actual:
+Each response includes information about your current usage:
 
 ```http
 X-RateLimit-Limit: 60
@@ -206,9 +206,9 @@ X-RateLimit-Remaining: 45
 X-RateLimit-Reset: 1640995200
 ```
 
-### Manejo de Límites Excedidos
+### Handling Exceeded Limits
 
-Cuando excedas el límite, recibirás una respuesta `429 Too Many Requests`:
+When you exceed the limit, you'll receive a `429 Too Many Requests` response:
 
 ```json
 {
@@ -220,11 +220,11 @@ Cuando excedas el límite, recibirás una respuesta `429 Too Many Requests`:
 }
 ```
 
-## Errores de Autenticación
+## Authentication Errors
 
 ### 401 Unauthorized
 
-**Causa:** API Key faltante o inválida
+**Cause:** Missing or invalid API Key
 
 ```json
 {
@@ -235,14 +235,14 @@ Cuando excedas el límite, recibirás una respuesta `429 Too Many Requests`:
 }
 ```
 
-**Solución:**
-- Verifica que incluyes el header `X-API-Key`
-- Confirma que la API Key sea correcta
-- Asegúrate de que la clave no haya expirado
+**Solution:**
+- Verify that you include the `X-API-Key` header
+- Confirm that the API Key is correct
+- Make sure the key hasn't expired
 
 ### 403 Forbidden
 
-**Causa:** API Key válida pero sin permisos suficientes
+**Cause:** Valid API Key but insufficient permissions
 
 ```json
 {
@@ -253,61 +253,61 @@ Cuando excedas el límite, recibirás una respuesta `429 Too Many Requests`:
 }
 ```
 
-**Solución:**
-- Revisa los permisos de tu API Key
-- Contacta al administrador para ampliar permisos
+**Solution:**
+- Review your API Key permissions
+- Contact the administrator to expand permissions
 
-## Gestión de API Keys
+## API Key Management
 
-### Listar Claves Activas
+### List Active Keys
 
-En **LatePoint > API Settings**, puedes ver:
+In **LatePoint > API Settings**, you can see:
 
-- Todas las API Keys generadas
-- Fecha de creación y último uso
-- Permisos asignados
-- Estado (activa/inactiva)
+- All generated API Keys
+- Creation date and last use
+- Assigned permissions
+- Status (active/inactive)
 
-### Revocar una API Key
+### Revoke an API Key
 
-1. Ve a **LatePoint > API Settings**
-2. Encuentra la clave que deseas revocar
-3. Haz clic en **"Revoke"**
-4. Confirma la acción
+1. Go to **LatePoint > API Settings**
+2. Find the key you want to revoke
+3. Click **"Revoke"**
+4. Confirm the action
 
 <Warning>
-  Una vez revocada, la API Key dejará de funcionar inmediatamente en todas las aplicaciones que la utilicen.
+  Once revoked, the API Key will stop working immediately in all applications that use it.
 </Warning>
 
-## Próximos Pasos
+## Next Steps
 
 <CardGroup cols={2}>
   <Card
-    title="Referencia de API"
+    title="API Reference"
     icon="book"
     href="/api-reference/introduction"
   >
-    Explora todos los endpoints disponibles
+    Explore all available endpoints
   </Card>
   <Card
-    title="Manejo de Errores"
+    title="Error Handling"
     icon="exclamation-triangle"
     href="/api-reference/errors"
   >
-    Aprende a manejar errores correctamente
+    Learn to handle errors correctly
   </Card>
   <Card
     title="Rate Limiting"
     icon="gauge"
     href="/api-reference/rate-limiting"
   >
-    Optimiza el uso de tu cuota de solicitudes
+    Optimize your request quota usage
   </Card>
   <Card
-    title="Ejemplos de Código"
+    title="Code Examples"
     icon="code"
     href="/api-reference/bookings/list"
   >
-    Ve ejemplos prácticos de implementación
+    See practical implementation examples
   </Card>
 </CardGroup>

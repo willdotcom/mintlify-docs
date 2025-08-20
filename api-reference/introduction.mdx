@@ -1,58 +1,58 @@
 ---
-title: 'Introducción a la API'
-description: 'Conceptos fundamentales de LatePoint API Extension'
+title: 'API Introduction'
+description: 'Fundamental concepts of LatePoint API Extension'
 ---
 
-## Bienvenido a LatePoint API
+## Welcome to LatePoint API
 
-LatePoint API Extension proporciona una interfaz REST completa para interactuar con tu sistema de reservas LatePoint. Esta API te permite integrar LatePoint con aplicaciones externas, crear automatizaciones personalizadas y construir experiencias de usuario únicas.
+LatePoint API Extension provides a complete REST interface to interact with your LatePoint booking system. This API allows you to integrate LatePoint with external applications, create custom automations, and build unique user experiences.
 
-## Características Principales
+## Key Features
 
 <CardGroup cols={2}>
   <Card title="RESTful Design" icon="globe">
-    API diseñada siguiendo principios REST con endpoints intuitivos y métodos HTTP estándar
+    API designed following REST principles with intuitive endpoints and standard HTTP methods
   </Card>
-  <Card title="Autenticación Segura" icon="shield">
-    Sistema de API Keys con permisos granulares y rate limiting configurable
+  <Card title="Secure Authentication" icon="shield">
+    API Key system with granular permissions and configurable rate limiting
   </Card>
-  <Card title="Respuestas JSON" icon="code">
-    Todas las respuestas en formato JSON con estructura consistente y códigos de estado HTTP
+  <Card title="JSON Responses" icon="code">
+    All responses in JSON format with consistent structure and HTTP status codes
   </Card>
-  <Card title="Documentación Completa" icon="book">
-    Ejemplos de código en múltiples lenguajes y casos de uso detallados
+  <Card title="Complete Documentation" icon="book">
+    Code examples in multiple languages and detailed use cases
   </Card>
 </CardGroup>
 
-## URL Base
+## Base URL
 
-Todas las solicitudes a la API utilizan la siguiente URL base:
+All API requests use the following base URL:
 
 ```
-https://tu-sitio.com/wp-json/latepoint/v1/
+https://your-site.com/wp-json/latepoint-api/v1/
 ```
 
-## Autenticación
+## Authentication
 
-Cada solicitud debe incluir tu API Key en el header:
+Each request must include your API Key in the header:
 
 ```http
-X-API-Key: tu_api_key_aqui
+X-API-Key: your_api_key_here
 ```
 
-[Aprende más sobre autenticación →](/authentication)
+[Learn more about authentication →](/authentication)
 
-## Estructura de Respuestas
+## Response Structure
 
-### Respuestas Exitosas
+### Successful Responses
 
-Todas las respuestas exitosas siguen esta estructura:
+All successful responses follow this structure:
 
 ```json
 {
   "status": "success",
   "data": {
-    // Datos solicitados
+    // Requested data
   },
   "meta": {
     "total": 100,
@@ -63,52 +63,52 @@ Todas las respuestas exitosas siguen esta estructura:
 }
 ```
 
-### Respuestas de Error
+### Error Responses
 
-Los errores siguen esta estructura:
+Errors follow this structure:
 
 ```json
 {
   "status": "error",
   "error": {
     "code": "invalid_request",
-    "message": "Descripción del error",
+    "message": "Error description",
     "details": {
-      "field": "Información adicional"
+      "field": "Additional information"
     }
   }
 }
 ```
 
-## Códigos de Estado HTTP
+## HTTP Status Codes
 
-| Código | Significado | Descripción |
-|--------|-------------|-------------|
-| 200 | OK | Solicitud exitosa |
-| 201 | Created | Recurso creado exitosamente |
-| 400 | Bad Request | Solicitud malformada |
-| 401 | Unauthorized | API Key faltante o inválida |
-| 403 | Forbidden | Permisos insuficientes |
-| 404 | Not Found | Recurso no encontrado |
-| 422 | Unprocessable Entity | Datos de entrada inválidos |
-| 429 | Too Many Requests | Rate limit excedido |
-| 500 | Internal Server Error | Error del servidor |
+| Code | Meaning | Description |
+|------|---------|-------------|
+| 200 | OK | Successful request |
+| 201 | Created | Resource created successfully |
+| 400 | Bad Request | Malformed request |
+| 401 | Unauthorized | Missing or invalid API Key |
+| 403 | Forbidden | Insufficient permissions |
+| 404 | Not Found | Resource not found |
+| 422 | Unprocessable Entity | Invalid input data |
+| 429 | Too Many Requests | Rate limit exceeded |
+| 500 | Internal Server Error | Server error |
 
-## Paginación
+## Pagination
 
-### Parámetros de Paginación
+### Pagination Parameters
 
-Los endpoints que devuelven listas soportan paginación:
+Endpoints that return lists support pagination:
 
 ```http
 GET /bookings?page=2&per_page=50
 ```
 
-**Parámetros:**
-- `page`: Número de página (por defecto: 1)
-- `per_page`: Elementos por página (por defecto: 20, máximo: 100)
+**Parameters:**
+- `page`: Page number (default: 1)
+- `per_page`: Items per page (default: 20, maximum: 100)
 
-### Respuesta con Paginación
+### Paginated Response
 
 ```json
 {
@@ -125,48 +125,48 @@ GET /bookings?page=2&per_page=50
 }
 ```
 
-## Filtrado y Búsqueda
+## Filtering and Search
 
-### Filtros Comunes
+### Common Filters
 
-La mayoría de endpoints soportan filtros:
+Most endpoints support filters:
 
 ```http
 GET /bookings?status=confirmed&date_from=2024-01-01&date_to=2024-01-31
 ```
 
-### Búsqueda de Texto
+### Text Search
 
-Para búsquedas de texto libre:
+For free text searches:
 
 ```http
-GET /customers?search=juan+perez
+GET /customers?search=john+doe
 ```
 
-### Ordenamiento
+### Sorting
 
-Especifica el orden de los resultados:
+Specify the order of results:
 
 ```http
 GET /bookings?sort=start_date&order=desc
 ```
 
-**Parámetros:**
-- `sort`: Campo por el cual ordenar
-- `order`: `asc` (ascendente) o `desc` (descendente)
+**Parameters:**
+- `sort`: Field to sort by
+- `order`: `asc` (ascending) or `desc` (descending)
 
 ## Rate Limiting
 
-### Límites por Defecto
+### Default Limits
 
-| Tipo de API Key | Por Minuto | Por Hora |
-|-----------------|------------|----------|
+| API Key Type | Per Minute | Per Hour |
+|--------------|------------|----------|
 | Test | 100 | 1,000 |
 | Live | 60 | 3,600 |
 
-### Headers de Rate Limiting
+### Rate Limiting Headers
 
-Cada respuesta incluye información sobre tu uso actual:
+Each response includes information about your current usage:
 
 ```http
 X-RateLimit-Limit: 60
@@ -174,64 +174,64 @@ X-RateLimit-Remaining: 45
 X-RateLimit-Reset: 1640995200
 ```
 
-[Aprende más sobre rate limiting →](/api-reference/rate-limiting)
+[Learn more about rate limiting →](/api-reference/rate-limiting)
 
-## Recursos Disponibles
+## Available Resources
 
-### Bookings (Reservas)
+### Bookings
 
-Gestión completa de reservas:
+Complete booking management:
 
-- **GET** `/bookings` - Listar reservas
-- **POST** `/bookings` - Crear reserva
-- **GET** `/bookings/{id}` - Obtener reserva
-- **PUT** `/bookings/{id}` - Actualizar reserva
-- **DELETE** `/bookings/{id}` - Eliminar reserva
+- **GET** `/bookings` - List bookings
+- **POST** `/bookings` - Create booking
+- **GET** `/bookings/{id}` - Get booking
+- **PUT** `/bookings/{id}` - Update booking
+- **DELETE** `/bookings/{id}` - Delete booking
 
-[Ver documentación completa →](/api-reference/bookings/list)
+[View complete documentation →](/api-reference/bookings/list)
 
-### Customers (Clientes)
+### Customers
 
-Administración de clientes:
+Customer administration:
 
-- **GET** `/customers` - Listar clientes
-- **POST** `/customers` - Crear cliente
-- **GET** `/customers/{id}` - Obtener cliente
-- **PUT** `/customers/{id}` - Actualizar cliente
+- **GET** `/customers` - List customers
+- **POST** `/customers` - Create customer
+- **GET** `/customers/{id}` - Get customer
+- **PUT** `/customers/{id}` - Update customer
 
-[Ver documentación completa →](/api-reference/customers/list)
+[View complete documentation →](/api-reference/customers/list)
 
-### Agents (Agentes)
+### Agents
 
-Consulta de agentes y horarios:
+Agent and schedule queries:
 
-- **GET** `/agents` - Listar agentes
-- **GET** `/agents/{id}` - Obtener agente
+- **GET** `/agents` - List agents
+- **GET** `/agents/{id}` - Get agent
 
-[Ver documentación completa →](/api-reference/agents/list)
+[View complete documentation →](/api-reference/agents/list)
 
-### Services (Servicios)
+### Services
 
-Consulta de servicios disponibles:
+Available services queries:
 
-- **GET** `/services` - Listar servicios
-- **GET** `/services/{id}` - Obtener servicio
+- **GET** `/services` - List services
+- **GET** `/services/{id}` - Get service
 
-[Ver documentación completa →](/api-reference/services/list)
+[View complete documentation →](/api-reference/services/list)
 
-### Availability (Disponibilidad)
+### Availability
 
-Verificación de disponibilidad:
+Availability verification:
 
-- **GET** `/availability` - Verificar disponibilidad
+- **GET** `/availability` - Check availability
 
-[Ver documentación completa →](/api-reference/availability/check)
+[View complete documentation →](/api-reference/availability/check)
 
-## Formatos de Fecha y Hora
+## Date and Time Formats
 
-### Formato ISO 8601
+### ISO 8601 Format
 
-Todas las fechas y horas utilizan formato ISO 8601:
+All dates and times use ISO 8601 format:
 
 ```json
 {
@@ -241,9 +241,9 @@ Todas las fechas y horas utilizan formato ISO 8601:
 }
 ```
 
-### Zona Horaria
+### Timezone
 
-Las fechas se manejan en la zona horaria configurada en WordPress. Para obtener la zona horaria actual:
+Dates are handled in the timezone configured in WordPress. To get the current timezone:
 
 ```http
 GET /status
@@ -253,40 +253,40 @@ GET /status
 {
   "status": "success",
   "data": {
-    "timezone": "America/Mexico_City",
-    "current_time": "2024-01-15T14:30:00-06:00"
+    "timezone": "America/New_York",
+    "current_time": "2024-01-15T14:30:00-05:00"
   }
 }
 ```
 
-## Versionado
+## Versioning
 
-### Versión Actual
+### Current Version
 
-La versión actual de la API es `v1`. Todas las URLs incluyen la versión:
+The current API version is `v1`. All URLs include the version:
 
 ```
-/wp-json/latepoint/v1/
+/wp-json/latepoint-api/v1/
 ```
 
-### Compatibilidad
+### Compatibility
 
-Nos comprometemos a mantener la compatibilidad hacia atrás dentro de la misma versión mayor. Los cambios que rompan la compatibilidad se introducirán en nuevas versiones.
+We are committed to maintaining backward compatibility within the same major version. Breaking changes will be introduced in new versions.
 
-## Ejemplos de Uso
+## Usage Examples
 
-### Ejemplo Básico
+### Basic Example
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/services" \
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/services" \
   -H "X-API-Key: lp_live_1234567890abcdef" \
   -H "Content-Type: application/json"
 ```
 
 ```javascript JavaScript
-const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/services', {
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/services', {
   headers: {
     'X-API-Key': 'lp_live_1234567890abcdef',
     'Content-Type': 'application/json'
@@ -301,7 +301,7 @@ console.log(data);
 import requests
 
 response = requests.get(
-    'https://tu-sitio.com/wp-json/latepoint/v1/services',
+    'https://your-site.com/wp-json/latepoint-api/v1/services',
     headers={
         'X-API-Key': 'lp_live_1234567890abcdef',
         'Content-Type': 'application/json'
@@ -314,44 +314,44 @@ print(data)
 
 </CodeGroup>
 
-## Próximos Pasos
+## Next Steps
 
 <CardGroup cols={2}>
   <Card
-    title="Autenticación"
+    title="Authentication"
     icon="key"
     href="/authentication"
   >
-    Configura tu API Key y permisos
+    Configure your API Key and permissions
   </Card>
   <Card
-    title="Gestión de Reservas"
+    title="Booking Management"
     icon="calendar"
     href="/api-reference/bookings/list"
   >
-    Comienza con el endpoint más utilizado
+    Start with the most used endpoint
   </Card>
   <Card
-    title="Manejo de Errores"
+    title="Error Handling"
     icon="exclamation-triangle"
     href="/api-reference/errors"
   >
-    Aprende a manejar errores correctamente
+    Learn to handle errors correctly
   </Card>
   <Card
-    title="Ejemplos Prácticos"
+    title="Practical Examples"
     icon="code"
     href="/quickstart"
   >
-    Ve ejemplos de implementación completos
+    See complete implementation examples
   </Card>
 </CardGroup>
 
-## Soporte
+## Support
 
-Si necesitas ayuda:
+If you need help:
 
-1. **Documentación**: Revisa la documentación específica de cada endpoint
-2. **Ejemplos**: Consulta los ejemplos de código en cada sección
-3. **Soporte técnico**: Contacta a través de tu cuenta de LatePoint
-4. **Comunidad**: Participa en los foros de LatePoint
+1. **Documentation**: Review the specific documentation for each endpoint
+2. **Examples**: Check the code examples in each section
+3. **Technical support**: Contact through your LatePoint account
+4. **Community**: Participate in LatePoint forums
