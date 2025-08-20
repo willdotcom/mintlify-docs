@@ -57,7 +57,8 @@
               "api-reference/customers/list",
               "api-reference/customers/create",
               "api-reference/customers/get",
-              "api-reference/customers/update"
+              "api-reference/customers/update",
+              "api-reference/customers/delete"
             ]
           },
           {
