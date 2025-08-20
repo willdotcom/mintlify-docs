@@ -33,21 +33,18 @@ description: 'Technical requirements for installing LatePoint API Extension'
 
 ### Core Plugin
 <Warning>
-  LatePoint API Extension requires the main LatePoint plugin to be installed and activated.
+  REST API for Latepoint, requires the main LatePoint plugin to be installed and activated.
 </Warning>
 
-- **LatePoint**: Version 4.0 or higher
+- **LatePoint**: Version 5.x or higher
 - **Status**: Must be activated and configured
-- **License**: Valid LatePoint license
+- **License**: Valid LatePoint PRO Features for access All endpoints
 
 ### Compatible Plugins
 
 LatePoint API Extension is compatible with:
 
 - **LatePoint Pro Features**: All versions
-- **LatePoint Payments**: All versions
-- **LatePoint SMS**: All versions
-- **LatePoint Email**: All versions
 
 ## Server Configuration
 
@@ -75,77 +72,6 @@ max_input_vars = 3000
 post_max_size = 64M
 upload_max_filesize = 64M
 ```
-
-## Requirements Verification
-
-### Plugin Health Check
-
-Once installed, LatePoint API Extension includes a verification tool:
-
-1. Go to **LatePoint > API Settings**
-2. Click **"System Check"**
-3. Verify all items show ✅
-
-### Verified Elements
-
-<AccordionGroup>
-  <Accordion title="WordPress Core">
-    - WordPress version
-    - Permalinks status
-    - User capabilities
-    - Timezone configuration
-  </Accordion>
-  
-  <Accordion title="PHP Environment">
-    - PHP version
-    - Required extensions
-    - Memory and time limits
-    - Error configuration
-  </Accordion>
-  
-  <Accordion title="Database">
-    - Database connection
-    - User permissions
-    - Charset and collation
-    - Available space
-  </Accordion>
-  
-  <Accordion title="LatePoint Core">
-    - Main plugin installed
-    - Compatible version
-    - Activation status
-    - Basic configuration
-  </Accordion>
-</AccordionGroup>
-
-## Common Issues
-
-### Error: "LatePoint not found"
-
-**Cause**: The main LatePoint plugin is not installed or activated.
-
-**Solution**:
-1. Install LatePoint from [latepoint.com](https://latepoint.com)
-2. Activate the plugin
-3. Complete initial setup
-
-### Error: "Permalinks not configured"
-
-**Cause**: Permalinks are set to "Plain".
-
-**Solution**:
-1. Go to **Settings > Permalinks**
-2. Select "Post name" or any other option
-3. Save changes
-
-### Error: "PHP version too old"
-
-**Cause**: Your server uses PHP 7.3 or lower.
-
-**Solution**:
-1. Contact your hosting provider
-2. Request upgrade to PHP 8.1 or higher
-3. Verify all extensions are available
 
 
 
