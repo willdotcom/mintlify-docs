@@ -1,0 +1,38 @@
+---
+title: "Create Coupon"
+api: "POST /wp-json/latepoint-api/v1/coupons"
+description: "Create a new coupon."
+---
+
+## Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `code` | string | Unique coupon code |
+| `discount_type` | string | Type of discount (percentage, fixed_amount) |
+| `discount_value` | number | Discount value |
+
+## Optional Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `usage_limit` | integer | Maximum number of uses |
+| `expiry_date` | string | Expiration date (YYYY-MM-DD) |
+| `minimum_amount` | number | Minimum order amount required |
+| `is_active` | boolean | Whether the coupon is active (default: true) |
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/coupons
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "code": "DESCUENTO25",
+  "discount_type": "percentage",
+  "discount_value": 25,
+  "usage_limit": 100,
+  "expiry_date": "2024-12-31"
+}
+```

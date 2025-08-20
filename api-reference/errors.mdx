@@ -1,0 +1,38 @@
+---
+title: "HTTP Status Codes"
+description: "HTTP status codes used by the LatePoint API"
+---
+
+## Success Codes
+
+| Code | Description |
+|------|-------------|
+| `200` | OK - Request processed successfully |
+| `201` | Created - Resource created successfully |
+| `204` | No Content - Resource deleted successfully |
+
+## Error Codes
+
+| Code | Description |
+|------|-------------|
+| `400` | Bad Request - Invalid or malformed data |
+| `401` | Unauthorized - Invalid, missing, or expired API key |
+| `403` | Forbidden - No permission to access resource |
+| `404` | Not Found - Resource or endpoint not found |
+| `405` | Method Not Allowed - HTTP method not supported |
+| `422` | Unprocessable Entity - Valid data that cannot be processed |
+| `500` | Internal Server Error - Server error |
+
+## Error Response Format
+
+All errors follow the WordPress REST API standard format:
+
+```json
+{
+  "code": "error_code",
+  "message": "Human readable error message",
+  "data": {
+    "status": 400
+  }
+}
+```

@@ -1,0 +1,331 @@
+---
+title: 'Instalación del Plugin'
+description: 'Guía paso a paso para instalar LatePoint API Extension'
+---
+
+## Antes de Comenzar
+
+<Warning>
+  Asegúrate de tener una **copia de seguridad completa** de tu sitio antes de instalar cualquier plugin.
+</Warning>
+
+### Lista de Verificación
+
+- ✅ [Requisitos del sistema](/installation/requirements) verificados
+- ✅ LatePoint plugin principal instalado y activado
+- ✅ Copia de seguridad del sitio realizada
+- ✅ Acceso de administrador a WordPress
+
+## Métodos de Instalación
+
+### Método 1: Instalación desde el Panel de WordPress
+
+<Steps>
+  <Step title="Acceder al Panel de Plugins">
+    1. Inicia sesión en tu panel de WordPress
+    2. Ve a **Plugins > Añadir nuevo**
+    3. Haz clic en **"Subir plugin"** en la parte superior
+  </Step>
+  
+  <Step title="Subir el Archivo">
+    1. Haz clic en **"Seleccionar archivo"**
+    2. Selecciona el archivo `latepoint-api-extension.zip`
+    3. Haz clic en **"Instalar ahora"**
+  </Step>
+  
+  <Step title="Activar el Plugin">
+    1. Una vez instalado, haz clic en **"Activar plugin"**
+    2. Serás redirigido a la página de plugins
+    3. Verifica que aparezca "LatePoint API Extension" en la lista
+  </Step>
+</Steps>
+
+### Método 2: Instalación vía FTP
+
+<Steps>
+  <Step title="Preparar los Archivos">
+    1. Descomprime el archivo `latepoint-api-extension.zip`
+    2. Tendrás una carpeta llamada `latepoint-api-extension`
+    3. Conecta a tu servidor vía FTP
+  </Step>
+  
+  <Step title="Subir al Servidor">
+    1. Navega a `/wp-content/plugins/`
+    2. Sube la carpeta `latepoint-api-extension` completa
+    3. Asegúrate de que todos los archivos se hayan subido correctamente
+  </Step>
+  
+  <Step title="Activar desde WordPress">
+    1. Ve a **Plugins > Plugins instalados** en WordPress
+    2. Busca "LatePoint API Extension"
+    3. Haz clic en **"Activar"**
+  </Step>
+</Steps>
+
+### Método 3: Instalación vía WP-CLI
+
+Si tienes acceso a WP-CLI:
+
+```bash
+# Subir e instalar el plugin
+wp plugin install /ruta/al/latepoint-api-extension.zip
+
+# Activar el plugin
+wp plugin activate latepoint-api-extension
+
+# Verificar que esté activo
+wp plugin list --status=active
+```
+
+## Verificación de la Instalación
+
+### 1. Verificar en el Panel de Plugins
+
+En **Plugins > Plugins instalados**, deberías ver:
+
+```
+LatePoint API Extension
+Versión 1.0.0 | Por LatePoint Team
+Estado: Activo
+```
+
+### 2. Verificar el Menú de LatePoint
+
+En el menú lateral de WordPress, bajo **LatePoint**, deberías ver una nueva opción:
+
+```
+LatePoint
+├── Dashboard
+├── Bookings
+├── Customers
+├── ...
+└── API Settings  ← Nueva opción
+```
+
+### 3. Verificar la API
+
+Prueba que la API esté disponible visitando:
+
+```
+https://tu-sitio.com/wp-json/latepoint/v1/
+```
+
+Deberías ver una respuesta JSON como:
+
+```json
+{
+  "namespace": "latepoint/v1",
+  "routes": {
+    "/latepoint/v1": {
+      "namespace": "latepoint/v1",
+      "methods": ["GET"],
+      "endpoints": [...]
+    }
+  }
+}
+```
+
+## Configuración Inicial
+
+### 1. Acceder a la Configuración
+
+1. Ve a **LatePoint > API Settings**
+2. Verás la página de configuración de la API
+3. Si es la primera vez, aparecerá un asistente de configuración
+
+### 2. Ejecutar el Asistente de Configuración
+
+<Steps>
+  <Step title="Bienvenida">
+    El asistente te dará la bienvenida y explicará los beneficios de la API.
+  </Step>
+  
+  <Step title="Verificación del Sistema">
+    Se ejecutará automáticamente una verificación de:
+    - Requisitos del sistema
+    - Configuración de permalinks
+    - Permisos de base de datos
+    - Estado de LatePoint principal
+  </Step>
+  
+  <Step title="Configuración de Seguridad">
+    - Configurar rate limiting
+    - Establecer políticas de acceso
+    - Configurar logs de auditoría
+  </Step>
+  
+  <Step title="Primera API Key">
+    - Generar tu primera API Key
+    - Configurar permisos básicos
+    - Copiar y guardar la clave
+  </Step>
+</Steps>
+
+## Configuración de Base de Datos
+
+### Tablas Creadas Automáticamente
+
+Durante la activación, se crean las siguientes tablas:
+
+```sql
+-- Almacena las API Keys
+wp_latepoint_api_keys
+
+-- Registra el uso de la API
+wp_latepoint_api_logs
+
+-- Configuración de rate limiting
+wp_latepoint_api_rate_limits
+
+-- Información de licencias
+wp_latepoint_license_info
+```
+
+### Verificar las Tablas
+
+Puedes verificar que las tablas se crearon correctamente:
+
+```sql
+SHOW TABLES LIKE 'wp_latepoint_api_%';
+```
+
+## Configuración del Servidor Web
+
+### Apache
+
+Si usas Apache, verifica que el archivo `.htaccess` en la raíz de WordPress contenga:
+
+```apache
+# BEGIN WordPress
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>
+# END WordPress
+```
+
+### Nginx
+
+Para Nginx, asegúrate de tener esta configuración:
+
+```nginx
+location /wp-json/ {
+    try_files $uri $uri/ /index.php?$args;
+}
+```
+
+## Solución de Problemas
+
+### Error: "Plugin could not be activated"
+
+**Posibles causas:**
+- LatePoint principal no está instalado
+- Versión de PHP incompatible
+- Permisos de archivo incorrectos
+
+**Solución:**
+1. Verifica que LatePoint esté instalado y activado
+2. Revisa los [requisitos del sistema](/installation/requirements)
+3. Verifica los logs de error de WordPress
+
+### Error: "Database error during activation"
+
+**Causa:** Permisos insuficientes de base de datos
+
+**Solución:**
+1. Verifica que el usuario de WordPress tenga permisos CREATE y ALTER
+2. Contacta a tu proveedor de hosting si es necesario
+3. Revisa los logs de MySQL/MariaDB
+
+### Error: "API endpoints not found"
+
+**Causa:** Permalinks no configurados correctamente
+
+**Solución:**
+1. Ve a **Configuración > Enlaces permanentes**
+2. Selecciona cualquier opción excepto "Simple"
+3. Guarda los cambios
+4. Prueba nuevamente la URL de la API
+
+### Plugin aparece pero no funciona
+
+**Diagnóstico:**
+1. Ve a **LatePoint > API Settings > System Check**
+2. Revisa todos los elementos marcados en rojo
+3. Sigue las recomendaciones específicas
+
+## Actualización del Plugin
+
+### Actualización Manual
+
+<Warning>
+  Siempre haz una copia de seguridad antes de actualizar.
+</Warning>
+
+<Steps>
+  <Step title="Desactivar el Plugin">
+    1. Ve a **Plugins > Plugins instalados**
+    2. Desactiva "LatePoint API Extension"
+  </Step>
+  
+  <Step title="Eliminar la Versión Anterior">
+    1. Haz clic en "Eliminar" (los datos se conservan)
+    2. Confirma la eliminación
+  </Step>
+  
+  <Step title="Instalar la Nueva Versión">
+    1. Sigue el proceso de instalación normal
+    2. Activa el plugin
+    3. Verifica que todo funcione correctamente
+  </Step>
+</Steps>
+
+### Actualización Automática (Próximamente)
+
+En futuras versiones, el plugin soportará actualizaciones automáticas desde el panel de WordPress.
+
+## Próximos Pasos
+
+<CardGroup cols={2}>
+  <Card
+    title="Configuración"
+    icon="gear"
+    href="/installation/configuration"
+  >
+    Configura el plugin después de la instalación
+  </Card>
+  <Card
+    title="Primera API Key"
+    icon="key"
+    href="/authentication"
+  >
+    Genera tu primera API Key
+  </Card>
+  <Card
+    title="Inicio Rápido"
+    icon="rocket"
+    href="/quickstart"
+  >
+    Realiza tu primera llamada a la API
+  </Card>
+  <Card
+    title="Referencia de API"
+    icon="book"
+    href="/api-reference/introduction"
+  >
+    Explora todos los endpoints disponibles
+  </Card>
+</CardGroup>
+
+## Soporte
+
+Si encuentras problemas durante la instalación:
+
+1. **Revisa los logs**: WordPress > Herramientas > Salud del sitio
+2. **Consulta la documentación**: [wpdocs.latepoint.com](https://wpdocs.latepoint.com)
+3. **Contacta al soporte**: A través de tu cuenta de LatePoint
+4. **Comunidad**: Foros de WordPress y LatePoint

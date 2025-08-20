@@ -1,0 +1,22 @@
+---
+title: "Update Coupon"
+api: "PUT /wp-json/latepoint-api/v1/coupons/{code}"
+description: "Update an existing coupon."
+---
+
+## Request Body Parameters
+
+Same parameters as POST (except code), all optional. Only provided fields will be updated.
+
+## Example Request
+
+```bash
+PUT /wp-json/latepoint-api/v1/coupons/DESCUENTO25
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "discount_value": 30,
+  "usage_limit": 50
+}
+```

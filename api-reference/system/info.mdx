@@ -1,0 +1,35 @@
+---
+title: "System Information"
+api: "GET /wp-json/latepoint-api/v1/info"
+description: "Get system information including plugin versions and available endpoints."
+---
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/info
+```
+
+## Example Response
+
+```json
+{
+  "plugin_version": "1.0.0",
+  "latepoint_version": "5.0.0",
+  "wordpress_version": "6.4.2",
+  "php_version": "8.1.0",
+  "endpoints": [
+    "/bookings",
+    "/agents",
+    "/services",
+    "/customers",
+    "/payments",
+    "/orders",
+    "/coupons",
+    "/locations",
+    "/availability",
+    "/info",
+    "/test"
+  ]
+}
+```

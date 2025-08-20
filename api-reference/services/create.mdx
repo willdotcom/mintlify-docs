@@ -1,0 +1,38 @@
+---
+title: "Create Service"
+api: "POST /wp-json/latepoint-api/v1/services"
+description: "Create a new service."
+---
+
+## Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `name` | string | Service name |
+| `duration` | integer | Service duration in minutes |
+| `price` | number | Service price |
+
+## Optional Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `short_description` | string | Brief description of the service |
+| `description` | string | Detailed description of the service |
+| `category_id` | integer | Service category ID |
+| `selection_image_id` | integer | Image ID for service selection |
+| `is_active` | boolean | Whether the service is active (default: true) |
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/services
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "name": "General Consultation",
+  "duration": 60,
+  "price": 100,
+  "short_description": "Standard medical consultation"
+}
+```

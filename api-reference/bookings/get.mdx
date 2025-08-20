@@ -1,0 +1,590 @@
+---
+title: 'Get Booking'
+api: 'GET https://your-site.com/wp-json/latepoint-api/v1/bookings/{id}'
+description: 'Retrieves detailed information for a specific booking'
+---
+
+## Description
+
+This endpoint returns all available information for a specific booking, including customer details, agent, service, location, and payment status.
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your LatePoint API Key with read permissions
+</ParamField>
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  Unique ID of the booking to retrieve
+</ParamField>
+
+## Response
+
+### Successful Response (200 OK)
+
+<ResponseField name="status" type="string">
+  Response status ("success")
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Complete booking object
+  
+  <Expandable title="Complete Booking Structure">
+    <ResponseField name="id" type="integer">
+      Unique booking ID
+    </ResponseField>
+    
+    <ResponseField name="booking_code" type="string">
+      Unique booking code
+    </ResponseField>
+    
+    <ResponseField name="status" type="string">
+      Current booking status
+      
+      **Possible values:**
+      - `pending` - Pending
+      - `confirmed` - Confirmed
+      - `cancelled` - Cancelled
+      - `completed` - Completed
+      - `no_show` - No show
+    </ResponseField>
+    
+    <ResponseField name="start_date" type="string">
+      Start date (YYYY-MM-DD)
+    </ResponseField>
+    
+    <ResponseField name="start_time" type="string">
+      Start time (HH:MM)
+    </ResponseField>
+    
+    <ResponseField name="end_time" type="string">
+      End time (HH:MM)
+    </ResponseField>
+    
+    <ResponseField name="duration" type="integer">
+      Duration in minutes
+    </ResponseField>
+    
+    <ResponseField name="price" type="string">
+      Total booking price
+    </ResponseField>
+    
+    <ResponseField name="subtotal" type="string">
+      Subtotal before taxes
+    </ResponseField>
+    
+    <ResponseField name="tax_total" type="string">
+      Total taxes
+    </ResponseField>
+    
+    <ResponseField name="customer" type="object">
+      Complete customer information
+      
+      <Expandable title="Complete Customer Data">
+        <ResponseField name="id" type="integer">
+          Customer ID
+        </ResponseField>
+        
+        <ResponseField name="first_name" type="string">
+          Customer first name
+        </ResponseField>
+        
+        <ResponseField name="last_name" type="string">
+          Customer last name
+        </ResponseField>
+        
+        <ResponseField name="full_name" type="string">
+          Customer full name
+        </ResponseField>
+        
+        <ResponseField name="email" type="string">
+          Customer email
+        </ResponseField>
+        
+        <ResponseField name="phone" type="string">
+          Customer phone
+        </ResponseField>
+        
+        <ResponseField name="avatar_url" type="string">
+          Customer avatar URL
+        </ResponseField>
+        
+        <ResponseField name="notes" type="string">
+          Customer notes
+        </ResponseField>
+        
+        <ResponseField name="created_at" type="string">
+          Customer registration date
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="agent" type="object">
+      Complete agent information
+      
+      <Expandable title="Complete Agent Data">
+        <ResponseField name="id" type="integer">
+          Agent ID
+        </ResponseField>
+        
+        <ResponseField name="display_name" type="string">
+          Agent display name
+        </ResponseField>
+        
+        <ResponseField name="first_name" type="string">
+          Agent first name
+        </ResponseField>
+        
+        <ResponseField name="last_name" type="string">
+          Agent last name
+        </ResponseField>
+        
+        <ResponseField name="email" type="string">
+          Agent email
+        </ResponseField>
+        
+        <ResponseField name="phone" type="string">
+          Agent phone
+        </ResponseField>
+        
+        <ResponseField name="bio" type="string">
+          Agent biography
+        </ResponseField>
+        
+        <ResponseField name="avatar_url" type="string">
+          Agent avatar URL
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="service" type="object">
+      Complete service information
+      
+      <Expandable title="Complete Service Data">
+        <ResponseField name="id" type="integer">
+          Service ID
+        </ResponseField>
+        
+        <ResponseField name="name" type="string">
+          Service name
+        </ResponseField>
+        
+        <ResponseField name="short_description" type="string">
+          Service short description
+        </ResponseField>
+        
+        <ResponseField name="duration" type="integer">
+          Duration in minutes
+        </ResponseField>
+        
+        <ResponseField name="price" type="string">
+          Service price
+        </ResponseField>
+        
+        <ResponseField name="category_id" type="integer">
+          Service category ID
+        </ResponseField>
+        
+        <ResponseField name="category_name" type="string">
+          Category name
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="location" type="object">
+      Complete location information
+      
+      <Expandable title="Complete Location Data">
+        <ResponseField name="id" type="integer">
+          Location ID
+        </ResponseField>
+        
+        <ResponseField name="name" type="string">
+          Location name
+        </ResponseField>
+        
+        <ResponseField name="full_address" type="string">
+          Complete address
+        </ResponseField>
+        
+        <ResponseField name="address" type="string">
+          Address
+        </ResponseField>
+        
+        <ResponseField name="city" type="string">
+          City
+        </ResponseField>
+        
+        <ResponseField name="state" type="string">
+          State/Province
+        </ResponseField>
+        
+        <ResponseField name="zipcode" type="string">
+          Postal code
+        </ResponseField>
+        
+        <ResponseField name="country" type="string">
+          Country
+        </ResponseField>
+        
+        <ResponseField name="phone" type="string">
+          Location phone
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="notes" type="string">
+      Additional booking notes
+    </ResponseField>
+    
+    <ResponseField name="internal_notes" type="string">
+      Internal notes (only visible to staff)
+    </ResponseField>
+    
+    <ResponseField name="payment_status" type="string">
+      Payment status
+      
+      **Possible values:**
+      - `not_paid` - Not paid
+      - `partially_paid` - Partially paid
+      - `paid` - Paid
+      - `refunded` - Refunded
+    </ResponseField>
+    
+    <ResponseField name="payment_method" type="string">
+      Payment method used
+    </ResponseField>
+    
+    <ResponseField name="confirmation_code" type="string">
+      Confirmation code sent to customer
+    </ResponseField>
+    
+    <ResponseField name="source_id" type="string">
+      Booking source ID (web, app, etc.)
+    </ResponseField>
+    
+    <ResponseField name="created_at" type="string">
+      Creation date and time (ISO 8601)
+    </ResponseField>
+    
+    <ResponseField name="updated_at" type="string">
+      Last update date and time (ISO 8601)
+    </ResponseField>
+    
+    <ResponseField name="custom_fields" type="object">
+      Custom booking fields
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Examples
+
+### Basic Request
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings/123" \
+  -H "X-API-Key: lp_live_1234567890abcdef" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const bookingId = 123;
+
+const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
+  headers: {
+    'X-API-Key': 'lp_live_1234567890abcdef',
+    'Content-Type': 'application/json'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+
+```python Python
+import requests
+
+booking_id = 123
+
+response = requests.get(
+    f'https://your-site.com/wp-json/latepoint-api/v1/bookings/{booking_id}',
+    headers={
+        'X-API-Key': 'lp_live_1234567890abcdef',
+        'Content-Type': 'application/json'
+    }
+)
+
+data = response.json()
+print(data)
+```
+
+```php PHP
+<?php
+$booking_id = 123;
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://your-site.com/wp-json/latepoint-api/v1/bookings/{$booking_id}",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER => [
+        'X-API-Key: lp_live_1234567890abcdef',
+        'Content-Type: application/json'
+    ]
+]);
+
+$response = curl_exec($curl);
+$data = json_decode($response, true);
+
+curl_close($curl);
+print_r($data);
+?>
+```
+
+</CodeGroup>
+
+## Example Response
+
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 123,
+    "booking_code": "LP-2024-001",
+    "status": "confirmed",
+    "start_date": "2024-01-15",
+    "start_time": "14:30",
+    "end_time": "15:30",
+    "duration": 60,
+    "price": "75.00",
+    "subtotal": "75.00",
+    "tax_total": "0.00",
+    "customer": {
+      "id": 45,
+      "first_name": "John",
+      "last_name": "Doe",
+      "full_name": "John Doe",
+      "email": "john.doe@email.com",
+      "phone": "+1 555 123 4567",
+      "avatar_url": "https://your-site.com/wp-content/uploads/avatars/45.jpg",
+      "notes": "Frequent customer",
+      "created_at": "2023-12-01T10:00:00Z"
+    },
+    "agent": {
+      "id": 3,
+      "display_name": "Dr. Sarah Johnson",
+      "first_name": "Sarah",
+      "last_name": "Johnson",
+      "email": "sarah.johnson@clinic.com",
+      "phone": "+1 555 987 6543",
+      "bio": "General medicine specialist with 10 years of experience",
+      "avatar_url": "https://your-site.com/wp-content/uploads/avatars/agent-3.jpg"
+    },
+    "service": {
+      "id": 7,
+      "name": "General Consultation",
+      "short_description": "General medical consultation",
+      "duration": 60,
+      "price": "75.00",
+      "category_id": 2,
+      "category_name": "General Medicine"
+    },
+    "location": {
+      "id": 1,
+      "name": "Main Clinic",
+      "full_address": "123 Main Street, Downtown, NY 10001, USA",
+      "address": "123 Main Street",
+      "city": "New York",
+      "state": "NY",
+      "zipcode": "10001",
+      "country": "USA",
+      "phone": "+1 555 111 2222"
+    },
+    "notes": "Patient's first consultation",
+    "internal_notes": "Review previous medical history",
+    "payment_status": "paid",
+    "payment_method": "credit_card",
+    "confirmation_code": "CONF-2024-001",
+    "source_id": "website",
+    "created_at": "2024-01-10T10:30:00Z",
+    "updated_at": "2024-01-10T10:30:00Z",
+    "custom_fields": {
+      "emergency_contact": "Jane Doe - +1 555 111 3333",
+      "insurance_provider": "Health Insurance Co."
+    }
+  }
+}
+```
+
+## Error Codes
+
+<ResponseExample>
+
+```json Error 404 - Booking Not Found
+{
+  "status": "error",
+  "error": {
+    "code": "booking_not_found",
+    "message": "Booking with ID 123 was not found"
+  }
+}
+```
+
+```json Error 401 - Invalid API Key
+{
+  "status": "error",
+  "error": {
+    "code": "unauthorized",
+    "message": "Invalid or missing API Key"
+  }
+}
+```
+
+```json Error 403 - Insufficient Permissions
+{
+  "status": "error",
+  "error": {
+    "code": "forbidden",
+    "message": "You don't have permission to access this booking"
+  }
+}
+```
+
+```json Error 400 - Invalid ID
+{
+  "status": "error",
+  "error": {
+    "code": "invalid_request",
+    "message": "Invalid booking ID",
+    "details": {
+      "id": "Must be a positive integer"
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+## Common Use Cases
+
+### 1. Display Booking Details
+
+```javascript
+// To display complete details on a booking page
+async function showBookingDetails(bookingId) {
+  try {
+    const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
+      headers: {
+        'X-API-Key': 'your_api_key',
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      const booking = result.data;
+      
+      // Display information in the UI
+      document.getElementById('booking-code').textContent = booking.booking_code;
+      document.getElementById('customer-name').textContent = booking.customer.full_name;
+      document.getElementById('service-name').textContent = booking.service.name;
+      document.getElementById('appointment-date').textContent = 
+        `${booking.start_date} ${booking.start_time}`;
+    }
+  } catch (error) {
+    console.error('Error fetching booking:', error);
+  }
+}
+```
+
+### 2. Check Booking Status
+
+```javascript
+// To verify the current status of a booking
+async function checkBookingStatus(bookingId) {
+  const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`);
+  const result = await response.json();
+  
+  if (result.status === 'success') {
+    const status = result.data.status;
+    const paymentStatus = result.data.payment_status;
+    
+    return {
+      booking_status: status,
+      payment_status: paymentStatus,
+      is_confirmed: status === 'confirmed',
+      is_paid: paymentStatus === 'paid'
+    };
+  }
+  
+  return null;
+}
+```
+
+### 3. Get Information for Confirmation Email
+
+```javascript
+// To generate personalized confirmation emails
+async function getBookingForEmail(bookingId) {
+  const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`);
+  const result = await response.json();
+  
+  if (result.status === 'success') {
+    const booking = result.data;
+    
+    return {
+      customer_name: booking.customer.full_name,
+      customer_email: booking.customer.email,
+      service_name: booking.service.name,
+      agent_name: booking.agent.display_name,
+      appointment_datetime: `${booking.start_date} ${booking.start_time}`,
+      location_name: booking.location.name,
+      location_address: booking.location.full_address,
+      booking_code: booking.booking_code,
+      confirmation_code: booking.confirmation_code
+    };
+  }
+  
+  return null;
+}
+```
+
+## Important Notes
+
+<Note>
+  **Complete Information**: This endpoint returns all available booking information, including related customer, agent, service, and location data.
+</Note>
+
+<Warning>
+  **Permissions**: Make sure your API Key has permissions to access bookings. Some configurations may restrict access to specific bookings.
+</Warning>
+
+<Tip>
+  **Caching**: Consider implementing client-side caching for bookings that don't change frequently, especially for displaying details in user interfaces.
+</Tip>
+
+## Custom Fields
+
+If your LatePoint installation has custom fields configured, these will appear in the `custom_fields` object of the response:
+
+```json
+"custom_fields": {
+  "emergency_contact": "Jane Doe - +1 555 111 3333",
+  "insurance_provider": "Health Insurance Co.",
+  "special_requirements": "Wheelchair access",
+  "referral_source": "Google"
+}
+```
+
+## Integration with Other Endpoints
+
+This endpoint complements perfectly with other API endpoints:
+
+- **Update booking**: Use `PUT /bookings/{id}` after getting current data
+- **Check availability**: Use `GET /availability` for schedule changes
+- **Get customer**: Use `GET /customers/{id}` for additional customer information
+- **List bookings**: Use `GET /bookings` for context of other customer bookings

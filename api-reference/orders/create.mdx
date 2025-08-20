@@ -1,0 +1,40 @@
+---
+title: "Create Order"
+api: "POST /wp-json/latepoint-api/v1/orders"
+description: "Create a new order."
+---
+
+## Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `customer_id` | integer | Customer ID |
+| `total` | number | Order total amount |
+| `subtotal` | number | Order subtotal |
+
+## Optional Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `tax_total` | number | Tax amount |
+| `discount_total` | number | Discount amount |
+| `coupon_code` | string | Applied coupon code |
+| `status` | string | Order status |
+| `payment_method` | string | Payment method used |
+| `notes` | string | Order notes |
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/orders
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "customer_id": 456,
+  "total": 120.00,
+  "subtotal": 100.00,
+  "tax_total": 20.00,
+  "status": "pending"
+}
+```

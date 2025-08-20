@@ -1,0 +1,743 @@
+---
+title: 'Eliminar Reserva'
+api: 'DELETE https://tu-sitio.com/wp-json/latepoint/v1/bookings/{id}'
+description: 'Elimina una reserva existente del sistema'
+---
+
+## Descripción
+
+Este endpoint permite eliminar permanentemente una reserva del sistema. Esta acción es irreversible y debe usarse con precaución.
+
+<Warning>
+  **Acción Irreversible**: Una vez eliminada, la reserva no puede ser recuperada. Considera usar el estado `cancelled` en su lugar si necesitas mantener un registro histórico.
+</Warning>
+
+## Autenticación
+
+<ParamField header="X-API-Key" type="string" required>
+  Tu API Key de LatePoint con permisos de eliminación
+</ParamField>
+
+## Parámetros de Ruta
+
+<ParamField path="id" type="integer" required>
+  ID único de la reserva a eliminar
+</ParamField>
+
+## Parámetros de Consulta
+
+<ParamField query="force" type="boolean" default="false">
+  Forzar eliminación incluso si la reserva está confirmada o completada
+</ParamField>
+
+<ParamField query="notify_customer" type="boolean" default="false">
+  Enviar notificación de cancelación al cliente antes de eliminar
+</ParamField>
+
+<ParamField query="reason" type="string">
+  Razón de la eliminación (se incluirá en logs de auditoría)
+</ParamField>
+
+## Respuesta
+
+### Respuesta Exitosa (200 OK)
+
+<ResponseField name="status" type="string">
+  Estado de la respuesta ("success")
+</ResponseField>
+
+<ResponseField name="message" type="string">
+  Mensaje de confirmación de la eliminación
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  Información de la reserva eliminada y detalles de la operación
+  
+  <Expandable title="Detalles de la Eliminación">
+    <ResponseField name="deleted_booking_id" type="integer">
+      ID de la reserva eliminada
+    </ResponseField>
+    
+    <ResponseField name="booking_code" type="string">
+      Código de la reserva eliminada
+    </ResponseField>
+    
+    <ResponseField name="customer_notified" type="boolean">
+      Si se notificó al cliente sobre la eliminación
+    </ResponseField>
+    
+    <ResponseField name="deleted_at" type="string">
+      Timestamp de cuando se eliminó la reserva
+    </ResponseField>
+    
+    <ResponseField name="deleted_by" type="object">
+      Información del usuario que eliminó la reserva
+    </ResponseField>
+    
+    <ResponseField name="reason" type="string">
+      Razón proporcionada para la eliminación
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Ejemplos
+
+### Eliminación Simple
+
+<CodeGroup>
+
+```bash cURL
+curl -X DELETE "https://tu-sitio.com/wp-json/latepoint/v1/bookings/123" \
+  -H "X-API-Key: lp_live_1234567890abcdef"
+```
+
+```javascript JavaScript
+const bookingId = 123;
+
+const response = await fetch(`https://tu-sitio.com/wp-json/latepoint/v1/bookings/${bookingId}`, {
+  method: 'DELETE',
+  headers: {
+    'X-API-Key': 'lp_live_1234567890abcdef'
+  }
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+booking_id = 123
+
+response = requests.delete(
+    f'https://tu-sitio.com/wp-json/latepoint/v1/bookings/{booking_id}',
+    headers={
+        'X-API-Key': 'lp_live_1234567890abcdef'
+    }
+)
+
+result = response.json()
+print(result)
+```
+
+```php PHP
+<?php
+$booking_id = 123;
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => "https://tu-sitio.com/wp-json/latepoint/v1/bookings/{$booking_id}",
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_CUSTOMREQUEST => 'DELETE',
+    CURLOPT_HTTPHEADER => [
+        'X-API-Key: lp_live_1234567890abcdef'
+    ]
+]);
+
+$response = curl_exec($curl);
+$result = json_decode($response, true);
+
+curl_close($curl);
+print_r($result);
+?>
+```
+
+</CodeGroup>
+
+### Eliminación con Notificación
+
+<CodeGroup>
+
+```bash cURL
+curl -X DELETE "https://tu-sitio.com/wp-json/latepoint/v1/bookings/123?notify_customer=true&reason=Cancelada%20por%20emergencia" \
+  -H "X-API-Key: lp_live_1234567890abcdef"
+```
+
+```javascript JavaScript
+const bookingId = 123;
+const params = new URLSearchParams({
+  notify_customer: 'true',
+  reason: 'Cancelada por emergencia'
+});
+
+const response = await fetch(`https://tu-sitio.com/wp-json/latepoint/v1/bookings/${bookingId}?${params}`, {
+  method: 'DELETE',
+  headers: {
+    'X-API-Key': 'lp_live_1234567890abcdef'
+  }
+});
+
+const result = await response.json();
+console.log(result);
+```
+
+```python Python
+import requests
+
+booking_id = 123
+params = {
+    'notify_customer': True,
+    'reason': 'Cancelada por emergencia'
+}
+
+response = requests.delete(
+    f'https://tu-sitio.com/wp-json/latepoint/v1/bookings/{booking_id}',
+    headers={
+        'X-API-Key': 'lp_live_1234567890abcdef'
+    },
+    params=params
+)
+
+result = response.json()
+print(result)
+```
+
+</CodeGroup>
+
+### Eliminación Forzada
+
+<CodeGroup>
+
+```bash cURL
+curl -X DELETE "https://tu-sitio.com/wp-json/latepoint/v1/bookings/123?force=true&reason=Solicitud%20administrativa" \
+  -H "X-API-Key: lp_live_1234567890abcdef"
+```
+
+```javascript JavaScript
+// Eliminar una reserva confirmada o completada
+const deleteParams = {
+  force: true,
+  reason: 'Solicitud administrativa',
+  notify_customer: true
+};
+
+const params = new URLSearchParams(deleteParams);
+
+const response = await fetch(`https://tu-sitio.com/wp-json/latepoint/v1/bookings/123?${params}`, {
+  method: 'DELETE',
+  headers: {
+    'X-API-Key': 'lp_live_1234567890abcdef'
+  }
+});
+
+if (response.ok) {
+  const result = await response.json();
+  console.log('Reserva eliminada:', result.data.booking_code);
+} else {
+  const error = await response.json();
+  console.error('Error:', error.error.message);
+}
+```
+
+</CodeGroup>
+
+## Respuesta de Ejemplo
+
+### Eliminación Exitosa
+
+```json
+{
+  "status": "success",
+  "message": "Reserva eliminada exitosamente",
+  "data": {
+    "deleted_booking_id": 123,
+    "booking_code": "LP-2024-001",
+    "customer_notified": true,
+    "deleted_at": "2024-01-20T15:30:00Z",
+    "deleted_by": {
+      "user_id": 5,
+      "display_name": "Admin Usuario",
+      "email": "admin@clinica.com"
+    },
+    "reason": "Cancelada por emergencia",
+    "original_booking_data": {
+      "customer_name": "Juan Pérez",
+      "service_name": "Consulta General",
+      "agent_name": "Dr. María García",
+      "start_date": "2024-01-25",
+      "start_time": "14:30",
+      "status": "confirmed"
+    }
+  }
+}
+```
+
+## Códigos de Error
+
+<ResponseExample>
+
+```json Error 404 - Reserva No Encontrada
+{
+  "status": "error",
+  "error": {
+    "code": "booking_not_found",
+    "message": "La reserva con ID 123 no fue encontrada"
+  }
+}
+```
+
+```json Error 403 - Eliminación No Permitida
+{
+  "status": "error",
+  "error": {
+    "code": "deletion_not_allowed",
+    "message": "No se puede eliminar una reserva confirmada sin usar el parámetro force",
+    "details": {
+      "booking_status": "confirmed",
+      "suggestion": "Usa force=true para eliminar o cambia el estado a 'cancelled' primero"
+    }
+  }
+}
+```
+
+```json Error 403 - Permisos Insuficientes
+{
+  "status": "error",
+  "error": {
+    "code": "insufficient_permissions",
+    "message": "No tienes permisos para eliminar reservas",
+    "details": {
+      "required_permission": "delete_bookings",
+      "current_permissions": ["read_bookings", "write_bookings"]
+    }
+  }
+}
+```
+
+```json Error 409 - Conflicto de Estado
+{
+  "status": "error",
+  "error": {
+    "code": "booking_conflict",
+    "message": "No se puede eliminar la reserva debido a dependencias",
+    "details": {
+      "conflicts": [
+        "Tiene pagos asociados",
+        "Está vinculada a un paquete de servicios"
+      ],
+      "suggestion": "Resuelve las dependencias antes de eliminar"
+    }
+  }
+}
+```
+
+</ResponseExample>
+
+## Reglas de Eliminación
+
+### Estados que Permiten Eliminación Directa
+
+- `pending` - Pendiente
+- `cancelled` - Cancelada
+
+### Estados que Requieren `force=true`
+
+- `confirmed` - Confirmada
+- `completed` - Completada
+- `no_show` - No se presentó
+
+### Restricciones de Eliminación
+
+1. **Pagos Procesados**: Reservas con pagos completados requieren manejo especial
+2. **Paquetes de Servicios**: Reservas parte de un paquete no pueden eliminarse individualmente
+3. **Dependencias**: Reservas con citas de seguimiento vinculadas
+4. **Período de Retención**: Algunas configuraciones pueden requerir mantener registros por tiempo específico
+
+## Casos de Uso Comunes
+
+### 1. Eliminación Segura con Verificación
+
+```javascript
+// Función para eliminar reserva con verificaciones previas
+async function safeDeleteBooking(bookingId, reason = null) {
+  try {
+    // Primero obtener información de la reserva
+    const bookingResponse = await fetch(`/wp-json/latepoint/v1/bookings/${bookingId}`, {
+      headers: { 'X-API-Key': 'tu_api_key' }
+    });
+    
+    if (!bookingResponse.ok) {
+      throw new Error('Reserva no encontrada');
+    }
+    
+    const booking = await bookingResponse.json();
+    const bookingData = booking.data;
+    
+    // Verificar si necesita forzar eliminación
+    const needsForce = ['confirmed', 'completed', 'no_show'].includes(bookingData.status);
+    
+    // Construir parámetros
+    const params = new URLSearchParams();
+    if (needsForce) params.append('force', 'true');
+    if (reason) params.append('reason', reason);
+    params.append('notify_customer', 'true');
+    
+    // Eliminar reserva
+    const deleteResponse = await fetch(
+      `/wp-json/latepoint/v1/bookings/${bookingId}?${params}`,
+      {
+        method: 'DELETE',
+        headers: { 'X-API-Key': 'tu_api_key' }
+      }
+    );
+    
+    if (deleteResponse.ok) {
+      const result = await deleteResponse.json();
+      console.log('Reserva eliminada:', result.data.booking_code);
+      return result;
+    } else {
+      const error = await deleteResponse.json();
+      throw new Error(error.error.message);
+    }
+    
+  } catch (error) {
+    console.error('Error al eliminar reserva:', error.message);
+    throw error;
+  }
+}
+
+// Uso
+await safeDeleteBooking(123, 'Cancelación por parte del cliente');
+```
+
+### 2. Eliminación Masiva con Manejo de Errores
+
+```javascript
+// Eliminar múltiples reservas con manejo robusto de errores
+async function bulkDeleteBookings(bookingIds, reason = null) {
+  const results = {
+    successful: [],
+    failed: [],
+    summary: {
+      total: bookingIds.length,
+      deleted: 0,
+      errors: 0
+    }
+  };
+  
+  for (const bookingId of bookingIds) {
+    try {
+      const params = new URLSearchParams({
+        force: 'true',
+        notify_customer: 'true'
+      });
+      
+      if (reason) params.append('reason', reason);
+      
+      const response = await fetch(
+        `/wp-json/latepoint/v1/bookings/${bookingId}?${params}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-API-Key': 'tu_api_key' }
+        }
+      );
+      
+      if (response.ok) {
+        const result = await response.json();
+        results.successful.push({
+          booking_id: bookingId,
+          booking_code: result.data.booking_code,
+          deleted_at: result.data.deleted_at
+        });
+        results.summary.deleted++;
+      } else {
+        const error = await response.json();
+        results.failed.push({
+          booking_id: bookingId,
+          error: error.error.message,
+          code: error.error.code
+        });
+        results.summary.errors++;
+      }
+      
+    } catch (error) {
+      results.failed.push({
+        booking_id: bookingId,
+        error: error.message,
+        code: 'network_error'
+      });
+      results.summary.errors++;
+    }
+    
+    // Pequeña pausa para evitar rate limiting
+    await new Promise(resolve => setTimeout(resolve, 100));
+  }
+  
+  return results;
+}
+
+// Uso
+const bookingIds = [123, 124, 125, 126];
+const results = await bulkDeleteBookings(bookingIds, 'Limpieza de datos obsoletos');
+
+console.log(`Eliminadas: ${results.summary.deleted}/${results.summary.total}`);
+if (results.failed.length > 0) {
+  console.log('Errores:', results.failed);
+}
+```
+
+### 3. Eliminación con Confirmación del Usuario
+
+```javascript
+// Función con confirmación interactiva
+async function deleteBookingWithConfirmation(bookingId) {
+  try {
+    // Obtener detalles de la reserva
+    const response = await fetch(`/wp-json/latepoint/v1/bookings/${bookingId}`, {
+      headers: { 'X-API-Key': 'tu_api_key' }
+    });
+    
+    const booking = await response.json();
+    const data = booking.data;
+    
+    // Mostrar información de la reserva
+    const confirmMessage = `
+¿Estás seguro de que quieres eliminar esta reserva?
+
+Código: ${data.booking_code}
+Cliente: ${data.customer.first_name} ${data.customer.last_name}
+Servicio: ${data.service.name}
+Fecha: ${data.start_date} ${data.start_time}
+Estado: ${data.status}
+
+Esta acción no se puede deshacer.
+    `;
+    
+    if (confirm(confirmMessage)) {
+      const reason = prompt('Razón de la eliminación (opcional):');
+      
+      const params = new URLSearchParams({
+        force: 'true',
+        notify_customer: 'true'
+      });
+      
+      if (reason) params.append('reason', reason);
+      
+      const deleteResponse = await fetch(
+        `/wp-json/latepoint/v1/bookings/${bookingId}?${params}`,
+        {
+          method: 'DELETE',
+          headers: { 'X-API-Key': 'tu_api_key' }
+        }
+      );
+      
+      if (deleteResponse.ok) {
+        const result = await deleteResponse.json();
+        alert(`Reserva ${result.data.booking_code} eliminada exitosamente`);
+        return result;
+      } else {
+        const error = await deleteResponse.json();
+        alert(`Error: ${error.error.message}`);
+        throw new Error(error.error.message);
+      }
+    } else {
+      console.log('Eliminación cancelada por el usuario');
+      return null;
+    }
+    
+  } catch (error) {
+    console.error('Error:', error.message);
+    alert(`Error al eliminar la reserva: ${error.message}`);
+    throw error;
+  }
+}
+```
+
+### 4. Limpieza de Reservas Antiguas
+
+```javascript
+// Función para limpiar reservas antiguas automáticamente
+async function cleanupOldBookings(daysOld = 365, status = 'cancelled') {
+  try {
+    // Calcular fecha límite
+    const cutoffDate = new Date();
+    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
+    const cutoffDateStr = cutoffDate.toISOString().split('T')[0];
+    
+    // Buscar reservas antiguas
+    const searchParams = new URLSearchParams({
+      status: status,
+      end_date_before: cutoffDateStr,
+      per_page: 100
+    });
+    
+    const response = await fetch(
+      `/wp-json/latepoint/v1/bookings?${searchParams}`,
+      {
+        headers: { 'X-API-Key': 'tu_api_key' }
+      }
+    );
+    
+    const bookings = await response.json();
+    
+    if (bookings.data.length === 0) {
+      console.log('No se encontraron reservas antiguas para eliminar');
+      return { deleted: 0, errors: 0 };
+    }
+    
+    console.log(`Encontradas ${bookings.data.length} reservas para eliminar`);
+    
+    // Eliminar reservas en lotes
+    const bookingIds = bookings.data.map(booking => booking.id);
+    const results = await bulkDeleteBookings(
+      bookingIds, 
+      `Limpieza automática - reservas ${status} de más de ${daysOld} días`
+    );
+    
+    console.log(`Limpieza completada: ${results.summary.deleted} eliminadas, ${results.summary.errors} errores`);
+    
+    return results.summary;
+    
+  } catch (error) {
+    console.error('Error en limpieza automática:', error.message);
+    throw error;
+  }
+}
+
+// Programar limpieza mensual
+setInterval(() => {
+  cleanupOldBookings(365, 'cancelled')
+    .then(summary => {
+      console.log('Limpieza automática completada:', summary);
+    })
+    .catch(error => {
+      console.error('Error en limpieza automática:', error);
+    });
+}, 30 * 24 * 60 * 60 * 1000); // 30 días
+```
+
+## Mejores Prácticas
+
+### 1. Siempre Verificar Antes de Eliminar
+
+```javascript
+// Obtener información completa antes de eliminar
+const booking = await getBooking(bookingId);
+if (booking.status === 'completed' && booking.payment_status === 'paid') {
+  // Considerar cancelar en lugar de eliminar
+  console.warn('Reserva completada con pago - considera cancelar en lugar de eliminar');
+}
+```
+
+### 2. Usar Razones Descriptivas
+
+```javascript
+// Proporcionar razones claras para auditoría
+const reasons = {
+  customer_request: 'Cancelación solicitada por el cliente',
+  no_show: 'Cliente no se presentó a la cita',
+  emergency: 'Cancelación por emergencia',
+  duplicate: 'Reserva duplicada',
+  data_cleanup: 'Limpieza de datos obsoletos',
+  system_error: 'Error del sistema - reserva inválida'
+};
+
+await deleteBooking(bookingId, reasons.customer_request);
+```
+
+### 3. Implementar Logs de Auditoría
+
+```javascript
+// Registrar todas las eliminaciones para auditoría
+function logBookingDeletion(bookingId, result, reason) {
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    action: 'booking_deleted',
+    booking_id: bookingId,
+    booking_code: result.data.booking_code,
+    deleted_by: result.data.deleted_by,
+    reason: reason,
+    customer_notified: result.data.customer_notified
+  };
+  
+  // Enviar a sistema de logs
+  console.log('AUDIT LOG:', logEntry);
+  
+  // Opcional: enviar a servicio de auditoría externo
+  // await sendToAuditService(logEntry);
+}
+```
+
+### 4. Manejo de Dependencias
+
+```javascript
+// Verificar dependencias antes de eliminar
+async function checkBookingDependencies(bookingId) {
+  const dependencies = {
+    payments: [],
+    followups: [],
+    packages: []
+  };
+  
+  // Verificar pagos
+  const paymentsResponse = await fetch(
+    `/wp-json/latepoint/v1/payments?booking_id=${bookingId}`
+  );
+  if (paymentsResponse.ok) {
+    const payments = await paymentsResponse.json();
+    dependencies.payments = payments.data;
+  }
+  
+  // Verificar citas de seguimiento
+  // ... más verificaciones
+  
+  return dependencies;
+}
+```
+
+## Notas Importantes
+
+<Note>
+  **Eliminación vs Cancelación**: En la mayoría de casos, es mejor cancelar una reserva (cambiar estado a `cancelled`) que eliminarla permanentemente.
+</Note>
+
+<Warning>
+  **Datos Irrecuperables**: Una vez eliminada, toda la información de la reserva se pierde permanentemente. Asegúrate de tener backups si es necesario.
+</Warning>
+
+<Tip>
+  **Auditoría**: Siempre proporciona una razón para la eliminación. Esto ayuda con la auditoría y el seguimiento de cambios.
+</Tip>
+
+<Info>
+  **Notificaciones**: Usa `notify_customer=true` para informar al cliente sobre la cancelación antes de eliminar la reserva.
+</Info>
+
+## Alternativas a la Eliminación
+
+### 1. Cancelar en Lugar de Eliminar
+
+```javascript
+// Mejor práctica: cancelar en lugar de eliminar
+const response = await fetch(`/wp-json/latepoint/v1/bookings/${bookingId}`, {
+  method: 'PUT',
+  headers: {
+    'X-API-Key': 'tu_api_key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    status: 'cancelled',
+    internal_notes: 'Cancelada - mantener para historial',
+    send_notification: true
+  })
+});
+```
+
+### 2. Archivar Reservas
+
+```javascript
+// Si tu sistema soporta archivado
+const response = await fetch(`/wp-json/latepoint/v1/bookings/${bookingId}`, {
+  method: 'PUT',
+  headers: {
+    'X-API-Key': 'tu_api_key',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    archived: true,
+    archived_reason: 'Datos obsoletos pero conservados para auditoría'
+  })
+});
+```

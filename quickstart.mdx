@@ -1,80 +1,241 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: 'Guía de Inicio Rápido'
+description: 'Configura LatePoint API Extension en minutos'
 ---
 
-## Get started in three steps
+## Instalación
 
-Get your documentation site running locally and make your first customization.
+<Steps>
+  <Step title="Descargar el Plugin">
+    Descarga el archivo ZIP del plugin LatePoint API Extension desde tu cuenta de LatePoint o desde el repositorio autorizado.
+  </Step>
+  
+  <Step title="Instalar en WordPress">
+    1. Ve a **Plugins > Añadir nuevo** en tu panel de WordPress
+    2. Haz clic en **Subir plugin**
+    3. Selecciona el archivo ZIP descargado
+    4. Haz clic en **Instalar ahora**
+    5. **Activa** el plugin una vez instalado
+  </Step>
+  
+  <Step title="Verificar Requisitos">
+    Asegúrate de que tienes:
+    - LatePoint plugin principal instalado y activado
+    - WordPress 5.0 o superior
+    - PHP 7.4 o superior
+    - Permisos de administrador en WordPress
+  </Step>
+</Steps>
 
-### Step 1: Set up your local environment
+## Configuración Inicial
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+### 1. Acceder a la Configuración
 
-### Step 2: Deploy your changes
+Una vez activado el plugin, encontrarás la nueva sección **API Settings** en el menú de LatePoint:
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+```
+LatePoint > API Settings
+```
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+### 2. Generar tu API Key
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+<Warning>
+  Guarda tu API Key en un lugar seguro. No podrás verla nuevamente una vez generada.
+</Warning>
 
-### Step 3: Go live
+1. En la página de configuración de API, haz clic en **"Generate New API Key"**
+2. Copia la API Key generada
+3. Guárdala en tu gestor de contraseñas o archivo de configuración seguro
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+### 3. Configurar Permisos
 
-## Next steps
+Configura qué endpoints estarán disponibles para tu API Key:
 
-Now that you have your docs running, explore these key features:
+- ✅ **Bookings**: Gestión completa de reservas
+- ✅ **Customers**: Administración de clientes
+- ✅ **Agents**: Consulta de agentes
+- ✅ **Services**: Consulta de servicios
+- ✅ **Availability**: Verificación de disponibilidad
+
+## Tu Primera Llamada a la API
+
+### Endpoint Base
+
+Todas las llamadas a la API utilizan la siguiente URL base:
+
+```
+https://tu-sitio.com/wp-json/latepoint/v1/
+```
+
+### Autenticación
+
+Incluye tu API Key en el header de cada solicitud:
+
+```bash
+X-API-Key: tu_api_key_aqui
+```
+
+### Ejemplo: Obtener Lista de Servicios
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/services" \
+  -H "X-API-Key: tu_api_key_aqui" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://tu-sitio.com/wp-json/latepoint/v1/services', {
+  method: 'GET',
+  headers: {
+    'X-API-Key': 'tu_api_key_aqui',
+    'Content-Type': 'application/json'
+  }
+});
+
+const services = await response.json();
+console.log(services);
+```
+
+```python Python
+import requests
+
+url = "https://tu-sitio.com/wp-json/latepoint/v1/services"
+headers = {
+    "X-API-Key": "tu_api_key_aqui",
+    "Content-Type": "application/json"
+}
+
+response = requests.get(url, headers=headers)
+services = response.json()
+print(services)
+```
+
+```php PHP
+<?php
+$url = 'https://tu-sitio.com/wp-json/latepoint/v1/services';
+$headers = [
+    'X-API-Key: tu_api_key_aqui',
+    'Content-Type: application/json'
+];
+
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+$response = curl_exec($ch);
+$services = json_decode($response, true);
+curl_close($ch);
+
+print_r($services);
+?>
+```
+
+</CodeGroup>
+
+### Respuesta Esperada
+
+```json
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "Consulta General",
+      "duration": 30,
+      "price": 50.00,
+      "description": "Consulta médica general",
+      "category_id": 1
+    },
+    {
+      "id": 2,
+      "name": "Consulta Especializada",
+      "duration": 60,
+      "price": 100.00,
+      "description": "Consulta con especialista",
+      "category_id": 2
+    }
+  ],
+  "total": 2
+}
+```
+
+## Verificar la Configuración
+
+### Test de Conectividad
+
+Puedes verificar que todo funciona correctamente con este endpoint de prueba:
+
+```bash
+curl -X GET "https://tu-sitio.com/wp-json/latepoint/v1/status" \
+  -H "X-API-Key: tu_api_key_aqui"
+```
+
+**Respuesta exitosa:**
+```json
+{
+  "status": "success",
+  "message": "API is working correctly",
+  "version": "1.0.0",
+  "timestamp": "2024-01-15T10:30:00Z"
+}
+```
+
+## Próximos Pasos
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card
+    title="Autenticación Avanzada"
+    icon="shield"
+    href="/authentication"
+  >
+    Aprende sobre seguridad y mejores prácticas
+  </Card>
+  <Card
+    title="Referencia Completa"
+    icon="book"
+    href="/api-reference/introduction"
+  >
+    Explora todos los endpoints disponibles
+  </Card>
+  <Card
+    title="Gestión de Reservas"
+    icon="calendar"
+    href="/api-reference/bookings/list"
+  >
+    Comienza a trabajar con reservas
+  </Card>
+  <Card
+    title="Manejo de Errores"
+    icon="exclamation-triangle"
+    href="/api-reference/errors"
+  >
+    Aprende a manejar errores correctamente
+  </Card>
 </CardGroup>
 
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>
+## Solución de Problemas
+
+<AccordionGroup>
+  <Accordion title="Error 401: Unauthorized">
+    - Verifica que tu API Key sea correcta
+    - Asegúrate de incluir el header `X-API-Key`
+    - Confirma que la API Key no haya expirado
+  </Accordion>
+  
+  <Accordion title="Error 404: Not Found">
+    - Verifica que la URL base sea correcta
+    - Confirma que el plugin esté activado
+    - Revisa que los permalinks estén configurados correctamente
+  </Accordion>
+  
+  <Accordion title="Error 500: Internal Server Error">
+    - Revisa los logs de WordPress
+    - Verifica que LatePoint principal esté instalado
+    - Confirma que los requisitos del sistema se cumplan
+  </Accordion>
+</AccordionGroup>
+
+¿Necesitas ayuda? Consulta nuestra [documentación completa](/api-reference/introduction) o contacta al soporte técnico.

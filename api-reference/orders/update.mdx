@@ -1,0 +1,22 @@
+---
+title: "Update Order"
+api: "PUT /wp-json/latepoint-api/v1/orders/{id}"
+description: "Update an existing order."
+---
+
+## Request Body Parameters
+
+Same parameters as POST (except customer_id), all optional. Only provided fields will be updated.
+
+## Example Request
+
+```bash
+PUT /wp-json/latepoint-api/v1/orders/101
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "status": "completed",
+  "payment_method": "credit_card"
+}
+```

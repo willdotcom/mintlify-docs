@@ -1,0 +1,19 @@
+---
+title: "Check Availability"
+api: "GET /wp-json/latepoint-api/v1/availability"
+description: "Check availability for a specific service, agent, and date."
+---
+
+## Required Parameters
+
+| Parameter | Type | Description |
+|-----------|------|--------------|
+| `service_id` | integer | Service ID |
+| `agent_id` | integer | Agent ID |
+| `date` | string | Date (YYYY-MM-DD) |
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/availability?service_id=1&agent_id=1&date=2024-01-15
+```
