@@ -1,0 +1,40 @@
+/* Personalización del tamaño del logo para Mintlify */
+
+/* Selector principal del navbar de Mintlify */
+#navbar img {
+  height: 32px !important;
+  width: auto !important;
+  max-height: 32px !important;
+}
+
+/* Selector específico para el logo */
+#navbar .logo img,
+#navbar [data-testid="logo"] img {
+  height: 32px !important;
+  width: auto !important;
+  max-height: 32px !important;
+}
+
+/* Contenedor del logo */
+#navbar .logo,
+#navbar [data-testid="logo"] {
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Selector alternativo para diferentes versiones de Mintlify */
+header img,
+header .logo img {
+  height: 32px !important;
+  width: auto !important;
+  max-height: 32px !important;
+}
+
+/* Asegurar que funcione en modo oscuro también */
+.dark #navbar img,
+.dark #navbar .logo img {
+  height: 32px !important;
+  width: auto !important;
+  max-height: 32px !important;
+}
