@@ -4,9 +4,42 @@ api: "GET /wp-json/latepoint-api/v1/coupons/{code}"
 description: "Retrieve a specific coupon by code."
 ---
 
+## Path Parameters
+
+<ParamField path="code" type="string" required>
+  The unique code of the coupon to retrieve
+</ParamField>
+
 ## Example Request
 
 ```bash
 GET /wp-json/latepoint-api/v1/coupons/DESCUENTO25
 Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "6",
+    "code": "DESCUENTO25",
+    "name": "Descuento 25%",
+    "description": "Descuento del 25% en todos los servicios",
+    "discount_type": "percent",
+    "discount_value": 25,
+    "readable_discount": "25%",
+    "status": "active",
+    "active_from": "0000-00-00",
+    "active_to": "0000-00-00",
+    "rules": null,
+    "usage_count": 0,
+    "total_discount": 0,
+    "last_usage_date": "n/a",
+    "recent_orders": [],
+    "created_at": "2025-08-18 07:59:36",
+    "updated_at": "2025-08-18 07:59:36"
+  }
+}
 ```

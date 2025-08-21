@@ -6,20 +6,51 @@ description: "Create a new coupon."
 
 ## Required Parameters
 
-| Parameter | Type | Description |
-|-----------|------|--------------|
-| `code` | string | Unique coupon code |
-| `discount_type` | string | Type of discount (percentage, fixed_amount) |
-| `discount_value` | number | Discount value |
+<ParamField body="code" type="string" required>
+  Unique coupon code
+</ParamField>
+
+<ParamField body="name" type="string" required>
+  Display name for the coupon
+</ParamField>
 
 ## Optional Parameters
 
-| Parameter | Type | Description |
-|-----------|------|--------------|
-| `usage_limit` | integer | Maximum number of uses |
-| `expiry_date` | string | Expiration date (YYYY-MM-DD) |
-| `minimum_amount` | number | Minimum order amount required |
-| `is_active` | boolean | Whether the coupon is active (default: true) |
+<ParamField body="description" type="string">
+  Description of the coupon
+</ParamField>
+
+<ParamField body="discount_type" type="string" default="percent">
+  Type of discount. Available values: `percent`, `fixed_amount`
+</ParamField>
+
+<ParamField body="discount_value" type="number" default="0">
+  Discount value (percentage or fixed amount)
+</ParamField>
+
+<ParamField body="status" type="string" default="active">
+  Coupon status. Available values: `active`, `inactive`
+</ParamField>
+
+<ParamField body="active_from" type="string">
+  Start date for coupon validity (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField body="active_to" type="string">
+  End date for coupon validity (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField body="usage_limit" type="integer" default="0">
+  Maximum number of uses (0 = unlimited)
+</ParamField>
+
+<ParamField body="min_order_amount" type="number" default="0">
+  Minimum order amount required to use coupon
+</ParamField>
+
+<ParamField body="max_discount_amount" type="number" default="0">
+  Maximum discount amount (for percentage discounts)
+</ParamField>
 
 ## Example Request
 
@@ -29,10 +60,36 @@ Authorization: Bearer YOUR_API_KEY
 Content-Type: application/json
 
 {
-  "code": "DESCUENTO25",
-  "discount_type": "percentage",
-  "discount_value": 25,
-  "usage_limit": 100,
-  "expiry_date": "2024-12-31"
+  "code": "TEST2025",
+  "name": "Test Coupon 2025",
+  "description": "Test coupon for API testing",
+  "discount_type": "percent",
+  "discount_value": 15,
+  "status": "active"
+}
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Coupon created successfully",
+  "data": {
+    "id": 7,
+    "code": "TEST2025",
+    "name": "Test Coupon 2025",
+    "description": "Test coupon for API testing",
+    "discount_type": "percent",
+    "discount_value": 15,
+    "status": "active",
+    "active_from": "",
+    "active_to": "",
+    "usage_limit": 0,
+    "min_order_amount": 0,
+    "max_discount_amount": 0,
+    "created_at": "2025-08-21 11:07:00",
+    "updated_at": "2025-08-21 11:07:00"
+  }
 }
 ```

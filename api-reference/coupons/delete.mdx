@@ -4,9 +4,35 @@ api: "DELETE /wp-json/latepoint-api/v1/coupons/{code}"
 description: "Delete a coupon. Cannot delete coupons with associated orders."
 ---
 
+## Path Parameters
+
+<ParamField path="code" type="string" required>
+  The unique code of the coupon to delete
+</ParamField>
+
 ## Example Request
 
 ```bash
-DELETE /wp-json/latepoint-api/v1/coupons/DESCUENTO25
+DELETE /wp-json/latepoint-api/v1/coupons/TEST2025
 Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Coupon deleted successfully"
+}
+```
+
+## Error Response
+
+If the coupon has associated orders, you will receive an error:
+
+```json
+{
+  "success": false,
+  "message": "Cannot delete coupon with associated orders"
+}
 ```

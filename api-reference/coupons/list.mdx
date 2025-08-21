@@ -1,12 +1,63 @@
 ---
 title: "List Coupons"
 api: "GET /wp-json/latepoint-api/v1/coupons"
-description: "Retrieve a list of all coupons."
+description: "Retrieve a list of all coupons with optional filtering and pagination."
 ---
+
+## Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of coupons per page (max 100)
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter coupons by status. Available values: `active`, `inactive`
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search coupons by code or name
+</ParamField>
 
 ## Example Request
 
 ```bash
-GET /wp-json/latepoint-api/v1/coupons
+GET /wp-json/latepoint-api/v1/coupons?status=active&per_page=10
 Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "6",
+      "code": "DESCUENTO25",
+      "name": "Descuento 25%",
+      "description": "Descuento del 25% en todos los servicios",
+      "discount_type": "percent",
+      "discount_value": 25,
+      "readable_discount": "25%",
+      "status": "active",
+      "active_from": "0000-00-00",
+      "active_to": "0000-00-00",
+      "usage_count": 0,
+      "total_discount": 0,
+      "last_usage_date": "n/a",
+      "created_at": "2025-08-18 07:59:36",
+      "updated_at": "2025-08-18 07:59:36"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 3,
+    "total_pages": 1
+  }
+}
 ```

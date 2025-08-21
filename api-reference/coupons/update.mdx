@@ -4,19 +4,93 @@ api: "PUT /wp-json/latepoint-api/v1/coupons/{code}"
 description: "Update an existing coupon."
 ---
 
+## Path Parameters
+
+<ParamField path="code" type="string" required>
+  The unique code of the coupon to update
+</ParamField>
+
 ## Request Body Parameters
 
-Same parameters as POST (except code), all optional. Only provided fields will be updated.
+All parameters are optional. Only provided fields will be updated.
+
+<ParamField body="name" type="string">
+  Display name for the coupon
+</ParamField>
+
+<ParamField body="description" type="string">
+  Description of the coupon
+</ParamField>
+
+<ParamField body="discount_type" type="string">
+  Type of discount. Available values: `percent`, `fixed_amount`
+</ParamField>
+
+<ParamField body="discount_value" type="number">
+  Discount value (percentage or fixed amount)
+</ParamField>
+
+<ParamField body="status" type="string">
+  Coupon status. Available values: `active`, `inactive`
+</ParamField>
+
+<ParamField body="active_from" type="string">
+  Start date for coupon validity (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField body="active_to" type="string">
+  End date for coupon validity (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField body="usage_limit" type="integer">
+  Maximum number of uses (0 = unlimited)
+</ParamField>
+
+<ParamField body="min_order_amount" type="number">
+  Minimum order amount required to use coupon
+</ParamField>
+
+<ParamField body="max_discount_amount" type="number">
+  Maximum discount amount (for percentage discounts)
+</ParamField>
 
 ## Example Request
 
 ```bash
-PUT /wp-json/latepoint-api/v1/coupons/DESCUENTO25
+PUT /wp-json/latepoint-api/v1/coupons/TEST2025
 Authorization: Bearer YOUR_API_KEY
 Content-Type: application/json
 
 {
-  "discount_value": 30,
-  "usage_limit": 50
+  "name": "Updated Test Coupon 2025",
+  "description": "Updated test coupon for API testing",
+  "discount_value": 20,
+  "usage_limit": 100,
+  "min_order_amount": 50
+}
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Coupon updated successfully",
+  "data": {
+    "id": "7",
+    "code": "TEST2025",
+    "name": "Updated Test Coupon 2025",
+    "description": "Updated test coupon for API testing",
+    "discount_type": "percent",
+    "discount_value": 20,
+    "status": "active",
+    "active_from": "0000-00-00",
+    "active_to": "0000-00-00",
+    "usage_limit": 100,
+    "min_order_amount": 50,
+    "max_discount_amount": null,
+    "created_at": "2025-08-21 11:07:00",
+    "updated_at": "2025-08-21 11:07:09"
+  }
 }
 ```
