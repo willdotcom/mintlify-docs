@@ -160,16 +160,16 @@ This endpoint allows you to create a new booking in your LatePoint system. It in
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/bookings" \
-  -H "X-API-Key: lp_live_1234567890abcdef" \
+curl -X POST "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings" \
+  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ" \
   -H "Content-Type: application/json" \
   -d '{
-    "service_id": 7,
-    "agent_id": 3,
-    "customer_id": 45,
-    "start_date": "2024-01-20",
+    "service_id": 2,
+    "agent_id": 1,
+    "customer_id": 2,
+    "start_date": "2025-09-01",
     "start_time": "14:30",
-    "status": "pending",
+    "status": "approved",
     "notes": "Consulta de seguimiento"
   }'
 ```
@@ -213,9 +213,9 @@ booking_data = {
 }
 
 response = requests.post(
-    'https://your-site.com/wp-json/latepoint-api/v1/bookings',
+    'http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings',
     headers={
-        'X-API-Key': 'lp_live_1234567890abcdef',
+        'X-API-Key': 'lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ',
         'Content-Type': 'application/json'
     },
     data=json.dumps(booking_data)
@@ -240,12 +240,12 @@ $booking_data = [
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-    CURLOPT_URL => 'https://your-site.com/wp-json/latepoint-api/v1/bookings',
+    CURLOPT_URL => 'http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode($booking_data),
     CURLOPT_HTTPHEADER => [
-        'X-API-Key: lp_live_1234567890abcdef',
+        'X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ',
         'Content-Type: application/json'
     ]
 ]);
@@ -265,13 +265,13 @@ print_r($result);
 <CodeGroup>
 
 ```bash cURL
-curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/bookings" \
-  -H "X-API-Key: lp_live_1234567890abcdef" \
+curl -X POST "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings" \
+  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ" \
   -H "Content-Type: application/json" \
   -d '{
-    "service_id": 7,
-    "agent_id": 3,
-    "start_date": "2024-01-20",
+    "service_id": 2,
+    "agent_id": 1,
+    "start_date": "2025-09-01",
     "start_time": "16:00",
     "customer": {
       "first_name": "Ana",

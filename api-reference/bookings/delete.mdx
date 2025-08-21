@@ -53,8 +53,8 @@ This endpoint allows you to permanently delete a booking from the system. This a
 <CodeGroup>
 
 ```bash cURL
-curl -X DELETE "https://your-site.com/wp-json/latepoint-api/v1/bookings/123" \
-  -H "X-API-Key: lp_live_1234567890abcdef"
+curl -X DELETE "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings/22" \
+  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ"
 ```
 
 ```javascript JavaScript
@@ -94,11 +94,11 @@ $booking_id = 123;
 $curl = curl_init();
 
 curl_setopt_array($curl, [
-    CURLOPT_URL => "https://your-site.com/wp-json/latepoint-api/v1/bookings/{$booking_id}",
+    CURLOPT_URL => "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings/{$booking_id}",
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_CUSTOMREQUEST => 'DELETE',
     CURLOPT_HTTPHEADER => [
-        'X-API-Key: lp_live_1234567890abcdef'
+        'X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ'
     ]
 ]);
 
@@ -117,8 +117,8 @@ print_r($result);
 <CodeGroup>
 
 ```bash cURL
-curl -X DELETE "https://your-site.com/wp-json/latepoint-api/v1/bookings/123?force=true" \
-  -H "X-API-Key: lp_live_1234567890abcdef"
+curl -X DELETE "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings/22?force=true" \
+  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ"
 ```
 
 ```javascript JavaScript
