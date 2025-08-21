@@ -4,9 +4,34 @@ api: "GET /wp-json/latepoint-api/v1/agents/{id}"
 description: "Retrieve a specific agent by ID."
 ---
 
+<ParamField path="id" type="string" required>
+  The unique identifier of the agent
+</ParamField>
+
 ## Example Request
 
 ```bash
-GET /wp-json/latepoint-api/v1/agents/1
-Authorization: Bearer YOUR_API_KEY
+GET /wp-json/latepoint-api/v1/agents/2
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "2",
+    "first_name": "Joselo",
+    "last_name": "Jose",
+    "display_name": "",
+    "email": "dadadd",
+    "phone": "",
+    "bio": "",
+    "features": "[{\"value\":\"\",\"label\":\"\"},{\"value\":\"\",\"label\":\"\"}]",
+    "status": "active",
+    "created_at": "2025-01-20 10:30:00",
+    "updated_at": "2025-01-20 10:30:00"
+  }
+}
 ```

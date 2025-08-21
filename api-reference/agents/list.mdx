@@ -1,12 +1,128 @@
 ---
 title: "List Agents"
 api: "GET /wp-json/latepoint-api/v1/agents"
-description: "Retrieve a list of all agents."
+description: "Retrieve a list of all agents with advanced filtering, pagination, and sorting options."
 ---
 
-## Example Request
+## Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by agent status. Available values: `active`, `disabled`
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search by first name, last name, or email address
+</ParamField>
+
+<ParamField query="email" type="string">
+  Filter by exact email address
+</ParamField>
+
+<ParamField query="phone" type="string">
+  Filter by phone number (partial match supported)
+</ParamField>
+
+<ParamField query="created_after" type="string">
+  Filter agents created after this date (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField query="created_before" type="string">
+  Filter agents created before this date (YYYY-MM-DD format)
+</ParamField>
+
+<ParamField query="include" type="string">
+  Include related data. Available values: `services`
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="10">
+  Number of results per page (1-100)
+</ParamField>
+
+<ParamField query="order_by" type="string" default="first_name">
+  Sort field. Available values: `id`, `first_name`, `last_name`, `email`, `created_at`, `updated_at`, `status`
+</ParamField>
+
+<ParamField query="order" type="string" default="asc">
+  Sort direction. Available values: `asc`, `desc`
+</ParamField>
+
+## Basic Request
 
 ```bash
 GET /wp-json/latepoint-api/v1/agents
-Authorization: Bearer YOUR_API_KEY
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+## Advanced Filtering Examples
+
+### Filter by Status
+```bash
+GET /wp-json/latepoint-api/v1/agents?status=active
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Search by Name or Email
+```bash
+GET /wp-json/latepoint-api/v1/agents?search=john
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Include Services Data
+```bash
+GET /wp-json/latepoint-api/v1/agents?include=services&per_page=5
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Date Range Filter
+```bash
+GET /wp-json/latepoint-api/v1/agents?created_after=2024-01-01&created_before=2024-12-31
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Pagination and Sorting
+```bash
+GET /wp-json/latepoint-api/v1/agents?page=2&per_page=25&order_by=last_name&order=desc
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "2",
+      "first_name": "Joselo",
+      "last_name": "Jose",
+      "display_name": "",
+      "email": "dadadd",
+      "phone": "",
+      "bio": "",
+      "features": "[{\"value\":\"\",\"label\":\"\"},{\"value\":\"\",\"label\":\"\"}]",
+      "status": "active",
+      "created_at": "2025-01-20 10:30:00",
+      "updated_at": "2025-01-20 10:30:00",
+      "services": [
+        {
+          "id": "1",
+          "name": "Consultation",
+          "is_custom_hours": false,
+          "is_custom_price": false,
+          "is_custom_duration": false
+        }
+      ]
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 1,
+    "total_pages": 1
+  }
+}
 ```
