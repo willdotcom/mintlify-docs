@@ -45,7 +45,7 @@ This endpoint returns all available information for a specific booking, includin
       
       **Possible values:**
       - `pending` - Pending
-      - `confirmed` - Confirmed
+      - `approved` - Approved
       - `cancelled` - Cancelled
       - `completed` - Completed
       - `no_show` - No show
@@ -351,71 +351,57 @@ print_r($data);
 
 ```json
 {
-  "status": "success",
+  "success": true,
   "data": {
-    "id": 123,
-    "booking_code": "LP-2024-001",
-    "status": "confirmed",
-    "start_date": "2024-01-15",
-    "start_time": "14:30",
-    "end_time": "15:30",
-    "duration": 60,
-    "price": "75.00",
-    "subtotal": "75.00",
-    "tax_total": "0.00",
-    "customer": {
-      "id": 45,
-      "first_name": "John",
-      "last_name": "Doe",
-      "full_name": "John Doe",
-      "email": "john.doe@email.com",
-      "phone": "+1 555 123 4567",
-      "avatar_url": "https://your-site.com/wp-content/uploads/avatars/45.jpg",
-      "notes": "Frequent customer",
-      "created_at": "2023-12-01T10:00:00Z"
-    },
+    "id": "18",
+    "booking_code": "EUHJVNH",
+    "start_datetime": "2025-11-17T16:00:00-03:00",
+    "end_datetime": "2025-11-17T17:00:00-03:00",
+    "service_name": "test 1",
+    "duration": "60",
+    "customer_comment": null,
+    "status": "pending",
+    "start_date": "11/17/2025",
+    "start_time": "16:00",
+    "timezone": "America/Montevideo",
     "agent": {
-      "id": 3,
-      "display_name": "Dr. Sarah Johnson",
-      "first_name": "Sarah",
-      "last_name": "Johnson",
-      "email": "sarah.johnson@clinic.com",
-      "phone": "+1 555 987 6543",
-      "bio": "General medicine specialist with 10 years of experience",
-      "avatar_url": "https://your-site.com/wp-content/uploads/avatars/agent-3.jpg"
+      "id": "1",
+      "full_name": "Pao Campo",
+      "email": "pao@pao.com",
+      "phone": ""
     },
-    "service": {
-      "id": 7,
-      "name": "General Consultation",
-      "short_description": "General medical consultation",
-      "duration": 60,
-      "price": "75.00",
-      "category_id": 2,
-      "category_name": "General Medicine"
+    "created_datetime": "2025-08-21T07:41:32+00:00",
+    "manage_booking_for_agent": "http://latepoint-dev.local/wp-admin/admin-post.php?action=latepoint_route_call&route_name=manage_booking_by_key__show&key=3d09aa7219f4c883f6a3f78e7662c977a5dd",
+    "manage_booking_for_customer": "http://latepoint-dev.local/wp-admin/admin-post.php?action=latepoint_route_call&route_name=manage_booking_by_key__show&key=2009d8e53283cca27ccf1345b53ffa38d881",
+    "customer": {
+      "id": "7",
+      "first_name": "Ana",
+      "last_name": "Lopez",
+      "full_name": "Ana Lopez",
+      "email": "ana.lopez@email.com",
+      "phone": "+525559876543"
+    },
+    "transactions": [],
+    "order": {
+      "id": "34",
+      "confirmation_code": "SCLRA23J",
+      "customer_comment": null,
+      "status": "open",
+      "fulfillment_status": "not_fulfilled",
+      "payment_status": "not_paid",
+      "source_id": null,
+      "source_url": "",
+      "total": "$0",
+      "subtotal": "$0",
+      "created_datetime": "2025-08-21T07:41:32+00:00"
     },
     "location": {
-      "id": 1,
-      "name": "Main Clinic",
-      "full_address": "123 Main Street, Downtown, NY 10001, USA",
-      "address": "123 Main Street",
-      "city": "New York",
-      "state": "NY",
-      "zipcode": "10001",
-      "country": "USA",
-      "phone": "+1 555 111 2222"
+      "id": "1",
+      "name": "Main Location",
+      "full_address": "",
+      "category": []
     },
-    "notes": "Patient's first consultation",
-    "internal_notes": "Review previous medical history",
-    "payment_status": "paid",
-    "payment_method": "credit_card",
-    "confirmation_code": "CONF-2024-001",
-    "source_id": "website",
-    "created_at": "2024-01-10T10:30:00Z",
-    "updated_at": "2024-01-10T10:30:00Z",
-    "custom_fields": {
-      "emergency_contact": "Jane Doe - +1 555 111 3333",
-      "insurance_provider": "Health Insurance Co."
-    }
+    "service_extras": []
   }
 }
 ```
@@ -516,7 +502,7 @@ async function checkBookingStatus(bookingId) {
     return {
       booking_status: status,
       payment_status: paymentStatus,
-      is_confirmed: status === 'confirmed',
+      is_approved: status === 'approved',
       is_paid: paymentStatus === 'paid'
     };
   }

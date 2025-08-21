@@ -27,15 +27,7 @@ This endpoint allows you to permanently delete a booking from the system. This a
 ## Query Parameters
 
 <ParamField query="force" type="boolean" default="false">
-  Force deletion even if the booking is confirmed or completed
-</ParamField>
-
-<ParamField query="notify_customer" type="boolean" default="false">
-  Send cancellation notification to the customer before deleting
-</ParamField>
-
-<ParamField query="reason" type="string">
-  Reason for deletion (will be included in audit logs)
+  Force deletion even if the booking is approved or completed
 </ParamField>
 
 ## Response
@@ -51,33 +43,7 @@ This endpoint allows you to permanently delete a booking from the system. This a
 </ResponseField>
 
 <ResponseField name="data" type="object">
-  Information about the deleted booking and operation details
-  
-  <Expandable title="Deletion Details">
-    <ResponseField name="deleted_booking_id" type="integer">
-      ID of the deleted booking
-    </ResponseField>
-    
-    <ResponseField name="booking_code" type="string">
-      Code of the deleted booking
-    </ResponseField>
-    
-    <ResponseField name="customer_notified" type="boolean">
-      Whether the customer was notified about the deletion
-    </ResponseField>
-    
-    <ResponseField name="deleted_at" type="string">
-      Timestamp when the booking was deleted
-    </ResponseField>
-    
-    <ResponseField name="deleted_by" type="object">
-      Information about the user who deleted the booking
-    </ResponseField>
-    
-    <ResponseField name="reason" type="string">
-      Reason provided for the deletion
-    </ResponseField>
-  </Expandable>
+  Basic confirmation of the deletion operation
 </ResponseField>
 
 ## Examples
@@ -146,76 +112,18 @@ print_r($result);
 
 </CodeGroup>
 
-### Deletion with Notification
-
-<CodeGroup>
-
-```bash cURL
-curl -X DELETE "https://your-site.com/wp-json/latepoint-api/v1/bookings/123?notify_customer=true&reason=Emergency%20cancellation" \
-  -H "X-API-Key: lp_live_1234567890abcdef"
-```
-
-```javascript JavaScript
-const bookingId = 123;
-const params = new URLSearchParams({
-  notify_customer: 'true',
-  reason: 'Emergency cancellation'
-});
-
-const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings/${bookingId}?${params}`, {
-  method: 'DELETE',
-  headers: {
-    'X-API-Key': 'lp_live_1234567890abcdef'
-  }
-});
-
-const result = await response.json();
-console.log(result);
-```
-
-```python Python
-import requests
-
-booking_id = 123
-params = {
-    'notify_customer': True,
-    'reason': 'Emergency cancellation'
-}
-
-response = requests.delete(
-    f'https://your-site.com/wp-json/latepoint-api/v1/bookings/{booking_id}',
-    headers={
-        'X-API-Key': 'lp_live_1234567890abcdef'
-    },
-    params=params
-)
-
-result = response.json()
-print(result)
-```
-
-</CodeGroup>
-
 ### Forced Deletion
 
 <CodeGroup>
 
 ```bash cURL
-curl -X DELETE "https://your-site.com/wp-json/latepoint-api/v1/bookings/123?force=true&reason=Administrative%20request" \
+curl -X DELETE "https://your-site.com/wp-json/latepoint-api/v1/bookings/123?force=true" \
   -H "X-API-Key: lp_live_1234567890abcdef"
 ```
 
 ```javascript JavaScript
-// Delete a confirmed or completed booking
-const deleteParams = {
-  force: true,
-  reason: 'Administrative request',
-  notify_customer: true
-};
-
-const params = new URLSearchParams(deleteParams);
-
-const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings/123?${params}`, {
+// Delete an approved or completed booking
+const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings/123?force=true`, {
   method: 'DELETE',
   headers: {
     'X-API-Key': 'lp_live_1234567890abcdef'
@@ -224,7 +132,7 @@ const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/boo
 
 if (response.ok) {
   const result = await response.json();
-  console.log('Booking deleted:', result.data.booking_code);
+  console.log('Booking deleted successfully');
 } else {
   const error = await response.json();
   console.error('Error:', error.error.message);
@@ -239,28 +147,8 @@ if (response.ok) {
 
 ```json
 {
-  "status": "success",
-  "message": "Booking deleted successfully",
-  "data": {
-    "deleted_booking_id": 123,
-    "booking_code": "LP-2024-001",
-    "customer_notified": true,
-    "deleted_at": "2024-01-20T15:30:00Z",
-    "deleted_by": {
-      "user_id": 5,
-      "display_name": "Admin User",
-      "email": "admin@clinic.com"
-    },
-    "reason": "Emergency cancellation",
-    "original_booking_data": {
-      "customer_name": "John Doe",
-      "service_name": "General Consultation",
-      "agent_name": "Dr. Maria Garcia",
-      "start_date": "2024-01-25",
-      "start_time": "14:30",
-      "status": "confirmed"
-    }
-  }
+  "success": true,
+  "message": "Booking deleted successfully"
 }
 ```
 
@@ -278,16 +166,12 @@ if (response.ok) {
 }
 ```
 
-```json Error 403 - Deletion Not Allowed
+```json Error 400 - Force Required
 {
-  "status": "error",
-  "error": {
-    "code": "deletion_not_allowed",
-    "message": "Cannot delete a confirmed booking without using the force parameter",
-    "details": {
-      "booking_status": "confirmed",
-      "suggestion": "Use force=true to delete or change status to 'cancelled' first"
-    }
+  "code": "force_required",
+  "message": "Force deletion is required for confirmed or completed bookings",
+  "data": {
+    "status": 400
   }
 }
 ```
@@ -306,19 +190,12 @@ if (response.ok) {
 }
 ```
 
-```json Error 409 - State Conflict
+```json Error 500 - Delete Error
 {
-  "status": "error",
-  "error": {
-    "code": "booking_conflict",
-    "message": "Cannot delete booking due to dependencies",
-    "details": {
-      "conflicts": [
-        "Has associated payments",
-        "Is linked to a service package"
-      ],
-      "suggestion": "Resolve dependencies before deleting"
-    }
+  "code": "delete_error",
+  "message": "Error deleting booking",
+  "data": {
+    "status": 500
   }
 }
 ```
@@ -334,358 +211,12 @@ if (response.ok) {
 
 ### States that Require `force=true`
 
-- `confirmed` - Confirmed
+- `confirmed` - Confirmed (legacy status)
 - `completed` - Completed
-- `no_show` - No show
 
-### Deletion Restrictions
-
-1. **Processed Payments**: Bookings with completed payments require special handling
-2. **Service Packages**: Bookings that are part of a package cannot be deleted individually
-3. **Dependencies**: Bookings with linked follow-up appointments
-4. **Retention Period**: Some configurations may require maintaining records for a specific time
-
-## Common Use Cases
-
-### 1. Safe Deletion with Verification
-
-```javascript
-// Function to delete booking with prior verifications
-async function safeDeleteBooking(bookingId, reason = null) {
-  try {
-    // First get booking information
-    const bookingResponse = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
-      headers: { 'X-API-Key': 'your_api_key' }
-    });
-    
-    if (!bookingResponse.ok) {
-      throw new Error('Booking not found');
-    }
-    
-    const booking = await bookingResponse.json();
-    const bookingData = booking.data;
-    
-    // Check if force deletion is needed
-    const needsForce = ['confirmed', 'completed', 'no_show'].includes(bookingData.status);
-    
-    // Build parameters
-    const params = new URLSearchParams();
-    if (needsForce) params.append('force', 'true');
-    if (reason) params.append('reason', reason);
-    params.append('notify_customer', 'true');
-    
-    // Delete booking
-    const deleteResponse = await fetch(
-      `/wp-json/latepoint-api/v1/bookings/${bookingId}?${params}`,
-      {
-        method: 'DELETE',
-        headers: { 'X-API-Key': 'your_api_key' }
-      }
-    );
-    
-    if (deleteResponse.ok) {
-      const result = await deleteResponse.json();
-      console.log('Booking deleted:', result.data.booking_code);
-      return result;
-    } else {
-      const error = await deleteResponse.json();
-      throw new Error(error.error.message);
-    }
-    
-  } catch (error) {
-    console.error('Error deleting booking:', error.message);
-    throw error;
-  }
-}
-
-// Usage
-await safeDeleteBooking(123, 'Customer cancellation request');
-```
-
-### 2. Bulk Deletion with Error Handling
-
-```javascript
-// Delete multiple bookings with robust error handling
-async function bulkDeleteBookings(bookingIds, reason = null) {
-  const results = {
-    successful: [],
-    failed: [],
-    summary: {
-      total: bookingIds.length,
-      deleted: 0,
-      errors: 0
-    }
-  };
-  
-  for (const bookingId of bookingIds) {
-    try {
-      const params = new URLSearchParams({
-        force: 'true',
-        notify_customer: 'true'
-      });
-      
-      if (reason) params.append('reason', reason);
-      
-      const response = await fetch(
-        `/wp-json/latepoint-api/v1/bookings/${bookingId}?${params}`,
-        {
-          method: 'DELETE',
-          headers: { 'X-API-Key': 'your_api_key' }
-        }
-      );
-      
-      if (response.ok) {
-        const result = await response.json();
-        results.successful.push({
-          booking_id: bookingId,
-          booking_code: result.data.booking_code,
-          deleted_at: result.data.deleted_at
-        });
-        results.summary.deleted++;
-      } else {
-        const error = await response.json();
-        results.failed.push({
-          booking_id: bookingId,
-          error: error.error.message,
-          code: error.error.code
-        });
-        results.summary.errors++;
-      }
-      
-    } catch (error) {
-      results.failed.push({
-        booking_id: bookingId,
-        error: error.message,
-        code: 'network_error'
-      });
-      results.summary.errors++;
-    }
-    
-    // Small pause to avoid rate limiting
-    await new Promise(resolve => setTimeout(resolve, 100));
-  }
-  
-  return results;
-}
-
-// Usage
-const bookingIds = [123, 124, 125, 126];
-const results = await bulkDeleteBookings(bookingIds, 'Obsolete data cleanup');
-
-console.log(`Deleted: ${results.summary.deleted}/${results.summary.total}`);
-if (results.failed.length > 0) {
-  console.log('Errors:', results.failed);
-}
-```
-
-### 3. Deletion with User Confirmation
-
-```javascript
-// Function with interactive confirmation
-async function deleteBookingWithConfirmation(bookingId) {
-  try {
-    // Get booking details
-    const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
-      headers: { 'X-API-Key': 'your_api_key' }
-    });
-    
-    const booking = await response.json();
-    const data = booking.data;
-    
-    // Show booking information
-    const confirmMessage = `
-Are you sure you want to delete this booking?
-
-Code: ${data.booking_code}
-Customer: ${data.customer.first_name} ${data.customer.last_name}
-Service: ${data.service.name}
-Date: ${data.start_date} ${data.start_time}
-Status: ${data.status}
-
-This action cannot be undone.
-    `;
-    
-    if (confirm(confirmMessage)) {
-      const reason = prompt('Reason for deletion (optional):');
-      
-      const params = new URLSearchParams({
-        force: 'true',
-        notify_customer: 'true'
-      });
-      
-      if (reason) params.append('reason', reason);
-      
-      const deleteResponse = await fetch(
-        `/wp-json/latepoint-api/v1/bookings/${bookingId}?${params}`,
-        {
-          method: 'DELETE',
-          headers: { 'X-API-Key': 'your_api_key' }
-        }
-      );
-      
-      if (deleteResponse.ok) {
-        const result = await deleteResponse.json();
-        alert(`Booking ${result.data.booking_code} deleted successfully`);
-        return result;
-      } else {
-        const error = await deleteResponse.json();
-        alert(`Error: ${error.error.message}`);
-        throw new Error(error.error.message);
-      }
-    } else {
-      console.log('Deletion cancelled by user');
-      return null;
-    }
-    
-  } catch (error) {
-    console.error('Error:', error.message);
-    alert(`Error deleting booking: ${error.message}`);
-    throw error;
-  }
-}
-```
-
-### 4. Cleanup of Old Bookings
-
-```javascript
-// Function to automatically clean up old bookings
-async function cleanupOldBookings(daysOld = 365, status = 'cancelled') {
-  try {
-    // Calculate cutoff date
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-    const cutoffDateStr = cutoffDate.toISOString().split('T')[0];
-    
-    // Search for old bookings
-    const searchParams = new URLSearchParams({
-      status: status,
-      end_date_before: cutoffDateStr,
-      per_page: 100
-    });
-    
-    const response = await fetch(
-      `/wp-json/latepoint-api/v1/bookings?${searchParams}`,
-      {
-        headers: { 'X-API-Key': 'your_api_key' }
-      }
-    );
-    
-    const bookings = await response.json();
-    
-    if (bookings.data.length === 0) {
-      console.log('No old bookings found to delete');
-      return { deleted: 0, errors: 0 };
-    }
-    
-    console.log(`Found ${bookings.data.length} bookings to delete`);
-    
-    // Delete bookings in batches
-    const bookingIds = bookings.data.map(booking => booking.id);
-    const results = await bulkDeleteBookings(
-      bookingIds, 
-      `Automatic cleanup - ${status} bookings older than ${daysOld} days`
-    );
-    
-    console.log(`Cleanup completed: ${results.summary.deleted} deleted, ${results.summary.errors} errors`);
-    
-    return results.summary;
-    
-  } catch (error) {
-    console.error('Error in automatic cleanup:', error.message);
-    throw error;
-  }
-}
-
-// Schedule monthly cleanup
-setInterval(() => {
-  cleanupOldBookings(365, 'cancelled')
-    .then(summary => {
-      console.log('Automatic cleanup completed:', summary);
-    })
-    .catch(error => {
-      console.error('Error in automatic cleanup:', error);
-    });
-}, 30 * 24 * 60 * 60 * 1000); // 30 days
-```
-
-## Best Practices
-
-### 1. Always Verify Before Deleting
-
-```javascript
-// Get complete information before deleting
-const booking = await getBooking(bookingId);
-if (booking.status === 'completed' && booking.payment_status === 'paid') {
-  // Consider cancelling instead of deleting
-  console.warn('Completed booking with payment - consider cancelling instead of deleting');
-}
-```
-
-### 2. Use Descriptive Reasons
-
-```javascript
-// Provide clear reasons for auditing
-const reasons = {
-  customer_request: 'Cancellation requested by customer',
-  no_show: 'Customer did not show up for appointment',
-  emergency: 'Emergency cancellation',
-  duplicate: 'Duplicate booking',
-  data_cleanup: 'Obsolete data cleanup',
-  system_error: 'System error - invalid booking'
-};
-
-await deleteBooking(bookingId, reasons.customer_request);
-```
-
-### 3. Implement Audit Logs
-
-```javascript
-// Log all deletions for auditing
-function logBookingDeletion(bookingId, result, reason) {
-  const logEntry = {
-    timestamp: new Date().toISOString(),
-    action: 'booking_deleted',
-    booking_id: bookingId,
-    booking_code: result.data.booking_code,
-    deleted_by: result.data.deleted_by,
-    reason: reason,
-    customer_notified: result.data.customer_notified
-  };
-  
-  // Send to logging system
-  console.log('AUDIT LOG:', logEntry);
-  
-  // Optional: send to external audit service
-  // await sendToAuditService(logEntry);
-}
-```
-
-### 4. Dependency Management
-
-```javascript
-// Check dependencies before deleting
-async function checkBookingDependencies(bookingId) {
-  const dependencies = {
-    payments: [],
-    followups: [],
-    packages: []
-  };
-  
-  // Check payments
-  const paymentsResponse = await fetch(
-    `/wp-json/latepoint-api/v1/payments?booking_id=${bookingId}`
-  );
-  if (paymentsResponse.ok) {
-    const payments = await paymentsResponse.json();
-    dependencies.payments = payments.data;
-  }
-  
-  // Check follow-up appointments
-  // ... more checks
-  
-  return dependencies;
-}
-```
+<Note>
+  The current implementation checks for `confirmed` and `completed` statuses to require force deletion.
+</Note>
 
 ## Important Notes
 
@@ -697,47 +228,6 @@ async function checkBookingDependencies(bookingId) {
   **Irrecoverable Data**: Once deleted, all booking information is permanently lost. Make sure you have backups if necessary.
 </Warning>
 
-<Tip>
-  **Auditing**: Always provide a reason for deletion. This helps with auditing and change tracking.
-</Tip>
-
 <Info>
-  **Notifications**: Use `notify_customer=true` to inform the customer about the cancellation before deleting the booking.
+  **Simple Implementation**: This endpoint provides basic deletion functionality. Advanced features like customer notifications and audit logging are not currently implemented.
 </Info>
-
-## Alternatives to Deletion
-
-### 1. Cancel Instead of Delete
-
-```javascript
-// Best practice: cancel instead of delete
-const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
-  method: 'PUT',
-  headers: {
-    'X-API-Key': 'your_api_key',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    status: 'cancelled',
-    internal_notes: 'Cancelled - keep for history',
-    send_notification: true
-  })
-});
-```
-
-### 2. Archive Bookings
-
-```javascript
-// If your system supports archiving
-const response = await fetch(`/wp-json/latepoint-api/v1/bookings/${bookingId}`, {
-  method: 'PUT',
-  headers: {
-    'X-API-Key': 'your_api_key',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({
-    archived: true,
-    archived_reason: 'Obsolete data but preserved for auditing'
-  })
-});
-```

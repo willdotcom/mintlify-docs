@@ -33,7 +33,7 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
   
   **Possible values:**
   - `pending` - Pending
-  - `confirmed` - Confirmed
+  - `approved` - Approved
   - `cancelled` - Cancelled
   - `completed` - Completed
   - `no_show` - No show
@@ -334,14 +334,14 @@ print_r($data);
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings?status=confirmed&date_from=2024-01-01&date_to=2024-01-31" \
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings?status=approved&date_from=2024-01-01&date_to=2024-01-31" \
   -H "X-API-Key: lp_live_1234567890abcdef" \
   -H "Content-Type: application/json"
 ```
 
 ```javascript JavaScript
 const params = new URLSearchParams({
-  status: 'confirmed',
+  status: 'approved',
   date_from: '2024-01-01',
   date_to: '2024-01-31'
 });
@@ -360,7 +360,7 @@ const data = await response.json();
 import requests
 
 params = {
-    'status': 'confirmed',
+    'status': 'approved',
     'date_from': '2024-01-01',
     'date_to': '2024-01-31'
 }
@@ -412,7 +412,7 @@ const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/boo
     {
       "id": 123,
       "booking_code": "LP-2024-001",
-      "status": "confirmed",
+      "status": "approved",
       "start_date": "2024-01-15",
       "start_time": "14:30",
       "end_time": "15:30",

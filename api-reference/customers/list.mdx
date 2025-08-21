@@ -52,25 +52,7 @@ This endpoint returns a paginated list of all customers registered in the system
   - `false` - Only customers without bookings
 </ParamField>
 
-<ParamField query="last_booking_after" type="string">
-  Customers with last booking after this date (format: YYYY-MM-DD)
-</ParamField>
 
-<ParamField query="last_booking_before" type="string">
-  Customers with last booking before this date (format: YYYY-MM-DD)
-</ParamField>
-
-<ParamField query="agent_id" type="integer">
-  Filter customers who have had appointments with a specific agent
-</ParamField>
-
-<ParamField query="service_id" type="integer">
-  Filter customers who have used a specific service
-</ParamField>
-
-<ParamField query="location_id" type="integer">
-  Filter customers who have visited a specific location
-</ParamField>
 
 ### Search
 
@@ -78,13 +60,7 @@ This endpoint returns a paginated list of all customers registered in the system
   Search customers by name, email or phone
 </ParamField>
 
-<ParamField query="email" type="string">
-  Search customer by exact email
-</ParamField>
 
-<ParamField query="phone" type="string">
-  Search customer by phone number
-</ParamField>
 
 ### Sorting
 
@@ -93,12 +69,7 @@ This endpoint returns a paginated list of all customers registered in the system
   
   **Possible values:**
   - `id` - By customer ID
-  - `first_name` - By first name
-  - `last_name` - By last name
-  - `email` - By email
   - `created_at` - By registration date
-  - `last_booking_date` - By last booking date
-  - `total_bookings` - By total number of bookings
 </ParamField>
 
 <ParamField query="order_direction" type="string" default="desc">
@@ -214,11 +185,11 @@ This endpoint returns a paginated list of all customers registered in the system
   </Expandable>
 </ResponseField>
 
-<ResponseField name="meta" type="object">
-  Pagination metadata
+<ResponseField name="pagination" type="object">
+  Pagination information
   
-  <Expandable title="Metadata">
-    <ResponseField name="current_page" type="integer">
+  <Expandable title="Pagination">
+    <ResponseField name="page" type="integer">
       Current page
     </ResponseField>
     
@@ -232,14 +203,6 @@ This endpoint returns a paginated list of all customers registered in the system
     
     <ResponseField name="total_pages" type="integer">
       Total pages
-    </ResponseField>
-    
-    <ResponseField name="has_next_page" type="boolean">
-      Whether there is a next page
-    </ResponseField>
-    
-    <ResponseField name="has_previous_page" type="boolean">
-      Whether there is a previous page
     </ResponseField>
   </Expandable>
 </ResponseField>

@@ -35,8 +35,6 @@ This endpoint returns all available information for a specific customer, includi
   - `custom_fields` - Include custom fields
   - `notes` - Include customer notes
   - `avatar` - Include avatar information
-  - `preferences` - Include customer preferences
-  - `payment_methods` - Include saved payment methods
 </ParamField>
 
 <ParamField query="bookings_limit" type="integer" default="10">
@@ -552,26 +550,7 @@ if (customer.status === 'success') {
       "referral_source": "Google"
     },
     "notes": "Very punctual and friendly customer. Prefers afternoon appointments.",
-    "preferences": {
-      "preferred_agent_id": 3,
-      "preferred_location_id": 1,
-      "preferred_time_slots": ["14:00-18:00"],
-      "communication_preferences": {
-        "email_notifications": true,
-        "sms_notifications": true,
-        "reminder_hours": 24
-      },
-      "language": "en"
-    },
-    "payment_methods": [
-      {
-        "id": "pm_1234",
-        "type": "card",
-        "last_four": "4242",
-        "brand": "visa",
-        "is_default": true
-      }
-    ]
+    "notes": "Very punctual and friendly customer. Prefers afternoon appointments."
   }
 }
 ```

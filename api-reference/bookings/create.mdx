@@ -75,7 +75,7 @@ This endpoint allows you to create a new booking in your LatePoint system. It in
   
   **Possible values:**
   - `pending` - Pending
-  - `confirmed` - Confirmed
+  - `approved` - Approved
   - `cancelled` - Cancelled
 </ParamField>
 
@@ -177,7 +177,7 @@ curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/bookings" \
     "customer_id": 45,
     "start_date": "2024-01-20",
     "start_time": "14:30",
-    "status": "confirmed",
+    "status": "pending",
     "notes": "Consulta de seguimiento"
   }'
 ```
@@ -189,7 +189,7 @@ const bookingData = {
   customer_id: 45,
   start_date: '2024-01-20',
   start_time: '14:30',
-  status: 'confirmed',
+  status: 'approved',
   notes: 'Consulta de seguimiento'
 };
 
@@ -216,7 +216,7 @@ booking_data = {
     'customer_id': 45,
     'start_date': '2024-01-20',
     'start_time': '14:30',
-    'status': 'confirmed',
+    'status': 'approved',
     'notes': 'Consulta de seguimiento'
 }
 
@@ -241,7 +241,7 @@ $booking_data = [
     'customer_id' => 45,
     'start_date' => '2024-01-20',
     'start_time' => '14:30',
-    'status' => 'confirmed',
+    'status' => 'approved',
     'notes' => 'Consulta de seguimiento'
 ];
 
@@ -363,7 +363,7 @@ result = response.json()
   "data": {
     "id": 156,
     "booking_code": "LP-2024-002",
-    "status": "confirmed",
+    "status": "approved",
     "start_date": "2024-01-20",
     "start_time": "14:30",
     "end_time": "15:30",
@@ -544,7 +544,7 @@ const quickBooking = {
   customer_id: 45,
   start_date: '2024-01-20',
   start_time: '14:30',
-  status: 'confirmed'
+  status: 'approved'
 };
 ```
 
