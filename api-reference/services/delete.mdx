@@ -8,5 +8,14 @@ description: "Delete a service. Cannot delete services with associated bookings.
 
 ```bash
 DELETE /wp-json/latepoint-api/v1/services/1
-Authorization: Bearer YOUR_API_KEY
+X-API-Key: YOUR_API_KEY
+```
+
+## Response Example
+
+```json
+{
+  "success": true,
+  "message": "Service deleted successfully"
+}
 ```

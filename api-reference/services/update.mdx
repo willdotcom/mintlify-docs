@@ -4,19 +4,70 @@ api: "PUT /wp-json/latepoint-api/v1/services/{id}"
 description: "Update an existing service."
 ---
 
-## Request Body Parameters
+## Parameters
 
-Same parameters as POST (except name), all optional. Only provided fields will be updated.
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | string | Service name |
+| `short_description` | string | Brief description of the service |
+| `description` | string | Detailed description of the service |
+| `duration` | integer | Service duration in minutes |
+| `price_min` | number | Minimum price for the service |
+| `price_max` | number | Maximum price for the service |
+| `charge_amount` | number | Amount to charge for the service |
+| `deposit_amount` | number | Deposit amount required |
+| `capacity_min` | integer | Minimum capacity |
+| `capacity_max` | integer | Maximum capacity |
+| `order_number` | integer | Display order number |
+| `selection_image_id` | integer | Image ID for service selection |
+| `status` | string | Service status: active, disabled |
+| `visibility` | string | Service visibility: visible, hidden |
+| `category_id` | integer | Service category ID |
+
+All parameters are optional. Only provided fields will be updated.
 
 ## Example Request
 
 ```bash
 PUT /wp-json/latepoint-api/v1/services/1
-Authorization: Bearer YOUR_API_KEY
+X-API-Key: YOUR_API_KEY
 Content-Type: application/json
 
 {
-  "price": 120,
-  "duration": 90
+  "name": "Updated Service Name",
+  "short_description": "Updated description",
+  "duration": 90,
+  "charge_amount": 150,
+  "price_min": 120,
+  "price_max": 180
+}
+```
+
+## Response Example
+
+```json
+{
+  "success": true,
+  "message": "Service updated successfully",
+  "data": {
+    "id": 1,
+    "name": "Updated Service Name",
+    "short_description": "Updated description",
+    "description": "",
+    "duration": 90,
+    "price_min": 120,
+    "price_max": 180,
+    "charge_amount": 150,
+    "deposit_amount": 0,
+    "capacity_min": 1,
+    "capacity_max": 1,
+    "order_number": 0,
+    "selection_image_id": 0,
+    "status": "active",
+    "visibility": "visible",
+    "category_id": null,
+    "created_at": "2025-08-21 09:51:59",
+    "updated_at": "2025-08-21 10:15:30"
+  }
 }
 ```
