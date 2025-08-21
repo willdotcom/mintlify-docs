@@ -1,12 +1,64 @@
 ---
 title: "Get Service"
 api: "GET /wp-json/latepoint-api/v1/services/{id}"
-description: "Retrieve a specific service by ID."
+description: "Retrieve a specific service by ID with optional related data."
 ---
 
-## Example Request
+## Path Parameters
 
+<ParamField path="id" type="integer" required>
+  The unique identifier of the service
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="include" type="string">
+  Include related data (comma-separated: category, agents, locations)
+</ParamField>
+
+## Example Requests
+
+### Basic Request
 ```bash
 GET /wp-json/latepoint-api/v1/services/1
 Authorization: Bearer YOUR_API_KEY
+```
+
+### Include Related Data
+```bash
+GET /wp-json/latepoint-api/v1/services/1?include=category,agents
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response Example
+
+```json
+{
+  "status": "success",
+  "message": "Service retrieved successfully",
+  "data": {
+    "id": 1,
+    "name": "Service Name",
+    "short_description": "Brief description",
+    "description": "Detailed description",
+    "price": "100.00",
+    "duration": 60,
+    "status": "active",
+    "visibility": "visible",
+    "category_id": 1,
+    "created_date": "2024-01-01 10:00:00",
+    "updated_date": "2024-01-15 14:30:00",
+    "category": {
+      "id": 1,
+      "name": "Category Name"
+    },
+    "agents": [
+      {
+        "id": 1,
+        "first_name": "John",
+        "last_name": "Doe"
+      }
+    ]
+  }
+}
 ```
