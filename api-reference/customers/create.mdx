@@ -81,76 +81,24 @@ This endpoint allows you to create a new customer in the LatePoint system. You c
 
 ### Address Information
 
-<ParamField body="address" type="object">
-  Customer's complete address
-  
-  <Expandable title="Address Fields">
-    <ParamField body="address.street" type="string">
-      Street and number
-    </ParamField>
-    
-    <ParamField body="address.city" type="string">
-      City
-    </ParamField>
-    
-    <ParamField body="address.state" type="string">
-      State or province
-    </ParamField>
-    
-    <ParamField body="address.postal_code" type="string">
-      Postal code
-    </ParamField>
-    
-    <ParamField body="address.country" type="string">
-      Country (2-letter ISO code)
-    </ParamField>
-  </Expandable>
+<ParamField body="address" type="string">
+  Customer's street address
 </ParamField>
 
-### Customer Preferences
+<ParamField body="city" type="string">
+  Customer's city
+</ParamField>
 
-<ParamField body="preferences" type="object">
-  Customer preferences
-  
-  <Expandable title="Available Preferences">
-    <ParamField body="preferences.preferred_agent_id" type="integer">
-      Preferred agent ID
-    </ParamField>
-    
-    <ParamField body="preferences.preferred_location_id" type="integer">
-      Preferred location ID
-    </ParamField>
-    
-    <ParamField body="preferences.preferred_time_slots" type="array">
-      Preferred time slots (format: ["09:00-12:00", "14:00-17:00"])
-    </ParamField>
-    
-    <ParamField body="preferences.language" type="string" default="en">
-      Preferred language (2-letter ISO code)
-    </ParamField>
-    
-    <ParamField body="preferences.communication_preferences" type="object">
-      Communication preferences
-      
-      <Expandable title="Communication">
-        <ParamField body="preferences.communication_preferences.email_notifications" type="boolean" default="true">
-          Receive email notifications
-        </ParamField>
-        
-        <ParamField body="preferences.communication_preferences.sms_notifications" type="boolean" default="false">
-          Receive SMS notifications
-        </ParamField>
-        
-        <ParamField body="preferences.communication_preferences.reminder_hours" type="integer" default="24">
-          Hours before for reminders
-        </ParamField>
-        
-        <ParamField body="preferences.communication_preferences.marketing_emails" type="boolean" default="false">
-          Receive marketing emails
-        </ParamField>
-      </Expandable>
-    </ParamField>
-  </Expandable>
+<ParamField body="state" type="string">
+  Customer's state or province
+</ParamField>
+
+<ParamField body="zipcode" type="string">
+  Customer's ZIP or postal code
+</ParamField>
+
+<ParamField body="country" type="string">
+  Customer's country
 </ParamField>
 
 ### Custom Fields
@@ -176,22 +124,14 @@ This endpoint allows you to create a new customer in the LatePoint system. You c
   - Maximum 1000 characters
 </ParamField>
 
-### Account Configuration
+### Additional Information
 
-<ParamField body="send_welcome_email" type="boolean" default="true">
-  Send welcome email to customer
+<ParamField body="is_guest" type="boolean" default="false">
+  Whether the customer is a guest (no account)
 </ParamField>
 
-<ParamField body="create_wp_user" type="boolean" default="false">
-  Create associated WordPress user
-</ParamField>
-
-<ParamField body="wp_user_role" type="string" default="customer">
-  WordPress user role (if created)
-  
-  **Possible values:**
-  - `customer` - Customer (default)
-  - `subscriber` - Subscriber
+<ParamField body="wordpress_user_id" type="integer">
+  Associated WordPress user ID (if applicable)
 </ParamField>
 
 ## Response
@@ -351,7 +291,7 @@ print_r($result['data']);
 
 </CodeGroup>
 
-### Complete Customer with Preferences
+### Complete Customer with Address
 
 <CodeGroup>
 
@@ -366,33 +306,17 @@ curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/customers" \
     "phone": "+1 555 987 6543",
     "date_of_birth": "1990-05-15",
     "gender": "female",
-    "address": {
-      "street": "123 Main Street, Apt 4B",
-      "city": "New York",
-      "state": "NY",
-      "postal_code": "10001",
-      "country": "US"
-    },
-    "preferences": {
-      "preferred_agent_id": 3,
-      "preferred_location_id": 1,
-      "preferred_time_slots": ["09:00-12:00", "14:00-17:00"],
-      "language": "en",
-      "communication_preferences": {
-        "email_notifications": true,
-        "sms_notifications": true,
-        "reminder_hours": 48,
-        "marketing_emails": false
-      }
-    },
+    "address": "123 Main Street, Apt 4B",
+    "city": "New York",
+    "state": "NY",
+    "zipcode": "10001",
+    "country": "US",
     "custom_fields": {
       "emergency_contact": "John Johnson - +1 555 111 2222",
       "insurance_provider": "Blue Cross Blue Shield",
       "referral_source": "Referral"
     },
-    "notes": "VIP customer, prefers morning appointments",
-    "send_welcome_email": true,
-    "create_wp_user": true
+    "notes": "VIP customer, prefers morning appointments"
   }'
 ```
 
@@ -404,33 +328,17 @@ const completeCustomer = {
   phone: '+1 555 987 6543',
   date_of_birth: '1990-05-15',
   gender: 'female',
-  address: {
-    street: '123 Main Street, Apt 4B',
-    city: 'New York',
-    state: 'NY',
-    postal_code: '10001',
-    country: 'US'
-  },
-  preferences: {
-    preferred_agent_id: 3,
-    preferred_location_id: 1,
-    preferred_time_slots: ['09:00-12:00', '14:00-17:00'],
-    language: 'en',
-    communication_preferences: {
-      email_notifications: true,
-      sms_notifications: true,
-      reminder_hours: 48,
-      marketing_emails: false
-    }
-  },
+  address: '123 Main Street, Apt 4B',
+  city: 'New York',
+  state: 'NY',
+  zipcode: '10001',
+  country: 'US',
   custom_fields: {
     emergency_contact: 'John Johnson - +1 555 111 2222',
     insurance_provider: 'Blue Cross Blue Shield',
     referral_source: 'Referral'
   },
-  notes: 'VIP customer, prefers morning appointments',
-  send_welcome_email: true,
-  create_wp_user: true
+  notes: 'VIP customer, prefers morning appointments'
 };
 
 const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/customers', {
@@ -472,33 +380,17 @@ complete_customer = {
     'phone': '+1 555 987 6543',
     'date_of_birth': '1990-05-15',
     'gender': 'female',
-    'address': {
-        'street': '123 Main Street, Apt 4B',
-        'city': 'New York',
-        'state': 'NY',
-        'postal_code': '10001',
-        'country': 'US'
-    },
-    'preferences': {
-        'preferred_agent_id': 3,
-        'preferred_location_id': 1,
-        'preferred_time_slots': ['09:00-12:00', '14:00-17:00'],
-        'language': 'en',
-        'communication_preferences': {
-            'email_notifications': True,
-            'sms_notifications': True,
-            'reminder_hours': 48,
-            'marketing_emails': False
-        }
-    },
+    'address': '123 Main Street, Apt 4B',
+    'city': 'New York',
+    'state': 'NY',
+    'zipcode': '10001',
+    'country': 'US',
     'custom_fields': {
         'emergency_contact': 'John Johnson - +1 555 111 2222',
         'insurance_provider': 'Blue Cross Blue Shield',
         'referral_source': 'Referral'
     },
-    'notes': 'VIP customer, prefers morning appointments',
-    'send_welcome_email': True,
-    'create_wp_user': True
+    'notes': 'VIP customer, prefers morning appointments'
 }
 
 response = requests.post(

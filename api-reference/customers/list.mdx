@@ -52,7 +52,42 @@ This endpoint returns a paginated list of all customers registered in the system
   - `false` - Only customers without bookings
 </ParamField>
 
+### Dynamic Field Filters
 
+<ParamField query="first_name" type="string">
+  Filter by customer's first name (partial match)
+</ParamField>
+
+<ParamField query="last_name" type="string">
+  Filter by customer's last name (partial match)
+</ParamField>
+
+<ParamField query="email" type="string">
+  Filter by customer's email address (partial match)
+</ParamField>
+
+<ParamField query="phone" type="string">
+  Filter by customer's phone number (partial match)
+</ParamField>
+
+<ParamField query="is_guest" type="boolean">
+  Filter by guest status
+  
+  - `true` - Only guest customers
+  - `false` - Only registered customers
+</ParamField>
+
+<ParamField query="wordpress_user_id" type="integer">
+  Filter by WordPress user ID (exact match)
+</ParamField>
+
+<ParamField query="created_at" type="string">
+  Filter by creation date (partial match, format: YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="updated_at" type="string">
+  Filter by last update date (partial match, format: YYYY-MM-DD)
+</ParamField>
 
 ### Search
 
@@ -265,21 +300,22 @@ print_r($customers);
 
 </CodeGroup>
 
-### Search Customers with Filters
+### Search Customers with Dynamic Filters
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/customers?search=john&status=active&include=stats" \
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/customers?first_name=Carlos&last_name=Lopez&status=active" \
   -H "X-API-Key: lp_live_1234567890abcdef"
 ```
 
 ```javascript JavaScript
 const params = new URLSearchParams({
-  search: 'john',
+  first_name: 'Carlos',
+  email: 'lopez',
   status: 'active',
   include: 'stats,custom_fields',
-  order_by: 'last_booking_date',
+  order_by: 'created_at',
   order_direction: 'desc'
 });
 
@@ -297,11 +333,11 @@ console.log(customers);
 import requests
 
 params = {
-    'search': 'john',
+    'first_name': 'Ana',
+    'email': 'gmail.com',
     'status': 'active',
-    'include': 'stats,custom_fields',
-    'order_by': 'last_booking_date',
-    'order_direction': 'desc'
+    'is_guest': 'false',
+    'include': 'stats,custom_fields'
 }
 
 response = requests.get(
@@ -316,25 +352,23 @@ print(customers)
 
 </CodeGroup>
 
-### Customers with Recent Bookings
+### Filter by Phone and Guest Status
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/customers?last_booking_after=2024-01-01&include=stats&order_by=last_booking_date" \
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/customers?phone=555&is_guest=true&include=stats" \
   -H "X-API-Key: lp_live_1234567890abcdef"
 ```
 
 ```javascript JavaScript
-// Get customers with recent activity
-const thirtyDaysAgo = new Date();
-thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-const dateFilter = thirtyDaysAgo.toISOString().split('T')[0];
-
+// Get guest customers with specific phone pattern
 const params = new URLSearchParams({
-  last_booking_after: dateFilter,
+  phone: '555',
+  is_guest: 'true',
+  status: 'active',
   include: 'stats',
-  order_by: 'last_booking_date',
+  order_by: 'created_at',
   order_direction: 'desc',
   per_page: 50
 });
@@ -345,8 +379,39 @@ const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/cus
   }
 });
 
-const activeCustomers = await response.json();
-console.log(`Active customers in the last 30 days: ${activeCustomers.meta.total}`);
+const guestCustomers = await response.json();
+console.log(`Guest customers with 555 in phone: ${guestCustomers.data.length}`);
+```
+
+</CodeGroup>
+
+### Filter by Creation Date
+
+<CodeGroup>
+
+```bash cURL
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/customers?created_at=2024-01&has_bookings=true" \
+  -H "X-API-Key: lp_live_1234567890abcdef"
+```
+
+```javascript JavaScript
+// Get customers created in January 2024 who have bookings
+const params = new URLSearchParams({
+  created_at: '2024-01',
+  has_bookings: 'true',
+  include: 'stats',
+  order_by: 'created_at',
+  order_direction: 'asc'
+});
+
+const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/customers?${params}`, {
+  headers: {
+    'X-API-Key': 'lp_live_1234567890abcdef'
+  }
+});
+
+const januaryCustomers = await response.json();
+console.log(`Customers from January 2024: ${januaryCustomers.data.length}`);
 ```
 
 </CodeGroup>
@@ -543,27 +608,22 @@ async function getActiveCustomersDashboard() {
 }
 ```
 
-### 2. Real-time Customer Search
+### 2. Dynamic Field Search
 
 ```javascript
-// Search function with debounce for autocomplete
-function createCustomerSearch() {
+// Advanced search using dynamic field filters
+function createAdvancedCustomerSearch() {
   let searchTimeout;
   
-  return function searchCustomers(query, callback) {
+  return function searchCustomers(filters, callback) {
     clearTimeout(searchTimeout);
     
     searchTimeout = setTimeout(async () => {
-      if (query.length < 2) {
-        callback([]);
-        return;
-      }
-      
       const params = new URLSearchParams({
-        search: query,
         status: 'active',
         per_page: 10,
-        order_by: 'last_name'
+        order_by: 'last_name',
+        ...filters // Spread dynamic filters
       });
       
       try {
@@ -578,7 +638,8 @@ function createCustomerSearch() {
             id: customer.id,
             name: `${customer.first_name} ${customer.last_name}`,
             email: customer.email,
-            phone: customer.phone
+            phone: customer.phone,
+            isGuest: customer.is_guest
           }));
           
           callback(customers);
@@ -593,10 +654,22 @@ function createCustomerSearch() {
   };
 }
 
-// Usage
-const searchCustomers = createCustomerSearch();
-searchCustomers('john', (customers) => {
-  console.log('Results:', customers);
+// Usage examples
+const searchCustomers = createAdvancedCustomerSearch();
+
+// Search by first name
+searchCustomers({ first_name: 'Carlos' }, (customers) => {
+  console.log('Carlos customers:', customers);
+});
+
+// Search by email domain
+searchCustomers({ email: 'gmail.com' }, (customers) => {
+  console.log('Gmail customers:', customers);
+});
+
+// Search guest customers with phone pattern
+searchCustomers({ phone: '555', is_guest: 'true' }, (customers) => {
+  console.log('Guest customers with 555:', customers);
 });
 ```
 
@@ -732,14 +805,31 @@ const params = new URLSearchParams({
 });
 ```
 
-### 2. Smart Filtering
+### 2. Smart Dynamic Filtering
 
 ```javascript
-// Combine filters for more specific queries
+// Combine dynamic field filters for precise queries
 const params = new URLSearchParams({
+  first_name: 'Ana',
+  email: 'gmail.com',
   status: 'active',
+  is_guest: 'false',
   has_bookings: 'true',
-  last_booking_after: '2024-01-01',
+  created_after: '2024-01-01',
+  include: 'stats'
+});
+
+// Filter by phone area code and guest status
+const phoneAreaParams = new URLSearchParams({
+  phone: '+1555',
+  is_guest: 'true',
+  status: 'active'
+});
+
+// Filter by creation month
+const monthlyParams = new URLSearchParams({
+  created_at: '2024-01',
+  status: 'active',
   include: 'stats'
 });
 ```

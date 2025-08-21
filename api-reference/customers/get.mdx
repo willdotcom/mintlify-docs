@@ -100,30 +100,24 @@ This endpoint returns all available information for a specific customer, includi
       Customer's gender
     </ResponseField>
     
-    <ResponseField name="address" type="object">
-      Customer's address
-      
-      <Expandable title="Address">
-        <ResponseField name="street" type="string">
-          Street and number
-        </ResponseField>
-        
-        <ResponseField name="city" type="string">
-          City
-        </ResponseField>
-        
-        <ResponseField name="state" type="string">
-          State/Province
-        </ResponseField>
-        
-        <ResponseField name="postal_code" type="string">
-          Postal code
-        </ResponseField>
-        
-        <ResponseField name="country" type="string">
-          Country
-        </ResponseField>
-      </Expandable>
+    <ResponseField name="address" type="string">
+      Customer's street address
+    </ResponseField>
+    
+    <ResponseField name="city" type="string">
+      Customer's city
+    </ResponseField>
+    
+    <ResponseField name="state" type="string">
+      Customer's state or province
+    </ResponseField>
+    
+    <ResponseField name="zipcode" type="string">
+      Customer's ZIP or postal code
+    </ResponseField>
+    
+    <ResponseField name="country" type="string">
+      Customer's country
     </ResponseField>
     
     <ResponseField name="created_at" type="string">
@@ -158,40 +152,8 @@ This endpoint returns all available information for a specific customer, includi
           Number of pending bookings
         </ResponseField>
         
-        <ResponseField name="total_spent" type="string">
-          Total amount spent by customer
-        </ResponseField>
-        
-        <ResponseField name="average_booking_value" type="string">
-          Average value per booking
-        </ResponseField>
-        
-        <ResponseField name="first_booking_date" type="string">
-          Date of first booking
-        </ResponseField>
-        
-        <ResponseField name="last_booking_date" type="string">
-          Date of last booking
-        </ResponseField>
-        
-        <ResponseField name="next_booking_date" type="string">
-          Date of next booking
-        </ResponseField>
-        
-        <ResponseField name="favorite_agent" type="object">
-          Most frequently visited agent
-        </ResponseField>
-        
-        <ResponseField name="favorite_service" type="object">
-          Most used service
-        </ResponseField>
-        
-        <ResponseField name="favorite_location" type="object">
-          Most visited location
-        </ResponseField>
-        
-        <ResponseField name="booking_frequency" type="string">
-          Average booking frequency
+        <ResponseField name="future_bookings_count" type="integer">
+          Number of future bookings
         </ResponseField>
       </Expandable>
     </ResponseField>
@@ -254,34 +216,12 @@ This endpoint returns all available information for a specific customer, includi
       Customer notes (if included)
     </ResponseField>
     
-    <ResponseField name="preferences" type="object">
-      Customer preferences (if included)
-      
-      <Expandable title="Preferences">
-        <ResponseField name="preferred_agent_id" type="integer">
-          Preferred agent ID
-        </ResponseField>
-        
-        <ResponseField name="preferred_location_id" type="integer">
-          Preferred location ID
-        </ResponseField>
-        
-        <ResponseField name="preferred_time_slots" type="array">
-          Preferred time slots
-        </ResponseField>
-        
-        <ResponseField name="communication_preferences" type="object">
-          Communication preferences
-        </ResponseField>
-        
-        <ResponseField name="language" type="string">
-          Preferred language
-        </ResponseField>
-      </Expandable>
+    <ResponseField name="is_guest" type="boolean">
+      Whether the customer is a guest (no account)
     </ResponseField>
     
-    <ResponseField name="payment_methods" type="array">
-      Saved payment methods (if included)
+    <ResponseField name="wordpress_user_id" type="integer">
+      Associated WordPress user ID (if applicable)
     </ResponseField>
   </Expandable>
 </ResponseField>
