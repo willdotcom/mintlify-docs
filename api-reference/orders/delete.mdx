@@ -1,12 +1,40 @@
 ---
 title: "Delete Order"
 api: "DELETE /wp-json/latepoint-api/v1/orders/{id}"
-description: "Delete an order. Cannot delete orders with associated payments."
+description: "Delete an order. Force deletion is required for completed orders."
 ---
 
-## Example Request
+## Path Parameters
 
+<ParamField path="id" type="integer" required>
+  The ID of the order to delete
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="force" type="boolean" default="false">
+  Force deletion of completed orders. Required when deleting orders with status 'completed'
+</ParamField>
+
+## Example Requests
+
+### Delete regular order
 ```bash
-DELETE /wp-json/latepoint-api/v1/orders/101
+DELETE /wp-json/latepoint-api/v1/orders/39
 Authorization: Bearer YOUR_API_KEY
+```
+
+### Force delete completed order
+```bash
+DELETE /wp-json/latepoint-api/v1/orders/39?force=true
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "Order deleted successfully"
+}
 ```

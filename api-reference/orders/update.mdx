@@ -4,19 +4,110 @@ api: "PUT /wp-json/latepoint-api/v1/orders/{id}"
 description: "Update an existing order."
 ---
 
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the order to update
+</ParamField>
+
 ## Request Body Parameters
 
-Same parameters as POST (except customer_id), all optional. Only provided fields will be updated.
+<ParamField body="total" type="number">
+  Total amount for the order
+</ParamField>
+
+<ParamField body="subtotal" type="number">
+  Subtotal amount for the order
+</ParamField>
+
+<ParamField body="tax_total" type="number">
+  Tax amount for the order
+</ParamField>
+
+<ParamField body="discount_total" type="number">
+  Discount amount for the order
+</ParamField>
+
+<ParamField body="coupon_code" type="string">
+  Coupon code applied to the order
+</ParamField>
+
+<ParamField body="status" type="string">
+  Order status. Valid values: `open`, `cancelled`, `completed`
+</ParamField>
+
+<ParamField body="payment_status" type="string">
+  Payment status. Valid values: `not_paid`, `partially_paid`, `fully_paid`, `processing`, `refunded`, `partially_refunded`
+</ParamField>
+
+<ParamField body="fulfillment_status" type="string">
+  Fulfillment status. Valid values: `not_fulfilled`, `partially_fulfilled`, `fulfilled`
+</ParamField>
+
+<ParamField body="customer_comment" type="string">
+  Customer comment or notes for the order
+</ParamField>
+
+<ParamField body="notes" type="string">
+  Internal notes for the order
+</ParamField>
+
+<ParamField body="coupon_discount" type="number">
+  Discount amount from coupon
+</ParamField>
+
+<ParamField body="ip_address" type="string">
+  IP address of the customer
+</ParamField>
+
+<ParamField body="source_id" type="string">
+  Source identifier for tracking
+</ParamField>
+
+<ParamField body="source_url" type="string">
+  Source URL for tracking
+</ParamField>
+
+<ParamField body="confirmation_code" type="string">
+  Custom confirmation code
+</ParamField>
+
+<ParamField body="customer_id" type="integer">
+  Customer ID (can be updated to transfer order to different customer)
+</ParamField>
 
 ## Example Request
 
 ```bash
-PUT /wp-json/latepoint-api/v1/orders/101
+PUT /wp-json/latepoint-api/v1/orders/39
 Authorization: Bearer YOUR_API_KEY
 Content-Type: application/json
 
 {
   "status": "completed",
-  "payment_method": "credit_card"
+  "payment_status": "fully_paid",
+  "fulfillment_status": "fulfilled",
+  "customer_comment": "Order completed successfully",
+  "total": 55.00
+}
+```
+
+## Example Response
+
+```json
+{
+  "id": 39,
+  "confirmation_code": "LP39CONF",
+  "subtotal": "45.00",
+  "total": "55.00",
+  "status": "completed",
+  "fulfillment_status": "fulfilled",
+  "payment_status": "fully_paid",
+  "customer_id": 8,
+  "coupon_code": null,
+  "tax_total": "5.00",
+  "customer_comment": "Order completed successfully",
+  "created_at": "2024-12-21 18:15:45",
+  "updated_at": "2024-12-21 18:20:12"
 }
 ```

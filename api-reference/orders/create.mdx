@@ -22,6 +22,11 @@ description: "Create a new order."
 | `status` | string | Order status |
 | `payment_method` | string | Payment method used |
 | `notes` | string | Order notes |
+| `coupon_discount` | number | Discount amount from coupon |
+| `ip_address` | string | IP address of the customer |
+| `source_id` | string | Source identifier for tracking |
+| `source_url` | string | Source URL for tracking |
+| `confirmation_code` | string | Custom confirmation code (auto-generated if not provided) |
 
 ## Example Request
 
@@ -31,10 +36,33 @@ Authorization: Bearer YOUR_API_KEY
 Content-Type: application/json
 
 {
-  "customer_id": 456,
-  "total": 120.00,
-  "subtotal": 100.00,
-  "tax_total": 20.00,
-  "status": "pending"
+  "customer_id": 8,
+  "total": 50.00,
+  "subtotal": 45.00,
+  "tax_total": 5.00,
+  "status": "open",
+  "payment_status": "not_paid",
+  "fulfillment_status": "not_fulfilled",
+  "customer_comment": "Test order creation"
+}
+```
+
+## Example Response
+
+```json
+{
+  "id": 39,
+  "confirmation_code": "LP39CONF",
+  "subtotal": "45.00",
+  "total": "50.00",
+  "status": "open",
+  "fulfillment_status": "not_fulfilled",
+  "payment_status": "not_paid",
+  "customer_id": 8,
+  "coupon_code": null,
+  "tax_total": "5.00",
+  "customer_comment": "Test order creation",
+  "created_at": "2024-12-21 18:15:45",
+  "updated_at": "2024-12-21 18:15:45"
 }
 ```
