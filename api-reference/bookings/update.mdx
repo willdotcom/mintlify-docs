@@ -91,30 +91,8 @@ This endpoint allows you to update an existing booking. You can modify any booki
   Public booking notes
 </ParamField>
 
-<ParamField body="internal_notes" type="string">
-  Internal notes (only visible to staff)
-</ParamField>
-
-<ParamField body="payment_status" type="string">
-  Payment status
-  
-  **Possible values:**
-  - `not_paid` - Not paid
-  - `partially_paid` - Partially paid
-  - `paid` - Paid
-  - `refunded` - Refunded
-</ParamField>
-
-<ParamField body="payment_method" type="string">
-  Payment method used
-</ParamField>
-
 <ParamField body="send_notification" type="boolean" default="false">
   Whether to send notification to customer about changes
-</ParamField>
-
-<ParamField body="custom_fields" type="object">
-  Custom booking fields
 </ParamField>
 
 ## Response
@@ -127,24 +105,6 @@ This endpoint allows you to update an existing booking. You can modify any booki
 
 <ResponseField name="data" type="object">
   Updated booking object with all fields
-</ResponseField>
-
-<ResponseField name="changes" type="object">
-  Summary of changes made
-  
-  <Expandable title="Change Information">
-    <ResponseField name="modified_fields" type="array">
-      List of fields that were modified
-    </ResponseField>
-    
-    <ResponseField name="previous_values" type="object">
-      Previous values of modified fields
-    </ResponseField>
-    
-    <ResponseField name="notification_sent" type="boolean">
-      Whether notification was sent to customer
-    </ResponseField>
-  </Expandable>
 </ResponseField>
 
 ## Examples

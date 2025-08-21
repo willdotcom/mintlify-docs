@@ -17,84 +17,109 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
 ## Query Parameters
 
 ### Pagination
-
 <ParamField query="page" type="integer" default="1">
-  Page number to retrieve
+  Page number for pagination
 </ParamField>
 
 <ParamField query="per_page" type="integer" default="20">
-  Number of bookings per page (maximum: 100)
+  Number of bookings per page (max 100)
 </ParamField>
 
-### Filters
-
+### Basic Filters
 <ParamField query="status" type="string">
-  Filter by booking status
-  
-  **Possible values:**
-  - `pending` - Pending
-  - `approved` - Approved
-  - `cancelled` - Cancelled
-  - `completed` - Completed
-  - `no_show` - No show
+  Filter by booking status (pending, confirmed, cancelled, completed)
 </ParamField>
 
 <ParamField query="customer_id" type="integer">
-  Customer ID to filter bookings
+  Filter by customer ID
 </ParamField>
 
 <ParamField query="agent_id" type="integer">
-  Agent ID to filter bookings
+  Filter by agent ID
 </ParamField>
 
 <ParamField query="service_id" type="integer">
-  Service ID to filter bookings
+  Filter by service ID
 </ParamField>
 
 <ParamField query="location_id" type="integer">
-  Location ID to filter bookings
+  Filter by location ID
 </ParamField>
 
 ### Date Filters
-
 <ParamField query="date_from" type="string">
-  Start date of range (format: YYYY-MM-DD)
+  Filter bookings from this date (YYYY-MM-DD format)
 </ParamField>
 
 <ParamField query="date_to" type="string">
-  End date of range (format: YYYY-MM-DD)
+  Filter bookings until this date (YYYY-MM-DD format)
 </ParamField>
 
 <ParamField query="created_date_from" type="string">
-  Filter by creation date from (format: YYYY-MM-DD)
+  Filter by creation date from (YYYY-MM-DD format)
 </ParamField>
 
 <ParamField query="created_date_to" type="string">
-  Filter by creation date to (format: YYYY-MM-DD)
+  Filter by creation date until (YYYY-MM-DD format)
+</ParamField>
+
+### Dynamic Filters
+<ParamField query="booking_code" type="string">
+  Filter by booking code (partial match supported)
+</ParamField>
+
+<ParamField query="payment_status" type="string">
+  Filter by payment status
+</ParamField>
+
+<ParamField query="duration_min" type="integer">
+  Filter bookings with minimum duration (in minutes)
+</ParamField>
+
+<ParamField query="duration_max" type="integer">
+  Filter bookings with maximum duration (in minutes)
+</ParamField>
+
+<ParamField query="price_min" type="number">
+  Filter bookings with minimum price
+</ParamField>
+
+<ParamField query="price_max" type="number">
+  Filter bookings with maximum price
+</ParamField>
+
+<ParamField query="customer_email" type="string">
+  Filter by customer email (partial match supported)
+</ParamField>
+
+<ParamField query="customer_phone" type="string">
+  Filter by customer phone (partial match supported)
+</ParamField>
+
+### Metadata Filters
+<ParamField query="include_meta" type="boolean" default="false">
+  Include booking metadata in response
+</ParamField>
+
+<ParamField query="meta_key" type="string">
+  Filter by specific metadata key (requires meta_value)
+</ParamField>
+
+<ParamField query="meta_value" type="string">
+  Filter by metadata value (requires meta_key, partial match supported)
 </ParamField>
 
 ### Search and Sorting
-
 <ParamField query="search" type="string">
-  Free text search in customer name, email or notes
+  Search in customer name, email, or booking code
 </ParamField>
 
 <ParamField query="sort" type="string" default="start_date">
-  Field to sort by
-  
-  **Possible values:**
-  - `start_date` - Start date
-  - `created_at` - Creation date
-  - `customer_name` - Customer name
-  - `status` - Status
+  Sort field (start_date, created_at, customer_name, status, id)
 </ParamField>
 
 <ParamField query="order" type="string" default="desc">
-  Sort direction
-  
-  **Possible values:**
-  - `asc` - Ascending
-  - `desc` - Descending
+  Sort order (asc, desc)
 </ParamField>
 
 ## Response

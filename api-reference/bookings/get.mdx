@@ -71,13 +71,7 @@ This endpoint returns all available information for a specific booking, includin
       Total booking price
     </ResponseField>
     
-    <ResponseField name="subtotal" type="string">
-      Subtotal before taxes
-    </ResponseField>
-    
-    <ResponseField name="tax_total" type="string">
-      Total taxes
-    </ResponseField>
+
     
     <ResponseField name="customer" type="object">
       Complete customer information
@@ -107,13 +101,7 @@ This endpoint returns all available information for a specific booking, includin
           Customer phone
         </ResponseField>
         
-        <ResponseField name="avatar_url" type="string">
-          Customer avatar URL
-        </ResponseField>
-        
-        <ResponseField name="notes" type="string">
-          Customer notes
-        </ResponseField>
+
         
         <ResponseField name="created_at" type="string">
           Customer registration date
@@ -149,13 +137,7 @@ This endpoint returns all available information for a specific booking, includin
           Agent phone
         </ResponseField>
         
-        <ResponseField name="bio" type="string">
-          Agent biography
-        </ResponseField>
-        
-        <ResponseField name="avatar_url" type="string">
-          Agent avatar URL
-        </ResponseField>
+
       </Expandable>
     </ResponseField>
     
@@ -239,9 +221,7 @@ This endpoint returns all available information for a specific booking, includin
       Additional booking notes
     </ResponseField>
     
-    <ResponseField name="internal_notes" type="string">
-      Internal notes (only visible to staff)
-    </ResponseField>
+
     
     <ResponseField name="payment_status" type="string">
       Payment status
@@ -253,17 +233,7 @@ This endpoint returns all available information for a specific booking, includin
       - `refunded` - Refunded
     </ResponseField>
     
-    <ResponseField name="payment_method" type="string">
-      Payment method used
-    </ResponseField>
-    
-    <ResponseField name="confirmation_code" type="string">
-      Confirmation code sent to customer
-    </ResponseField>
-    
-    <ResponseField name="source_id" type="string">
-      Booking source ID (web, app, etc.)
-    </ResponseField>
+
     
     <ResponseField name="created_at" type="string">
       Creation date and time (ISO 8601)
@@ -273,9 +243,7 @@ This endpoint returns all available information for a specific booking, includin
       Last update date and time (ISO 8601)
     </ResponseField>
     
-    <ResponseField name="custom_fields" type="object">
-      Custom booking fields
-    </ResponseField>
+
   </Expandable>
 </ResponseField>
 
@@ -530,14 +498,12 @@ async function getBookingForEmail(bookingId) {
       appointment_datetime: `${booking.start_date} ${booking.start_time}`,
       location_name: booking.location.name,
       location_address: booking.location.full_address,
-      booking_code: booking.booking_code,
-      confirmation_code: booking.confirmation_code
+      booking_code: booking.booking_code
     };
   }
   
   return null;
-}
-```
+}```
 
 ## Important Notes
 
@@ -553,18 +519,9 @@ async function getBookingForEmail(bookingId) {
   **Caching**: Consider implementing client-side caching for bookings that don't change frequently, especially for displaying details in user interfaces.
 </Tip>
 
-## Custom Fields
+## Additional Information
 
-If your LatePoint installation has custom fields configured, these will appear in the `custom_fields` object of the response:
-
-```json
-"custom_fields": {
-  "emergency_contact": "Jane Doe - +1 555 111 3333",
-  "insurance_provider": "Health Insurance Co.",
-  "special_requirements": "Wheelchair access",
-  "referral_source": "Google"
-}
-```
+The booking response includes all essential information needed for managing appointments, including customer details, agent information, service details, and location data.
 
 ## Integration with Other Endpoints
 

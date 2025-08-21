@@ -87,14 +87,6 @@ This endpoint allows you to create a new booking in your LatePoint system. It in
   Whether to send confirmation email to customer
 </ParamField>
 
-<ParamField body="buffer_before" type="integer">
-  Buffer time before appointment in minutes
-</ParamField>
-
-<ParamField body="buffer_after" type="integer">
-  Buffer time after appointment in minutes
-</ParamField>
-
 ## Respuesta
 
 ### Success Response (201 Created)
@@ -474,7 +466,6 @@ The system performs the following validations automatically:
 3. **Service Duration**: Verifies there is enough time to complete the service
 4. **Valid Dates**: Does not allow bookings on past dates
 5. **Unique Email**: If creating a new customer, verifies the email is not already in use
-6. **Buffers**: Respects configured buffer times
 
 ### Business Rules
 
@@ -579,8 +570,5 @@ const customBooking = {
   start_time: '14:30',
   duration: 90, // 90 minutes instead of default 60
   price: '100.00', // Custom price
-  buffer_before: 15, // 15 minutes buffer before
-  buffer_after: 10, // 10 minutes buffer after
   notes: 'Extended session with complete evaluation'
-};
-```
+};```
