@@ -1,0 +1,119 @@
+---
+title: "Update Payment"
+api: "PUT /wp-json/latepoint-api/v1/payments/{id}"
+description: "Update an existing payment transaction."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the payment to update
+</ParamField>
+
+## Request Body
+
+<ParamField body="amount" type="number">
+  The payment amount
+</ParamField>
+
+<ParamField body="processor" type="string">
+  Payment processor (stripe, paypal, square, etc.)
+</ParamField>
+
+<ParamField body="payment_method" type="string">
+  Payment method (credit_card, paypal, cash, etc.)
+</ParamField>
+
+<ParamField body="payment_portion" type="string">
+  Payment portion (full, partial, etc.)
+</ParamField>
+
+<ParamField body="kind" type="string">
+  Transaction kind (capture, refund, etc.)
+</ParamField>
+
+<ParamField body="status" type="string">
+  Payment status (pending, succeeded, failed, refunded)
+</ParamField>
+
+<ParamField body="token" type="string">
+  Payment transaction token from processor
+</ParamField>
+
+<ParamField body="notes" type="string">
+  Additional notes about the payment
+</ParamField>
+
+<ParamField body="receipt_number" type="string">
+  Receipt number for the payment
+</ParamField>
+
+## Example Request
+
+```bash
+PUT /wp-json/latepoint-api/v1/payments/3
+X-API-Key: YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "amount": 75.00,
+  "status": "succeeded",
+  "notes": "Updated payment amount",
+  "payment_portion": "full",
+  "kind": "capture"
+}
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "Payment updated successfully",
+  "data": {
+    "id": "3",
+    "booking_id": null,
+    "customer_id": "0",
+    "processor": "stripe",
+    "payment_method": "credit_card",
+    "payment_portion": "full",
+    "kind": "capture",
+    "amount": "75",
+    "status": "succeeded",
+    "token": null,
+    "notes": "Updated payment amount",
+    "order_id": "37",
+    "created_at": "2025-01-21 15:30:00",
+    "updated_at": "2025-01-21 15:45:00"
+  }
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+```json Payment Not Found
+{
+  "success": false,
+  "error": "Payment not found"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Invalid Status
+{
+  "success": false,
+  "error": "Invalid payment status provided"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Update Failed
+{
+  "success": false,
+  "error": "Failed to update payment"
+}
+```
+</ResponseExample>

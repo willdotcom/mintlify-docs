@@ -1,0 +1,67 @@
+---
+title: "Delete Payment"
+api: "DELETE /wp-json/latepoint-api/v1/payments/{id}"
+description: "Delete a payment transaction."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the payment to delete
+</ParamField>
+
+## Example Request
+
+```bash
+DELETE /wp-json/latepoint-api/v1/payments/1
+X-API-Key: YOUR_API_KEY
+Content-Type: application/json
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "Payment deleted successfully"
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+```json Payment Not Found
+{
+  "success": false,
+  "error": "Payment not found"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Cannot Delete
+{
+  "success": false,
+  "error": "Cannot delete payment with completed status. Please refund first."
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Delete Failed
+{
+  "success": false,
+  "error": "Failed to delete payment"
+}
+```
+</ResponseExample>
+
+## Important Notes
+
+<Note>
+  Deleting a payment is a permanent action and cannot be undone. Consider using the update endpoint to change the status to "cancelled" or "refunded" instead of deleting the record entirely.
+</Note>
+
+<Warning>
+  Some payment processors may not allow deletion of completed transactions. In such cases, you should use the refund functionality instead.
+</Warning>

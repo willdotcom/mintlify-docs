@@ -1,0 +1,111 @@
+---
+title: "Create Payment"
+api: "POST /wp-json/latepoint-api/v1/payments"
+description: "Create a new payment transaction."
+---
+
+## Request Body
+
+<ParamField body="order_id" type="integer" required>
+  The order ID associated with this payment
+</ParamField>
+
+<ParamField body="amount" type="number" required>
+  The payment amount
+</ParamField>
+
+<ParamField body="customer_id" type="integer">
+  The customer ID (default: 0)
+</ParamField>
+
+<ParamField body="processor" type="string">
+  Payment processor (default: 'manual')
+</ParamField>
+
+<ParamField body="payment_method" type="string">
+  Payment method (default: 'other')
+</ParamField>
+
+<ParamField body="payment_portion" type="string">
+  Payment portion (default: 'full')
+</ParamField>
+
+<ParamField body="kind" type="string">
+  Transaction kind (default: 'capture')
+</ParamField>
+
+<ParamField body="status" type="string">
+  Payment status (default: 'succeeded')
+</ParamField>
+
+<ParamField body="token" type="string">
+  Payment transaction token from processor
+</ParamField>
+
+<ParamField body="notes" type="string">
+  Additional notes about the payment
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/payments
+X-API-Key: YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "order_id": 37,
+  "amount": 50.00,
+  "processor": "stripe",
+  "payment_method": "credit_card",
+  "payment_portion": "full",
+  "kind": "capture",
+  "status": "succeeded",
+  "token": "pi_1234567890abcdef"
+}
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "message": "Payment created successfully",
+  "data": {
+    "id": "3",
+    "booking_id": null,
+    "customer_id": "0",
+    "processor": "stripe",
+    "payment_method": "credit_card",
+    "payment_portion": "full",
+    "kind": "capture",
+    "amount": "50",
+    "status": "succeeded",
+    "token": null,
+    "notes": null,
+    "order_id": "37",
+    "created_at": "2025-01-21 15:30:00",
+    "updated_at": "2025-01-21 15:30:00"
+  }
+}
+```
+
+## Error Responses
+
+<ResponseExample>
+```json Missing Required Fields
+{
+  "success": false,
+  "error": "Missing required fields: booking_id, amount"
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Invalid Booking
+{
+  "success": false,
+  "error": "Invalid booking ID provided"
+}
+```
+</ResponseExample>

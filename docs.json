@@ -82,7 +82,10 @@
             "group": "Payments",
             "pages": [
               "api-reference/payments/list",
-              "api-reference/payments/get"
+              "api-reference/payments/create",
+              "api-reference/payments/get",
+              "api-reference/payments/update",
+              "api-reference/payments/delete"
             ]
           },
           {

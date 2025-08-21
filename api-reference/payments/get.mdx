@@ -4,9 +4,108 @@ api: "GET /wp-json/latepoint-api/v1/payments/{id}"
 description: "Retrieve a specific payment by ID."
 ---
 
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The unique identifier of the payment
+</ParamField>
+
 ## Example Request
 
 ```bash
-GET /wp-json/latepoint-api/v1/payments/789
-Authorization: Bearer YOUR_API_KEY
+GET /wp-json/latepoint-api/v1/payments/1
+X-API-Key: YOUR_API_KEY
+Content-Type: application/json
 ```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "1",
+    "token": "TXN123456",
+    "invoice_id": "5",
+    "order_id": "10",
+    "customer_id": "3",
+    "processor": "stripe",
+    "payment_method": "credit_card",
+    "payment_portion": "full",
+    "kind": "capture",
+    "amount": "150.00",
+    "status": "completed",
+    "notes": "Payment processed successfully",
+    "receipt_number": "RCP12345",
+    "access_key": "ak_1234567890abcdef",
+    "created_at": "2024-01-15 10:30:00",
+    "updated_at": "2024-01-15 10:30:00"
+  }
+}
+```
+
+## Response Fields
+
+<ResponseField name="id" type="string">
+  Unique identifier for the payment
+</ResponseField>
+
+<ResponseField name="token" type="string">
+  Payment transaction token
+</ResponseField>
+
+<ResponseField name="invoice_id" type="string">
+  Associated invoice ID
+</ResponseField>
+
+<ResponseField name="order_id" type="string">
+  Associated order ID
+</ResponseField>
+
+<ResponseField name="customer_id" type="string">
+  Customer who made the payment
+</ResponseField>
+
+<ResponseField name="processor" type="string">
+  Payment processor used (stripe, paypal, etc.)
+</ResponseField>
+
+<ResponseField name="payment_method" type="string">
+  Payment method used (credit_card, paypal, etc.)
+</ResponseField>
+
+<ResponseField name="payment_portion" type="string">
+  Portion of payment (full, deposit, balance)
+</ResponseField>
+
+<ResponseField name="kind" type="string">
+  Type of transaction (capture, refund, etc.)
+</ResponseField>
+
+<ResponseField name="amount" type="string">
+  Payment amount
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Payment status (completed, pending, failed, refunded)
+</ResponseField>
+
+<ResponseField name="notes" type="string">
+  Additional notes about the payment
+</ResponseField>
+
+<ResponseField name="receipt_number" type="string">
+  Receipt number for the payment
+</ResponseField>
+
+<ResponseField name="access_key" type="string">
+  Access key for payment verification
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Payment creation timestamp
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Payment last update timestamp
+</ResponseField>
