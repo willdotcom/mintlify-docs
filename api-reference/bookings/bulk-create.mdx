@@ -1,0 +1,355 @@
+---
+title: 'Create Multiple Bookings'
+api: 'POST /wp-json/latepoint-api/v1/bookings/bulk'
+description: 'Creates multiple bookings in a single request with automatic availability validation and error handling.'
+---
+
+## Description
+
+This endpoint allows you to create multiple bookings at once in your LatePoint system. It includes automatic availability validation for all bookings, creation of new customers if necessary, and comprehensive error handling for partial failures.
+
+**Key Features:**
+- Create up to 50 bookings in a single request
+- Automatic availability validation for all bookings before creation
+- Support for both existing and new customers
+- Partial success handling (some bookings may succeed while others fail)
+- Detailed error reporting for each failed booking
+- Optional confirmation email sending
+
+## Authentication
+
+<ParamField header="X-API-Key" type="string" required>
+  Your LatePoint API key. You can get it from the admin panel.
+</ParamField>
+
+## Request Body
+
+### Required Fields
+
+<ParamField body="bookings" type="array" required>
+  Array of booking objects to create (maximum 50 bookings per request)
+</ParamField>
+
+### Booking Object Structure
+
+Each booking object in the `bookings` array must contain:
+
+<ParamField body="bookings[].service_id" type="integer" required>
+  ID of the service to book
+</ParamField>
+
+<ParamField body="bookings[].agent_id" type="integer" required>
+  ID of the agent who will provide the service
+</ParamField>
+
+<ParamField body="bookings[].start_date" type="string" required>
+  Booking date (format: YYYY-MM-DD)
+</ParamField>
+
+<ParamField body="bookings[].start_time" type="string" required>
+  Start time (format: HH:MM in 24-hour format)
+</ParamField>
+
+### Customer Information (per booking)
+
+<ParamField body="bookings[].customer_id" type="integer">
+  ID of an existing customer. If provided, new customer fields are ignored
+</ParamField>
+
+<ParamField body="bookings[].customer.first_name" type="string">
+  Customer first name (required if customer_id is not provided)
+</ParamField>
+
+<ParamField body="bookings[].customer.last_name" type="string">
+  Customer last name (required if customer_id is not provided)
+</ParamField>
+
+<ParamField body="bookings[].customer.email" type="string">
+  Customer email (required if customer_id is not provided)
+</ParamField>
+
+<ParamField body="bookings[].customer.phone" type="string">
+  Customer phone number
+</ParamField>
+
+### Optional Fields (per booking)
+
+<ParamField body="bookings[].location_id" type="integer">
+  ID of the location where the service will be provided. If not specified, the default location will be used
+</ParamField>
+
+<ParamField body="bookings[].duration" type="integer">
+  Duration of the booking in minutes. If not provided, the service's default duration will be used
+</ParamField>
+
+<ParamField body="bookings[].status" type="string">
+  Booking status. Defaults to 'approved'
+</ParamField>
+
+<ParamField body="bookings[].notes" type="string">
+  Additional notes for the booking
+</ParamField>
+
+### Global Options
+
+<ParamField body="send_confirmation" type="boolean">
+  Whether to send confirmation emails for successfully created bookings. Defaults to false
+</ParamField>
+
+## Request Example
+
+```json
+{
+  "bookings": [
+    {
+      "service_id": 2,
+      "agent_id": 1,
+      "start_date": "2025-09-01",
+      "start_time": "16:00",
+      "customer": {
+        "first_name": "Ana",
+        "last_name": "López",
+        "email": "ana.lopez@email.com",
+        "phone": "+52 555 987 6543"
+      },
+      "status": "pending",
+      "notes": "Primera reserva"
+    },
+    {
+      "service_id": 3,
+      "agent_id": 2,
+      "start_date": "2025-09-02",
+      "start_time": "10:00",
+      "customer_id": 15,
+      "status": "approved"
+    },
+    {
+      "service_id": 2,
+      "agent_id": 1,
+      "start_date": "2025-09-03",
+      "start_time": "14:30",
+      "customer": {
+        "first_name": "Carlos",
+        "last_name": "Mendoza",
+        "email": "carlos.mendoza@email.com",
+        "phone": "+52 555 123 4567"
+      }
+    }
+  ],
+  "send_confirmation": true
+}
+```
+
+## Response Format
+
+The response includes detailed information about the success and failure of each booking creation:
+
+### Success Response (201 Created)
+
+```json
+{
+  "success": true,
+  "message": "Bulk booking operation completed. 3 successful, 0 failed out of 3 total.",
+  "results": {
+    "success": [
+      {
+        "index": 0,
+        "booking_id": 123,
+        "data": {
+          "id": 123,
+          "booking_code": "BK123456",
+          "service": {
+            "id": 2,
+            "name": "Consulta General"
+          },
+          "agent": {
+            "id": 1,
+            "full_name": "Dr. García"
+          },
+          "customer": {
+            "id": 45,
+            "full_name": "Ana López",
+            "email": "ana.lopez@email.com"
+          },
+          "start_date": "2025-09-01",
+          "start_time": "16:00",
+          "status": "pending"
+        },
+        "confirmation_sent": true
+      }
+    ],
+    "errors": [],
+    "summary": {
+      "total_requested": 3,
+      "successful": 3,
+      "failed": 0
+    }
+  }
+}
+```
+
+### Partial Success Response (207 Multi-Status)
+
+```json
+{
+  "success": true,
+  "message": "Bulk booking operation completed. 2 successful, 1 failed out of 3 total.",
+  "results": {
+    "success": [
+      {
+        "index": 0,
+        "booking_id": 123,
+        "data": {
+          "id": 123,
+          "booking_code": "BK123456",
+          "service": {
+            "id": 2,
+            "name": "Consulta General"
+          },
+          "agent": {
+            "id": 1,
+            "full_name": "Dr. García"
+          },
+          "customer": {
+            "id": 45,
+            "full_name": "Ana López",
+            "email": "ana.lopez@email.com"
+          },
+          "start_date": "2025-09-01",
+          "start_time": "16:00",
+          "status": "pending"
+        },
+        "confirmation_sent": true
+      }
+    ],
+    "errors": [
+      {
+        "index": 1,
+        "error": "Time slot not available",
+        "booking_data": {
+          "service_id": 3,
+          "agent_id": 2,
+          "start_date": "2025-09-02",
+          "start_time": "10:00",
+          "customer_id": 15
+        }
+      }
+    ],
+    "summary": {
+      "total_requested": 3,
+      "successful": 2,
+      "failed": 1
+    }
+  }
+}
+```
+
+### Error Response (400 Bad Request)
+
+```json
+{
+  "success": false,
+  "message": "Bulk booking operation completed. 0 successful, 3 failed out of 3 total.",
+  "results": {
+    "success": [],
+    "errors": [
+      {
+        "index": 0,
+        "error": "Missing required field: service_id",
+        "booking_data": {
+          "agent_id": 1,
+          "start_date": "2025-09-01",
+          "start_time": "16:00"
+        }
+      },
+      {
+        "index": 1,
+        "error": "Time slot not available",
+        "booking_data": {
+          "service_id": 3,
+          "agent_id": 2,
+          "start_date": "2025-09-02",
+          "start_time": "10:00",
+          "customer_id": 15
+        }
+      }
+    ],
+    "summary": {
+      "total_requested": 3,
+      "successful": 0,
+      "failed": 3
+    }
+  }
+}
+```
+
+## Response Status Codes
+
+- **201 Created**: All bookings were created successfully
+- **207 Multi-Status**: Some bookings were created successfully, others failed
+- **400 Bad Request**: All bookings failed or invalid request format
+- **503 Service Unavailable**: LatePoint is not available
+
+## Error Handling
+
+The endpoint uses a two-phase approach:
+
+1. **Validation Phase**: All bookings are validated for required fields and availability
+2. **Creation Phase**: Only validated bookings are created
+
+This ensures that:
+- No partial data corruption occurs
+- Clear error reporting for each failed booking
+- Successful bookings are not affected by failed ones
+
+## Usage Examples
+
+### cURL Example
+
+```bash
+curl -X POST "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings/bulk" \
+  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bookings": [
+      {
+        "service_id": 2,
+        "agent_id": 1,
+        "start_date": "2025-09-01",
+        "start_time": "16:00",
+        "customer": {
+          "first_name": "Ana",
+          "last_name": "López",
+          "email": "ana.lopez@email.com",
+          "phone": "+52 555 987 6543"
+        },
+        "status": "pending"
+      },
+      {
+        "service_id": 3,
+        "agent_id": 2,
+        "start_date": "2025-09-02",
+        "start_time": "10:00",
+        "customer_id": 15
+      }
+    ],
+    "send_confirmation": true
+  }'
+```
+
+## Limitations
+
+- Maximum 50 bookings per request
+- Each booking must pass availability validation
+- Customer email must be unique when creating new customers
+- All standard LatePoint business rules apply to each booking
+
+## Integration Notes
+
+This endpoint is perfect for:
+- Importing bookings from external systems
+- Creating recurring appointments
+- Batch booking operations
+- Integration with calendar systems
+
+For single booking creation, use the standard `POST /bookings` endpoint for better performance.
