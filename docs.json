@@ -46,6 +46,7 @@
             "pages": [
               "api-reference/bookings/list",
               "api-reference/bookings/create",
+              "api-reference/bookings/bulk-create",
               "api-reference/bookings/get",
               "api-reference/bookings/update",
               "api-reference/bookings/delete"
