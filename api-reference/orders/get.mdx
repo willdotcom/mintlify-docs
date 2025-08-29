@@ -46,3 +46,39 @@ Authorization: Bearer YOUR_API_KEY
   ]
 }
 ```
+
+## Related Endpoints
+
+Once you have an order ID, you can access related resources:
+
+### Order Invoices
+```bash
+# Get all invoices for an order
+GET /wp-json/latepoint-api/v1/orders/{order_id}/invoices
+
+# Get a specific invoice
+GET /wp-json/latepoint-api/v1/orders/{order_id}/invoices/{invoice_id}
+
+# Update an invoice
+PUT /wp-json/latepoint-api/v1/orders/{order_id}/invoices/{invoice_id}
+```
+
+### Order Transactions
+```bash
+# Get all transactions for an order
+GET /wp-json/latepoint-api/v1/orders/{order_id}/transactions
+
+# Get a specific transaction
+GET /wp-json/latepoint-api/v1/orders/{order_id}/transactions/{transaction_id}
+```
+
+### Example Usage
+```bash
+# Get invoices for order 56
+GET /wp-json/latepoint-api/v1/orders/56/invoices
+Authorization: Bearer YOUR_API_KEY
+
+# Get transactions for order 56
+GET /wp-json/latepoint-api/v1/orders/56/transactions
+Authorization: Bearer YOUR_API_KEY
+```

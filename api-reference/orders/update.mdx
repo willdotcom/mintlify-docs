@@ -76,6 +76,38 @@ description: "Update an existing order."
   Customer ID (can be updated to transfer order to different customer)
 </ParamField>
 
+## Invoice Management
+
+Orders can contain invoices that track payment obligations. When updating orders, you may also need to manage associated invoices.
+
+### Valid Invoice Statuses
+
+- `open` - Invoice is open and awaiting payment
+- `paid` - Invoice has been fully paid
+- `partially_paid` - Invoice has been partially paid
+- `draft` - Invoice is in draft status
+- `void` - Invoice has been voided
+- `uncollectible` - Invoice is marked as uncollectible
+
+### Invoice Update Example
+
+To update an invoice within an order, you can use the dedicated invoice endpoint:
+
+```bash
+PUT /wp-json/latepoint-api/v1/orders/{order_id}/invoices/{invoice_id}
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "status": "paid",
+  "charge_amount": 55.00
+}
+```
+
+<Warning>
+When updating invoice status to `paid`, ensure that the corresponding payment transactions are properly recorded in the system.
+</Warning>
+
 ## Example Request
 
 ```bash
