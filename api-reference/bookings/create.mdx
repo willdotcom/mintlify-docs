@@ -22,8 +22,8 @@ This endpoint allows you to create a new booking in your LatePoint system. It in
   ID of the service to book
 </ParamField>
 
-<ParamField body="agent_id" type="integer" required>
-  ID of the agent who will provide the service
+<ParamField body="agent_id" type="integer|string" required>
+  ID of the agent who will provide the service. Use "any" or "-1" for automatic agent assignment based on availability
 </ParamField>
 
 <ParamField body="start_date" type="string" required>

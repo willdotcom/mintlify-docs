@@ -22,6 +22,14 @@ description: "Retrieve a list of all agents with advanced filtering, pagination,
   Filter by phone number (partial match supported)
 </ParamField>
 
+<ParamField query="location_id" type="integer">
+  Filter agents by location ID (shows only agents available at this location)
+</ParamField>
+
+<ParamField query="service_id" type="integer">
+  Filter agents by service ID (shows only agents who provide this service)
+</ParamField>
+
 <ParamField query="created_after" type="string">
   Filter agents created after this date (YYYY-MM-DD format)
 </ParamField>
@@ -86,6 +94,24 @@ X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
 ### Pagination and Sorting
 ```bash
 GET /wp-json/latepoint-api/v1/agents?page=2&per_page=25&order_by=last_name&order=desc
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Filter by Location
+```bash
+GET /wp-json/latepoint-api/v1/agents?location_id=2
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Filter by Service
+```bash
+GET /wp-json/latepoint-api/v1/agents?service_id=1
+X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
+```
+
+### Combined Location and Service Filter
+```bash
+GET /wp-json/latepoint-api/v1/agents?location_id=2&service_id=1&status=active
 X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ
 ```
 

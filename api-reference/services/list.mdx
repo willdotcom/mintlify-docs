@@ -22,6 +22,14 @@ description: "Retrieve a list of all services with advanced filtering, paginatio
   Filter by service category ID
 </ParamField>
 
+<ParamField query="location_id" type="integer">
+  Filter services by location ID (shows only services available at this location)
+</ParamField>
+
+<ParamField query="agent_id" type="integer">
+  Filter services by agent ID (shows only services provided by this agent)
+</ParamField>
+
 <ParamField query="visibility" type="string">
   Filter by visibility (visible, hidden)
 </ParamField>
@@ -107,6 +115,24 @@ X-API-Key: YOUR_API_KEY
 ### Duration and Date Filters
 ```bash
 GET /wp-json/latepoint-api/v1/services?duration_min=30&duration_max=120&created_after=2024-01-01
+X-API-Key: YOUR_API_KEY
+```
+
+### Filter by Location
+```bash
+GET /wp-json/latepoint-api/v1/services?location_id=2
+X-API-Key: YOUR_API_KEY
+```
+
+### Filter by Agent
+```bash
+GET /wp-json/latepoint-api/v1/services?agent_id=1
+X-API-Key: YOUR_API_KEY
+```
+
+### Combined Location and Agent Filter
+```bash
+GET /wp-json/latepoint-api/v1/services?location_id=2&agent_id=1&status=active
 X-API-Key: YOUR_API_KEY
 ```
 

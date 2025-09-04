@@ -38,8 +38,8 @@ Each booking object in the `bookings` array must contain:
   ID of the service to book
 </ParamField>
 
-<ParamField body="bookings[].agent_id" type="integer" required>
-  ID of the agent who will provide the service
+<ParamField body="bookings[].agent_id" type="integer|string" required>
+  ID of the agent who will provide the service. Use "any" or "-1" for automatic agent assignment based on availability
 </ParamField>
 
 <ParamField body="bookings[].start_date" type="string" required>
