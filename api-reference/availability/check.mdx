@@ -1,19 +1,34 @@
 ---
 title: "Check Availability"
 api: "GET /wp-json/latepoint-api/v1/availability"
-description: "Check availability for a specific service, agent, and date."
+description: "Check availability for a specific service, agent, date, and duration."
 ---
 
 ## Required Parameters
 
-| Parameter | Type | Description |
-|-----------|------|--------------|
-| `service_id` | integer | Service ID |
-| `agent_id` | integer | Agent ID |
-| `date` | string | Date (YYYY-MM-DD) |
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `service_id` | integer | Yes | Service ID |
+| `agent_id` | integer | Yes | Agent ID |
+| `date` | string | Yes | Date (YYYY-MM-DD) |
+| `duration` | integer | No | Service duration in minutes. If not provided, uses the service default duration. Must be a valid duration for the service. |
 
 ## Example Request
 
 ```bash
+# Basic request using service default duration
 GET /wp-json/latepoint-api/v1/availability?service_id=1&agent_id=1&date=2024-01-15
+
+# Request with specific duration
+GET /wp-json/latepoint-api/v1/availability?service_id=1&agent_id=1&date=2024-01-15&duration=60
+```
+
+## Additional Examples
+
+```bash
+# Check availability for a 90-minute service
+GET /wp-json/latepoint-api/v1/availability?service_id=1&agent_id=1&date=2024-01-15&duration=90
+
+# Check availability for a 30-minute service
+GET /wp-json/latepoint-api/v1/availability?service_id=1&agent_id=1&date=2024-01-15&duration=30
 ```

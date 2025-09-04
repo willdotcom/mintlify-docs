@@ -488,7 +488,7 @@ The system performs the following validations automatically:
 ```javascript
 // First check availability
 const availabilityResponse = await fetch(
-  `/wp-json/latepoint-api/v1/availability?service_id=7&agent_id=3&date=2024-01-20`
+`/wp-json/latepoint-api/v1/availability?service_id=7&agent_id=3&date=2024-01-20&duration=60`
 );
 const availability = await availabilityResponse.json();
 

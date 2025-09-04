@@ -318,9 +318,9 @@ async function confirmBooking(bookingId) {
 // Reschedule a booking by checking availability first
 async function rescheduleBooking(bookingId, newDate, newTime, agentId, serviceId) {
   // First check availability
-  const availabilityResponse = await fetch(
-    `/wp-json/latepoint-api/v1/availability?service_id=${serviceId}&agent_id=${agentId}&date=${newDate}`
-  );
+const availabilityResponse = await fetch(
+`/wp-json/latepoint-api/v1/availability?service_id=${serviceId}&agent_id=${agentId}&date=${newDate}&duration=${duration}`
+);
   
   const availability = await availabilityResponse.json();
   

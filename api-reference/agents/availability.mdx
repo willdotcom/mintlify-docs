@@ -1,0 +1,356 @@
+---
+title: "Get Agents Availability"
+api: "GET /agents/availability"
+description: "Get agents with flexible filtering and optional availability checking"
+---
+
+This endpoint allows you to get a list of agents with flexible filtering options. You can filter by location, service, and optionally check their availability for a specific date and time. All parameters are optional, making it very flexible for different use cases.
+
+## Parameters
+
+<ParamField query="location_id" type="integer">
+  Filter agents by location ID. If provided, only agents working at this location will be returned
+</ParamField>
+
+<ParamField query="service_id" type="integer">
+  Filter agents by service ID. If provided, only agents who can provide this service will be returned
+</ParamField>
+
+<ParamField query="date" type="string">
+  Date to check availability for in Y-m-d format (e.g., "2024-01-15"). Only used if start_time is also provided
+</ParamField>
+
+<ParamField query="start_time" type="string">
+  Start time to check availability for. Can be in HH:MM format (e.g., "14:30") or minutes since midnight (e.g., "870"). Only used if date is also provided
+</ParamField>
+
+<ParamField query="duration" type="integer">
+  Duration of the appointment in minutes. If not provided and service_id is given, uses the service's default duration. Otherwise defaults to 60 minutes
+</ParamField>
+
+<ParamField query="limit" type="integer" default="50">
+  Maximum number of agents to return. Useful for pagination
+</ParamField>
+
+## Response
+
+<ResponseField name="success" type="boolean">
+  Indicates if the request was successful
+</ResponseField>
+
+<ResponseField name="data" type="object">
+  The main response data containing agents information
+  
+  <Expandable title="data properties">
+    <ResponseField name="filters" type="object">
+      The filters that were applied to the search
+      
+      <Expandable title="filter properties">
+        <ResponseField name="location_id" type="integer">
+          The location ID filter (if provided)
+        </ResponseField>
+        
+        <ResponseField name="service_id" type="integer">
+          The service ID filter (if provided)
+        </ResponseField>
+        
+        <ResponseField name="date" type="string">
+          The date filter (if provided)
+        </ResponseField>
+        
+        <ResponseField name="start_time" type="string">
+          The start time filter (if provided)
+        </ResponseField>
+        
+        <ResponseField name="duration" type="integer">
+          The duration filter (if provided)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="total_agents" type="integer">
+      Total number of agents returned (after filtering)
+    </ResponseField>
+    
+    <ResponseField name="available_agents_count" type="integer">
+      Number of agents that are available at the specified time (only if date and start_time were provided)
+    </ResponseField>
+    
+    <ResponseField name="agents" type="array">
+      Array of all agent objects (filtered by location/service if specified)
+      
+      <Expandable title="agent properties">
+        <ResponseField name="id" type="integer">
+          Agent's unique identifier
+        </ResponseField>
+        
+        <ResponseField name="first_name" type="string">
+          Agent's first name
+        </ResponseField>
+        
+        <ResponseField name="last_name" type="string">
+          Agent's last name
+        </ResponseField>
+        
+        <ResponseField name="display_name" type="string">
+          Agent's display name
+        </ResponseField>
+        
+        <ResponseField name="email" type="string">
+          Agent's email address
+        </ResponseField>
+        
+        <ResponseField name="phone" type="string">
+          Agent's phone number
+        </ResponseField>
+        
+        <ResponseField name="status" type="string">
+          Agent's status (active, disabled)
+        </ResponseField>
+        
+        <ResponseField name="services" type="array">
+          Array of services this agent can provide (filtered by location if specified)
+        </ResponseField>
+        
+        <ResponseField name="locations" type="array">
+          Array of locations where this agent works (filtered by service if specified)
+        </ResponseField>
+        
+        <ResponseField name="is_available" type="boolean|null">
+          Whether the agent is available at the specified time (null if no time check was performed)
+        </ResponseField>
+      </Expandable>
+    </ResponseField>
+    
+    <ResponseField name="available_agents" type="array">
+      Array of agents that are available at the specified time (only if date and start_time were provided)
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+## Example Requests
+
+### 1. Get all agents (no filters)
+
+```bash
+curl -X GET "https://yourdomain.com/wp-json/latepoint-api/v1/agents/availability" \
+  -H "Authorization: Bearer lp_your_api_key_here"
+```
+
+### 2. Get agents by location only
+
+```bash
+curl -X GET "https://yourdomain.com/wp-json/latepoint-api/v1/agents/availability?location_id=1" \
+  -H "Authorization: Bearer lp_your_api_key_here"
+```
+
+### 3. Get agents by location and service
+
+```bash
+curl -X GET "https://yourdomain.com/wp-json/latepoint-api/v1/agents/availability?location_id=1&service_id=2" \
+  -H "Authorization: Bearer lp_your_api_key_here"
+```
+
+### 4. Check availability for specific date and time
+
+```bash
+curl -X GET "https://yourdomain.com/wp-json/latepoint-api/v1/agents/availability?location_id=1&service_id=2&date=2024-01-15&start_time=14:30&duration=60&limit=3" \
+  -H "Authorization: Bearer lp_your_api_key_here"
+```
+
+## Example Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "filters": {
+      "location_id": 1,
+      "service_id": 2,
+      "date": "2024-01-15",
+      "start_time": "14:30",
+      "duration": 60
+    },
+    "total_agents": 3,
+    "available_agents_count": 2,
+    "agents": [
+      {
+        "id": 3,
+        "first_name": "John",
+        "last_name": "Smith",
+        "display_name": "Dr. John Smith",
+        "email": "john.smith@example.com",
+        "phone": "+1234567890",
+        "status": "active",
+        "services": [
+          {
+            "id": 2,
+            "name": "Consultation",
+            "duration": 60
+          }
+        ],
+        "locations": [
+          {
+            "id": 1,
+            "name": "Main Office",
+            "address": "123 Main St, City, State"
+          }
+        ],
+        "is_available": true
+      },
+      {
+        "id": 7,
+        "first_name": "Sarah",
+        "last_name": "Johnson",
+        "display_name": "Dr. Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+1234567891",
+        "status": "active",
+        "services": [
+          {
+            "id": 2,
+            "name": "Consultation",
+            "duration": 60
+          }
+        ],
+        "locations": [
+          {
+            "id": 1,
+            "name": "Main Office",
+            "address": "123 Main St, City, State"
+          }
+        ],
+        "is_available": true
+      },
+      {
+        "id": 9,
+        "first_name": "Mike",
+        "last_name": "Wilson",
+        "display_name": "Dr. Mike Wilson",
+        "email": "mike.wilson@example.com",
+        "phone": "+1234567892",
+        "status": "active",
+        "services": [
+          {
+            "id": 2,
+            "name": "Consultation",
+            "duration": 60
+          }
+        ],
+        "locations": [
+          {
+            "id": 1,
+            "name": "Main Office",
+            "address": "123 Main St, City, State"
+          }
+        ],
+        "is_available": false
+      }
+    ],
+    "available_agents": [
+      {
+        "id": 3,
+        "first_name": "John",
+        "last_name": "Smith",
+        "display_name": "Dr. John Smith",
+        "email": "john.smith@example.com",
+        "phone": "+1234567890",
+        "status": "active",
+        "services": [...],
+        "locations": [...],
+        "is_available": true
+      },
+      {
+        "id": 7,
+        "first_name": "Sarah",
+        "last_name": "Johnson",
+        "display_name": "Dr. Sarah Johnson",
+        "email": "sarah.johnson@example.com",
+        "phone": "+1234567891",
+        "status": "active",
+        "services": [...],
+        "locations": [...],
+        "is_available": true
+      }
+    ]
+  }
+},
+      {
+        "id": 5,
+        "first_name": "Mike",
+        "last_name": "Johnson",
+        "display_name": "Dr. Mike Johnson",
+        "email": "mike.johnson@example.com",
+        "status": "active"
+      }
+    ]
+  }
+}
+```
+
+## Use Cases
+
+- **Find Multiple Available Agents**: When you need to show customers multiple agent options for the same time slot
+- **Count Available Agents**: Check how many agents are available without needing their full details
+- **Load Balancing**: Distribute bookings across available agents
+- **Capacity Planning**: Understand availability patterns for better scheduling
+- **Group Bookings**: Find multiple agents for simultaneous appointments
+
+## Error Responses
+
+<ResponseExample>
+```json Missing Parameters
+{
+  "code": "missing_parameters",
+  "message": "Required parameters: location_id, service_id, date, start_time",
+  "data": {
+    "status": 400
+  }
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Invalid Date Format
+{
+  "code": "invalid_date",
+  "message": "Date must be in Y-m-d format",
+  "data": {
+    "status": 400
+  }
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Invalid Time Format
+{
+  "code": "invalid_time",
+  "message": "Start time must be in HH:MM format or minutes",
+  "data": {
+    "status": 400
+  }
+}
+```
+</ResponseExample>
+
+<ResponseExample>
+```json Service Not Found
+{
+  "code": "service_not_found",
+  "message": "Service not found",
+  "data": {
+    "status": 404
+  }
+}
+```
+</ResponseExample>
+
+## Notes
+
+- The endpoint checks for both existing bookings and agent working hours
+- Only active agents are considered for availability
+- The `limit` parameter is useful for performance when you only need a specific number of agents
+- Time can be provided in either HH:MM format or as minutes since midnight
+- If duration is not provided, the service's default duration is used
+- The endpoint considers both approved and pending bookings as conflicts
