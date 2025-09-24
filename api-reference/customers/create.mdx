@@ -36,16 +36,20 @@ This endpoint allows you to create a new customer in the LatePoint system. You c
   - Only letters, spaces, and hyphens
 </ParamField>
 
-<ParamField body="email" type="string" required>
-  Customer's email (must be unique)
+### Optional Fields
+
+<ParamField body="email" type="string">
+  Customer's email (optional for API, must be unique if provided)
   
   **Validations:**
   - Valid email format
   - Unique in the system
   - Maximum 100 characters
+  
+  <Note>
+    Email is optional when creating customers via API. However, if you provide an email, it must be valid and unique.
+  </Note>
 </ParamField>
-
-### Optional Fields
 
 <ParamField body="phone" type="string">
   Customer's phone number
@@ -408,6 +412,99 @@ if result['status'] == 'success':
     print('Customer created successfully:', result['data'])
 else:
     print('Error creating customer:', result['error'])
+```
+
+</CodeGroup>
+
+### Customer Without Email (API Only)
+
+<Note>
+  This example shows how to create a customer without an email address, which is only possible via API.
+</Note>
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://your-site.com/wp-json/latepoint-api/v1/customers" \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: lp_live_1234567890abcdef" \
+  -d '{
+    "first_name": "Maria",
+    "last_name": "Garcia",
+    "phone": "+1 555 456 7890"
+  }'
+```
+
+```javascript JavaScript
+const customerWithoutEmail = {
+  first_name: 'Maria',
+  last_name: 'Garcia',
+  phone: '+1 555 456 7890'
+};
+
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/customers', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-API-Key': 'lp_live_1234567890abcdef'
+  },
+  body: JSON.stringify(customerWithoutEmail)
+});
+
+const result = await response.json();
+console.log('Customer created without email:', result.data);
+```
+
+```python Python
+import requests
+import json
+
+customer_without_email = {
+    'first_name': 'Maria',
+    'last_name': 'Garcia',
+    'phone': '+1 555 456 7890'
+}
+
+response = requests.post(
+    'https://your-site.com/wp-json/latepoint-api/v1/customers',
+    headers={
+        'Content-Type': 'application/json',
+        'X-API-Key': 'lp_live_1234567890abcdef'
+    },
+    data=json.dumps(customer_without_email)
+)
+
+result = response.json()
+print('Customer created without email:', result['data'])
+```
+
+```php PHP
+<?php
+$customer_without_email = [
+    'first_name' => 'Maria',
+    'last_name' => 'Garcia',
+    'phone' => '+1 555 456 7890'
+];
+
+$curl = curl_init();
+
+curl_setopt_array($curl, [
+    CURLOPT_URL => 'https://your-site.com/wp-json/latepoint-api/v1/customers',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_POST => true,
+    CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json',
+        'X-API-Key: lp_live_1234567890abcdef'
+    ],
+    CURLOPT_POSTFIELDS => json_encode($customer_without_email)
+]);
+
+$response = curl_exec($curl);
+$result = json_decode($response, true);
+
+curl_close($curl);
+print_r($result['data']);
+?>
 ```
 
 </CodeGroup>
