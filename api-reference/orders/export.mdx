@@ -1,0 +1,51 @@
+---
+title: "Export Orders"
+api: "GET https://your-site.com/wp-json/latepoint-api/v1/orders/export"
+description: "Download a CSV file containing order (transaction) data."
+---
+
+### Response
+Returns a CSV file download containing order records.
+
+### CSV Columns
+| Column | Description |
+| :--- | :--- |
+| ID | Order ID |
+| Token | Payment Token |
+| Booking ID | Associated Booking ID |
+| Customer | Customer Name |
+| Processor | Payment Processor (Stripe, PayPal, etc.) |
+| Method | Payment Method |
+| Amount | Transaction Amount |
+| Status | Payment Status |
+| Type | Transaction Type |
+| Date | Date of Transaction |
+
+### Query Parameters
+
+<ParamField query="filter" type="object">
+  Filtering options.
+  <Expandable title="properties">
+    <ParamField query="id" type="integer">
+      Filter by Order ID.
+    </ParamField>
+    <ParamField query="total" type="string">
+      Filter by Amount.
+    </ParamField>
+    <ParamField query="status" type="string">
+      Filter by Status.
+    </ParamField>
+    <ParamField query="payment_status" type="string">
+      Filter by Payment Status.
+    </ParamField>
+    <ParamField query="created_at_from" type="string">
+      Start date (YYYY-MM-DD).
+    </ParamField>
+    <ParamField query="created_at_to" type="string">
+      End date (YYYY-MM-DD).
+    </ParamField>
+    <ParamField query="customer[full_name]" type="string">
+      Filter by Customer Name.
+    </ParamField>
+  </Expandable>
+</ParamField>

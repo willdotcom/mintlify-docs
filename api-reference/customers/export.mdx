@@ -1,0 +1,46 @@
+---
+title: "Export Customers"
+api: "GET https://your-site.com/wp-json/latepoint-api/v1/customers/export"
+description: "Download a CSV file containing customer data."
+---
+
+### Response
+Returns a CSV file download containing customer records.
+
+### CSV Columns
+| Column | Description |
+| :--- | :--- |
+| ID | Customer ID |
+| Name | Full Name |
+| Phone | Phone Number |
+| Email | Email Address |
+| Total Appointments | Count of total bookings |
+| Next Appointment | Date/Time of next booking |
+| Registered On | Registration Date |
+| Custom Fields | Any custom fields (e.g., Edad) defined in LatePoint |
+
+### Query Parameters
+
+<ParamField query="filter" type="object">
+  Filtering options.
+  <Expandable title="properties">
+    <ParamField query="id" type="integer">
+      Filter by Customer ID.
+    </ParamField>
+    <ParamField query="customer" type="string">
+      Filter by Name.
+    </ParamField>
+    <ParamField query="phone" type="string">
+      Filter by Phone.
+    </ParamField>
+    <ParamField query="email" type="string">
+      Filter by Email.
+    </ParamField>
+    <ParamField query="registration_date_from" type="string">
+      Start date (YYYY-MM-DD).
+    </ParamField>
+    <ParamField query="registration_date_to" type="string">
+      End date (YYYY-MM-DD).
+    </ParamField>
+  </Expandable>
+</ParamField>

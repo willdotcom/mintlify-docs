@@ -49,7 +49,8 @@
               "api-reference/bookings/bulk-create",
               "api-reference/bookings/get",
               "api-reference/bookings/update",
-              "api-reference/bookings/delete"
+              "api-reference/bookings/delete",
+              "api-reference/bookings/export"
             ]
           },
           {
@@ -59,7 +60,8 @@
               "api-reference/customers/create",
               "api-reference/customers/get",
               "api-reference/customers/update",
-              "api-reference/customers/delete"
+              "api-reference/customers/delete",
+              "api-reference/customers/export"
             ]
           },
           {
@@ -98,7 +100,8 @@
               "api-reference/orders/create",
               "api-reference/orders/get",
               "api-reference/orders/update",
-              "api-reference/orders/delete"
+              "api-reference/orders/delete",
+              "api-reference/orders/export"
             ]
           },
           {
@@ -125,8 +128,8 @@
               "api-reference/system/test"
             ]
           },
-           {
-             "group": "Availability",
+          {
+            "group": "Availability",
             "pages": [
               "api-reference/availability/check"
             ]
@@ -168,15 +171,15 @@
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "mcp",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {

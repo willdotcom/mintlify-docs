@@ -124,8 +124,8 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
 
 ## Response
 
-<ResponseField name="status" type="string">
-  Response status ("success")
+<ResponseField name="success" type="boolean">
+  Always `true` on success
 </ResponseField>
 
 <ResponseField name="data" type="array">
@@ -190,51 +190,41 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
       </Expandable>
     </ResponseField>
     
+    <ResponseField name="payment_status" type="string">
+      Payment status of the booking
+    </ResponseField>
+
     <ResponseField name="agent" type="object">
       Agent information
       
       <Expandable title="Agent Data">
-        <ResponseField name="id" type="integer">
+        <ResponseField name="id" type="string">
           Agent ID
         </ResponseField>
         
-        <ResponseField name="display_name" type="string">
-          Agent name
+        <ResponseField name="full_name" type="string">
+          Agent full name
         </ResponseField>
         
         <ResponseField name="email" type="string">
           Agent email
         </ResponseField>
+
+        <ResponseField name="phone" type="string">
+          Agent phone
+        </ResponseField>
       </Expandable>
     </ResponseField>
     
-    <ResponseField name="service" type="object">
-      Service information
-      
-      <Expandable title="Service Data">
-        <ResponseField name="id" type="integer">
-          Service ID
-        </ResponseField>
-        
-        <ResponseField name="name" type="string">
-          Service name
-        </ResponseField>
-        
-        <ResponseField name="duration" type="integer">
-          Duration in minutes
-        </ResponseField>
-        
-        <ResponseField name="price" type="string">
-          Service price
-        </ResponseField>
-      </Expandable>
+    <ResponseField name="service" type="array">
+      Service information (empty array if no service assigned)
     </ResponseField>
     
     <ResponseField name="location" type="object">
       Location information
       
       <Expandable title="Location Data">
-        <ResponseField name="id" type="integer">
+        <ResponseField name="id" type="string">
           Location ID
         </ResponseField>
         
@@ -242,10 +232,18 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
           Location name
         </ResponseField>
         
-        <ResponseField name="address" type="string">
-          Location address
+        <ResponseField name="full_address" type="string">
+          Location full address
+        </ResponseField>
+
+        <ResponseField name="category" type="array">
+          Location category data
         </ResponseField>
       </Expandable>
+    </ResponseField>
+
+    <ResponseField name="total_attendees" type="integer">
+      Total number of attendees for the booking
     </ResponseField>
     
     <ResponseField name="notes" type="string">
@@ -262,20 +260,20 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
   </Expandable>
 </ResponseField>
 
-<ResponseField name="meta" type="object">
+<ResponseField name="pagination" type="object">
   Pagination information
   
-  <Expandable title="Pagination Metadata">
-    <ResponseField name="total" type="integer">
-      Total number of bookings
-    </ResponseField>
-    
+  <Expandable title="Pagination">
     <ResponseField name="page" type="integer">
       Current page
     </ResponseField>
-    
+
     <ResponseField name="per_page" type="integer">
       Items per page
+    </ResponseField>
+
+    <ResponseField name="total" type="integer">
+      Total number of bookings
     </ResponseField>
     
     <ResponseField name="total_pages" type="integer">
@@ -283,11 +281,11 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
     </ResponseField>
     
     <ResponseField name="has_next_page" type="boolean">
-      Whether next page exists
+      Whether a next page exists
     </ResponseField>
     
-    <ResponseField name="has_prev_page" type="boolean">
-      Whether previous page exists
+    <ResponseField name="has_previous_page" type="boolean">
+      Whether a previous page exists
     </ResponseField>
   </Expandable>
 </ResponseField>
@@ -299,19 +297,14 @@ This endpoint allows you to retrieve a list of all bookings in your LatePoint sy
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings" \
-  -H "X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ" \
-  -H "Content-Type: application/json"
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings" \
+  -H "X-API-Key: YOUR_API_KEY"
 ```
 
 ```javascript JavaScript
-const response = await fetch('http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings', {
-  headers: {
-    'X-API-Key': 'lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ',
-    'Content-Type': 'application/json'
-  }
+const response = await fetch('https://your-site.com/wp-json/latepoint-api/v1/bookings', {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
 });
-
 const data = await response.json();
 console.log(data);
 ```
@@ -320,36 +313,10 @@ console.log(data);
 import requests
 
 response = requests.get(
-    'http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings',
-    headers={
-        'X-API-Key': 'lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ',
-        'Content-Type': 'application/json'
-    }
+    'https://your-site.com/wp-json/latepoint-api/v1/bookings',
+    headers={'X-API-Key': 'YOUR_API_KEY'}
 )
-
-data = response.json()
-print(data)
-```
-
-```php PHP
-<?php
-$curl = curl_init();
-
-curl_setopt_array($curl, [
-    CURLOPT_URL => 'http://latepoint-dev.local/wp-json/latepoint-api/v1/bookings',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_HTTPHEADER => [
-        'X-API-Key: lp_n1k6BVf3h7JRyjXkWMSoXi0BBZYRaOLL4QohDPQJ',
-        'Content-Type: application/json'
-    ]
-]);
-
-$response = curl_exec($curl);
-$data = json_decode($response, true);
-
-curl_close($curl);
-print_r($data);
-?>
+print(response.json())
 ```
 
 </CodeGroup>
@@ -360,8 +327,7 @@ print_r($data);
 
 ```bash cURL
 curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings?status=approved&date_from=2024-01-01&date_to=2024-01-31" \
-  -H "X-API-Key: lp_live_1234567890abcdef" \
-  -H "Content-Type: application/json"
+  -H "X-API-Key: YOUR_API_KEY"
 ```
 
 ```javascript JavaScript
@@ -370,60 +336,21 @@ const params = new URLSearchParams({
   date_from: '2024-01-01',
   date_to: '2024-01-31'
 });
-
 const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings?${params}`, {
-  headers: {
-    'X-API-Key': 'lp_live_1234567890abcdef',
-    'Content-Type': 'application/json'
-  }
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
 });
-
 const data = await response.json();
-```
-
-```python Python
-import requests
-
-params = {
-    'status': 'approved',
-    'date_from': '2024-01-01',
-    'date_to': '2024-01-31'
-}
-
-response = requests.get(
-    'https://your-site.com/wp-json/latepoint-api/v1/bookings',
-    headers={'X-API-Key': 'lp_live_1234567890abcdef'},
-    params=params
-)
-
-data = response.json()
 ```
 
 </CodeGroup>
 
-### Customer Search
+### Search by Customer Name or Code
 
 <CodeGroup>
 
 ```bash cURL
-curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings?search=john+doe&sort=start_date&order=asc" \
-  -H "X-API-Key: lp_live_1234567890abcdef" \
-  -H "Content-Type: application/json"
-```
-
-```javascript JavaScript
-const params = new URLSearchParams({
-  search: 'john doe',
-  sort: 'start_date',
-  order: 'asc'
-});
-
-const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/bookings?${params}`, {
-  headers: {
-    'X-API-Key': 'lp_live_1234567890abcdef',
-    'Content-Type': 'application/json'
-  }
-});
+curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/bookings?search=john&sort=start_date&order=asc" \
+  -H "X-API-Key: YOUR_API_KEY"
 ```
 
 </CodeGroup>
@@ -432,95 +359,72 @@ const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/boo
 
 ```json
 {
-  "status": "success",
+  "success": true,
   "data": [
     {
-      "id": "16",
-      "booking_code": "LP-16",
+      "id": 55,
+      "booking_code": "M3DELUX",
       "status": "approved",
-      "start_date": "2025-08-31",
-      "start_time": "10:00",
-      "end_time": "11:00",
+      "start_date": "2026-04-29",
+      "start_time": "13:00",
+      "end_time": "14:00",
       "duration": 60,
-      "price": "100.00",
+      "price": "23.00",
+      "payment_status": "",
       "customer": {
-        "id": "2",
+        "id": 2,
         "first_name": "John",
         "last_name": "Doe",
         "email": "john@example.com",
-        "phone": "+1234567890"
+        "phone": "+11111111111"
       },
       "agent": {
         "id": "1",
-        "display_name": "Dr. Smith",
-        "email": "dr.smith@clinic.com"
+        "full_name": "Pao Campo",
+        "email": "pao@example.com",
+        "phone": ""
       },
-      "service": {
-        "id": "2",
-        "name": "Consultation",
-        "duration": 60,
-        "price": "100.00"
-      },
+      "service": [],
       "location": {
         "id": "1",
         "name": "Main Location",
-        "address": "123 Main St"
+        "full_address": "",
+        "category": []
       },
-      "notes": null,
-      "created_at": "2025-08-21 10:45:23",
-      "updated_at": "2025-08-21 10:45:23"
+      "notes": "",
+      "created_at": "2026-04-26 06:14:48",
+      "updated_at": "2026-04-26 06:14:48",
+      "total_attendees": 1
     }
   ],
-  "meta": {
-    "total": 24,
+  "pagination": {
     "page": 1,
-    "per_page": 5,
-    "total_pages": 5,
+    "per_page": 20,
+    "total": 21,
+    "total_pages": 2,
     "has_next_page": true,
-    "has_prev_page": false
+    "has_previous_page": false
   }
 }
 ```
 
-## Error Codes
+## Error Responses
 
-<ResponseExample>
-
-```json Error 401 - Invalid API Key
+```json Error 401 - Unauthorized
 {
-  "status": "error",
-  "error": {
-    "code": "unauthorized",
-    "message": "Invalid or missing API Key"
-  }
+  "code": "rest_forbidden",
+  "message": "Unauthorized",
+  "data": { "status": 401 }
 }
 ```
 
-```json Error 403 - Insufficient Permissions
+```json Error 503 - LatePoint not available
 {
-  "status": "error",
-  "error": {
-    "code": "forbidden",
-    "message": "You don't have permission to access bookings"
-  }
+  "code": "latepoint_not_available",
+  "message": "LatePoint is not available or has not loaded correctly",
+  "data": { "status": 503 }
 }
 ```
-
-```json Error 400 - Invalid Parameters
-{
-  "status": "error",
-  "error": {
-    "code": "invalid_request",
-    "message": "Invalid query parameters",
-    "details": {
-      "per_page": "Maximum value is 100",
-      "date_from": "Invalid date format, use YYYY-MM-DD"
-    }
-  }
-}
-```
-
-</ResponseExample>
 
 ## Important Notes
 
@@ -541,16 +445,24 @@ const response = await fetch(`https://your-site.com/wp-json/latepoint-api/v1/boo
 ### 1. Today's Bookings Dashboard
 
 ```javascript
-// Get today's bookings
+// Get today's bookings sorted by start time
 const today = new Date().toISOString().split('T')[0];
-const response = await fetch(`/wp-json/latepoint-api/v1/bookings?date_from=${today}&date_to=${today}&sort=start_time&order=asc`);
+const response = await fetch(`/wp-json/latepoint-api/v1/bookings?date_from=${today}&date_to=${today}&sort=start_date&order=asc`, {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+const data = await response.json();
+if (data.success) console.log(data.data);
 ```
 
 ### 2. Customer History
 
 ```javascript
 // Get all bookings for a specific customer
-const response = await fetch(`/wp-json/latepoint-api/v1/bookings?customer_id=45&sort=start_date&order=desc`);
+const response = await fetch(`/wp-json/latepoint-api/v1/bookings?customer_id=45&sort=start_date&order=desc`, {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+const data = await response.json();
+if (data.success) console.log(data.data);
 ```
 
 ### 3. Monthly Report
@@ -559,5 +471,12 @@ const response = await fetch(`/wp-json/latepoint-api/v1/bookings?customer_id=45&
 // Get current month's bookings
 const firstDay = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
 const lastDay = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).toISOString().split('T')[0];
-const response = await fetch(`/wp-json/latepoint-api/v1/bookings?date_from=${firstDay}&date_to=${lastDay}&status=completed`);
+const response = await fetch(`/wp-json/latepoint-api/v1/bookings?date_from=${firstDay}&date_to=${lastDay}&status=approved`, {
+  headers: { 'X-API-Key': 'YOUR_API_KEY' }
+});
+const data = await response.json();
+if (data.success) {
+  console.log(`Total bookings: ${data.pagination.total}`);
+  console.log(data.data);
+}
 ```

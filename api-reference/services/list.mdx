@@ -138,47 +138,80 @@ X-API-Key: YOUR_API_KEY
 
 ## Response Example
 
+### Basic Response
 ```json
 {
   "success": true,
   "data": [
     {
-      "id": "1",
-      "name": "test 1",
-      "short_description": "descripcion test 1",
+      "id": "2",
+      "name": "General Consultation",
+      "short_description": "Standard medical consultation",
       "description": null,
       "duration": "60",
-      "price_min": "100.0000",
-      "price_max": "299.0000",
-      "charge_amount": "100.0000",
+      "price_min": "23.0000",
+      "price_max": "23.0000",
+      "charge_amount": "23.0000",
       "deposit_amount": "0.0000",
       "capacity_min": "1",
       "capacity_max": "1",
-      "order_number": "0",
+      "order_number": "2",
       "selection_image_id": "0",
       "status": "active",
       "visibility": "visible",
-      "category_id": null,
-      "created_at": "2024-08-20 10:00:00",
-      "updated_at": "2024-08-20 10:00:00",
+      "category_id": "0",
+      "customer_limit": "visible",
+      "created_at": "2025-08-18 07:58:53",
+      "updated_at": "2025-08-18 07:58:53"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 4,
+    "total_pages": 1,
+    "has_next_page": false,
+    "has_previous_page": false
+  }
+}
+```
+
+### With `include=category,agents`
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "2",
+      "name": "General Consultation",
+      "charge_amount": "23.0000",
+      "status": "active",
       "category": {
         "id": 1,
-        "name": "Category Name"
+        "name": "Category Name",
+        "short_description": "Category description"
       },
       "agents": [
         {
-          "id": 1,
-          "first_name": "John",
-          "last_name": "Doe"
+          "id": "1",
+          "first_name": "Pao",
+          "last_name": "Campo",
+          "display_name": "Agente Pao"
         }
       ]
     }
   ],
   "pagination": {
-    "current_page": 1,
+    "page": 1,
     "per_page": 10,
-    "total_items": 25,
-    "total_pages": 3
+    "total": 4,
+    "total_pages": 1,
+    "has_next_page": false,
+    "has_previous_page": false
   }
 }
 ```
+
+<Note>
+  The `customer_limit` field is always present in the response. Use `include=category` to embed category data and `include=agents` for agent data per service. Use `include=categories` to append all service categories to the root of the response.
+</Note>

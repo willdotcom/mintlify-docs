@@ -1,0 +1,48 @@
+---
+title: "Export Bookings"
+api: "GET https://your-site.com/wp-json/latepoint-api/v1/bookings/export"
+description: "Download a CSV file containing booking data."
+---
+
+### Response
+Returns a CSV file download containing booking records.
+
+### CSV Columns
+| Column | Description |
+| :--- | :--- |
+| ID | Booking ID |
+| Service | Service Name |
+| Start Date | Start Date |
+| Start Time | Start Time |
+| Duration | Duration in minutes |
+| Customer | Customer Name |
+| Agent | Agent Name |
+| Status | Booking Status |
+| Price | Price |
+| ... | And more standard columns |
+
+### Query Parameters
+
+<ParamField query="filter" type="object">
+  Filtering options.
+  <Expandable title="properties">
+    <ParamField query="date_from" type="string">
+      Filter by start date (YYYY-MM-DD).
+    </ParamField>
+    <ParamField query="date_to" type="string">
+      Filter by end date (YYYY-MM-DD).
+    </ParamField>
+    <ParamField query="service_id" type="integer">
+      Filter by Service ID.
+    </ParamField>
+    <ParamField query="agent_id" type="integer">
+      Filter by Agent ID.
+    </ParamField>
+    <ParamField query="location_id" type="integer">
+      Filter by Location ID.
+    </ParamField>
+    <ParamField query="status" type="string">
+      Filter by Status.
+    </ParamField>
+  </Expandable>
+</ParamField>

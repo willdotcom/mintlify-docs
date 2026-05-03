@@ -1,7 +1,7 @@
 ---
 title: "List Payments"
 api: "GET /wp-json/latepoint-api/v1/payments"
-description: "Retrieve a list of all payments with pagination support."
+description: "Retrieve a paginated list of all payment transactions."
 ---
 
 ## Query Parameters
@@ -23,19 +23,33 @@ description: "Retrieve a list of all payments with pagination support."
 </ParamField>
 
 <ParamField query="status" type="string">
-  Filter payments by status (succeeded, processing, failed)
+  Filter payments by status. Common values: `succeeded`, `processing`, `failed`
 </ParamField>
 
-<ParamField query="payment_method" type="string">
-  Filter payments by payment method
-</ParamField>
+## Example Requests
 
-## Example Request
-
+### Basic Request
 ```bash
-GET /wp-json/latepoint-api/v1/payments?page=1&per_page=10&status=completed
+GET /wp-json/latepoint-api/v1/payments
 X-API-Key: YOUR_API_KEY
-Content-Type: application/json
+```
+
+### Filter by Status
+```bash
+GET /wp-json/latepoint-api/v1/payments?status=succeeded
+X-API-Key: YOUR_API_KEY
+```
+
+### Filter by Order
+```bash
+GET /wp-json/latepoint-api/v1/payments?order_id=37
+X-API-Key: YOUR_API_KEY
+```
+
+### Filter by Customer
+```bash
+GET /wp-json/latepoint-api/v1/payments?customer_id=10&per_page=5
+X-API-Key: YOUR_API_KEY
 ```
 
 ## Example Response
@@ -45,46 +59,45 @@ Content-Type: application/json
   "success": true,
   "data": [
     {
-      "id": "1",
-      "token": "TXN123456",
-      "invoice_id": "5",
-      "order_id": "10",
-      "customer_id": "3",
-      "processor": "stripe",
-      "payment_method": "credit_card",
-      "payment_portion": "full",
-      "kind": "capture",
-      "amount": "150.00",
-      "status": "completed",
-      "notes": "Payment processed successfully",
-      "receipt_number": "RCP12345",
-      "access_key": "ak_1234567890abcdef",
-      "created_at": "2024-01-15 10:30:00",
-      "updated_at": "2024-01-15 10:30:00"
-    },
-    {
-      "id": "2",
-      "token": "TXN789012",
-      "invoice_id": "6",
-      "order_id": "11",
-      "customer_id": "4",
-      "processor": "paypal",
-      "payment_method": "paypal",
+      "id": "5",
+      "token": "",
+      "invoice_id": null,
+      "order_id": "37",
+      "customer_id": "10",
+      "processor": "other",
+      "payment_method": "local",
       "payment_portion": "deposit",
       "kind": "capture",
-      "amount": "50.00",
-      "status": "completed",
-      "notes": "Deposit payment",
-      "receipt_number": "RCP67890",
-      "access_key": "ak_0987654321fedcba",
-      "created_at": "2024-01-15 11:15:00",
-      "updated_at": "2024-01-15 11:15:00"
+      "amount": "467.0000",
+      "status": "succeeded",
+      "notes": "",
+      "created_at": "2025-08-21 10:35:39",
+      "updated_at": "2025-08-21 10:35:39"
+    },
+    {
+      "id": "4",
+      "token": "",
+      "invoice_id": null,
+      "order_id": "37",
+      "customer_id": "10",
+      "processor": "mercadopago",
+      "payment_method": "mercadopago_checkout",
+      "payment_portion": "full",
+      "kind": "capture",
+      "amount": "233.0000",
+      "status": "succeeded",
+      "notes": "",
+      "created_at": "2025-08-21 10:34:17",
+      "updated_at": "2025-08-21 10:34:17"
     }
   ],
   "pagination": {
-    "current_page": 1,
+    "page": 1,
     "per_page": 10,
+    "total": 4,
     "total_pages": 1,
-    "total_records": 2
+    "has_next_page": false,
+    "has_previous_page": false
   }
 }
+```
