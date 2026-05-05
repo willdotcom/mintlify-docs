@@ -26,6 +26,42 @@ description: "Retrieve a list of orders with pagination and filtering options."
   Filter orders by payment status. Valid values: `not_paid`, `partially_paid`, `fully_paid`, `processing`, `refunded`, `partially_refunded`
 </ParamField>
 
+<ParamField query="fulfillment_status" type="string">
+  Filter orders by fulfillment status. Valid values: `not_fulfilled`, `partially_fulfilled`, `fulfilled`
+</ParamField>
+
+<ParamField query="coupon_code" type="string">
+  Filter orders that used a specific coupon code (exact match)
+</ParamField>
+
+<ParamField query="total_min" type="number">
+  Filter orders with a total amount greater than or equal to this value
+</ParamField>
+
+<ParamField query="total_max" type="number">
+  Filter orders with a total amount less than or equal to this value
+</ParamField>
+
+<ParamField query="created_after" type="string">
+  Filter orders created on or after this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="created_before" type="string">
+  Filter orders created on or before this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search across confirmation code, customer comment, and coupon code
+</ParamField>
+
+<ParamField query="sort" type="string" default="created_at">
+  Field to sort results by. Valid values: `id`, `total`, `created_at`, `status`
+</ParamField>
+
+<ParamField query="order" type="string" default="DESC">
+  Sort direction. Valid values: `ASC`, `DESC`
+</ParamField>
+
 ## Example Requests
 
 ### Basic pagination

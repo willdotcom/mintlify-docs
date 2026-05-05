@@ -26,6 +26,42 @@ description: "Retrieve a paginated list of all payment transactions."
   Filter payments by status. Common values: `succeeded`, `processing`, `failed`
 </ParamField>
 
+<ParamField query="payment_method" type="string">
+  Filter by payment method (e.g. `cash`, `credit_card`, `paypal`, `stripe`, `mercadopago_checkout`)
+</ParamField>
+
+<ParamField query="processor" type="string">
+  Filter by payment processor (e.g. `stripe`, `paypal`, `mercadopago`, `square`, `other`)
+</ParamField>
+
+<ParamField query="amount_min" type="number">
+  Filter payments with amount greater than or equal to this value
+</ParamField>
+
+<ParamField query="amount_max" type="number">
+  Filter payments with amount less than or equal to this value
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  Filter payments created on or after this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  Filter payments created on or before this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search across token, notes, and receipt number
+</ParamField>
+
+<ParamField query="sort" type="string" default="created_at">
+  Field to sort results by. Valid values: `id`, `amount`, `created_at`, `status`
+</ParamField>
+
+<ParamField query="order" type="string" default="DESC">
+  Sort direction. Valid values: `ASC`, `DESC`
+</ParamField>
+
 ## Example Requests
 
 ### Basic Request

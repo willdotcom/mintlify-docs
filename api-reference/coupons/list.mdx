@@ -22,6 +22,34 @@ description: "Retrieve a list of all coupons with optional filtering and paginat
   Search coupons by code or name
 </ParamField>
 
+<ParamField query="discount_type" type="string">
+  Filter by discount type. Valid values: `percent`, `fixed_amount`
+</ParamField>
+
+<ParamField query="discount_value_min" type="number">
+  Filter coupons with a discount value greater than or equal to this amount
+</ParamField>
+
+<ParamField query="discount_value_max" type="number">
+  Filter coupons with a discount value less than or equal to this amount
+</ParamField>
+
+<ParamField query="valid_from" type="string">
+  Filter coupons whose `active_from` date is on or after this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="valid_until" type="string">
+  Filter coupons whose `active_to` date is on or before this date (YYYY-MM-DD)
+</ParamField>
+
+<ParamField query="sort" type="string" default="created_at">
+  Field to sort results by. Valid values: `id`, `code`, `discount_value`, `active_from`, `active_to`, `created_at`
+</ParamField>
+
+<ParamField query="order" type="string" default="DESC">
+  Sort direction. Valid values: `ASC`, `DESC`
+</ParamField>
+
 ## Example Request
 
 ```bash
