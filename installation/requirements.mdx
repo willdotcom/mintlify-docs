@@ -26,6 +26,7 @@ description: 'Technical requirements for installing LatePoint API Extension'
 
 ### Web Server
 - **Apache**: 2.4 or higher with mod_rewrite
+- **Litespeed Web Server**: Any verion
 - **Nginx**: 1.18 or higher
 - **IIS**: 10.0 or higher (with URL Rewrite Module)
 
@@ -69,8 +70,8 @@ Configure these limits in your `php.ini`:
 memory_limit = 256M
 max_execution_time = 300
 max_input_vars = 3000
-post_max_size = 64M
-upload_max_filesize = 64M
+post_max_size = 256M
+upload_max_filesize = 256M
 ```
 
 

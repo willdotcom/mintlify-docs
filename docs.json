@@ -122,16 +122,16 @@
             ]
           },
           {
+            "group": "Availability",
+            "pages": [
+              "api-reference/availability/check"
+            ]
+          },
+          {
             "group": "System",
             "pages": [
               "api-reference/system/info",
               "api-reference/system/test"
-            ]
-          },
-          {
-            "group": "Availability",
-            "pages": [
-              "api-reference/availability/check"
             ]
           }
         ]
@@ -146,7 +146,7 @@
         },
         {
           "anchor": "Support",
-          "href": "https://wplimit.com",
+          "href": "https://discord.gg/cC35Jync4v",
           "icon": "life-ring"
         }
       ]
@@ -160,13 +160,13 @@
     "links": [
       {
         "label": "Support",
-        "href": "https://wplimit.com"
+        "href": "https://discord.gg/cC35Jync4v"
       }
     ],
     "primary": {
       "type": "button",
       "label": "Buy REST API",
-      "href": "https://wplimit.com"
+      "href": "https://wplimit.com/rest-api-for-latepoint/"
     }
   },
   "contextual": {

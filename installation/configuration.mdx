@@ -11,7 +11,6 @@ After activating the plugin, access the configuration:
 
 1. Go to **LatePoint > API Settings** in your WordPress dashboard
 2. You'll see the API configuration panel
-3. If it's your first time, the setup wizard will run
 
 ### Configuration Panel
 
@@ -28,22 +27,7 @@ The main panel includes the following sections:
   <Accordion title="API Keys Management">
     - List of active API Keys
     - Generate new keys
-    - Configure permissions
-    - Revoke keys
-  </Accordion>
-  
-  <Accordion title="Security Settings">
-    - Rate limiting
-    - IP restrictions
-    - CORS configuration
-    - Audit logs
-  </Accordion>
-  
-  <Accordion title="System Status">
-    - Requirements verification
-    - Database status
-    - Server information
-    - Diagnostics
+    - Remove keys
   </Accordion>
 </AccordionGroup>
 
@@ -59,16 +43,6 @@ The main panel includes the following sections:
   <Step title="Generate New Key">
     1. Click **"Generate New API Key"**
     2. Assign a descriptive name (e.g., "iOS Mobile App")
-    3. Select environment (Test/Live)
-  </Step>
-  
-  <Step title="Configure Permissions">
-    Select necessary permissions:
-    - **Bookings**: Read, Create, Update, Delete
-    - **Customers**: Read, Create, Update
-    - **Agents**: Read
-    - **Services**: Read
-    - **Availability**: Read
   </Step>
   
   <Step title="Save and Copy">
@@ -109,92 +83,6 @@ The main panel includes the following sections:
   </Accordion>
 </AccordionGroup>
 
-## Security Configuration
-
-### Rate Limiting
-
-Configure request limits to protect your server:
-
-```json
-{
-  "requests_per_minute": 60,
-  "requests_per_hour": 3600,
-  "requests_per_day": 86400
-}
-```
-
-### IP Restrictions
-
-For additional security, you can restrict access by IP:
-
-<Tabs>
-  <Tab title="Whitelist">
-    ```
-    # Allow only these IPs
-    192.168.1.100
-    10.0.0.0/8
-    203.0.113.0/24
-    ```
-  </Tab>
-  
-  <Tab title="Blacklist">
-    ```
-    # Block these IPs
-    192.168.1.50
-    172.16.0.0/12
-    198.51.100.0/24
-    ```
-  </Tab>
-</Tabs>
-
-## Database Configuration
-
-### Verify Tables
-
-Verify all tables were created correctly:
-
-```sql
--- Check API tables
-SELECT table_name 
-FROM information_schema.tables 
-WHERE table_schema = 'your_database' 
-AND table_name LIKE 'wp_latepoint_api_%';
-```
-
-**Expected tables:**
-- `wp_latepoint_api_keys`
-- `wp_latepoint_api_logs`
-- `wp_latepoint_api_rate_limits`
-- `wp_latepoint_license_info`
-
-## Final Verification
-
-### Checklist
-
-- ✅ API Keys generated and saved
-- ✅ Permissions configured correctly
-- ✅ Rate limiting established
-- ✅ Database tables created
-
-### Connectivity Test
-
-Perform a final test:
-
-```bash
-curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/status" \
-  -H "X-API-Key: your_api_key_here"
-```
-
-**Expected response:**
-```json
-{
-  "status": "success",
-  "message": "API is working correctly",
-  "version": "1.0.0",
-  "timestamp": "2024-01-15T10:30:00Z"
-}
-```
-
 ## Next Steps
 
 <CardGroup cols={2}>
@@ -233,6 +121,4 @@ curl -X GET "https://your-site.com/wp-json/latepoint-api/v1/status" \
 If you need help with configuration:
 
 1. **Documentation**: [wpdocs.latepoint.com](https://wpdocs.latepoint.com)
-2. **Technical support**: Through your LatePoint account
-3. **Community**: WordPress and LatePoint forums
-4. **System Check**: Use the integrated tool in **API Settings > System Status**
+2. **Technical support**: [Discord](https://discord.gg/cC35Jync4v)
