@@ -62,21 +62,6 @@ description: 'Step-by-step guide to install LatePoint API Extension'
   </Step>
 </Steps>
 
-### Method 3: WP-CLI Installation
-
-If you have WP-CLI access:
-
-```bash
-# Upload and install the plugin
-wp plugin install /path/to/latepoint-api-extension.zip
-
-# Activate the plugin
-wp plugin activate latepoint-api-extension
-
-# Verify it's active
-wp plugin list --status=active
-```
-
 ## Installation Verification
 
 ### 1. Check Plugin Panel
@@ -85,7 +70,7 @@ In **Plugins > Installed Plugins**, you should see:
 
 ```
 LatePoint API Extension
-Version 1.0.0 | By LatePoint Team
+Version 1.0.0 | By WPLimit
 Status: Active
 ```
 
@@ -124,73 +109,6 @@ You should see a JSON response like:
   }
 }
 ```
-
-## Initial Setup
-
-### 1. Access Configuration
-
-1. Go to **LatePoint > API Settings**
-2. You'll see the API configuration page
-3. If it's your first time, a setup wizard will appear
-
-### 2. Run Setup Wizard
-
-<Steps>
-  <Step title="Welcome">
-    The wizard will welcome you and explain the API benefits.
-  </Step>
-  
-  <Step title="System Check">
-    An automatic verification will run for:
-    - System requirements
-    - Permalinks configuration
-    - Database permissions
-    - LatePoint main status
-  </Step>
-  
-  <Step title="Security Configuration">
-    - Configure rate limiting
-    - Set access policies
-    - Configure audit logs
-  </Step>
-  
-  <Step title="First API Key">
-    - Generate your first API Key
-    - Configure basic permissions
-    - Copy and save the key
-  </Step>
-</Steps>
-
-## Database Configuration
-
-### Automatically Created Tables
-
-During activation, the following tables are created:
-
-```sql
--- Stores API Keys
-wp_latepoint_api_keys
-
--- Records API usage
-wp_latepoint_api_logs
-
--- Rate limiting configuration
-wp_latepoint_api_rate_limits
-
--- License information
-wp_latepoint_license_info
-```
-
-### Verify Tables
-
-You can verify the tables were created correctly:
-
-```sql
-SHOW TABLES LIKE 'wp_latepoint_api_%';
-```
-
-
-
 ## Troubleshooting
 
 ### Error: "Plugin could not be activated"
@@ -223,8 +141,6 @@ SHOW TABLES LIKE 'wp_latepoint_api_%';
 2. Select any option except "Plain"
 3. Save changes
 4. Test the API URL again
-
-
 
 ## Next Steps
 
@@ -265,5 +181,4 @@ If you encounter issues during installation:
 
 1. **Check logs**: WordPress > Tools > Site Health
 2. **Consult documentation**: [wpdocs.latepoint.com](https://wpdocs.latepoint.com)
-3. **Contact support**: Through your LatePoint account
-4. **Community**: WordPress and LatePoint forums
+3. **Contact support**: Dicord Community

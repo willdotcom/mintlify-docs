@@ -155,27 +155,6 @@ GET /bookings?sort=start_date&order=desc
 - `sort`: Field to sort by
 - `order`: `asc` (ascending) or `desc` (descending)
 
-## Rate Limiting
-
-### Default Limits
-
-| API Key Type | Per Minute | Per Hour |
-|--------------|------------|----------|
-| Test | 100 | 1,000 |
-| Live | 60 | 3,600 |
-
-### Rate Limiting Headers
-
-Each response includes information about your current usage:
-
-```http
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1640995200
-```
-
-[Learn more about rate limiting →](/api-reference/rate-limiting)
-
 ## Available Resources
 
 ### Bookings

@@ -21,38 +21,6 @@ LatePoint API Extension uses an **API Keys** based authentication system to ensu
   **Important**: The API Key is only shown once. If you lose it, you'll need to generate a new one.
 </Warning>
 
-### Permission Configuration
-
-Each API Key can have specific permissions for different resources:
-
-<AccordionGroup>
-  <Accordion title="Bookings">
-    - **Read**: Query existing bookings
-    - **Create**: Create new bookings
-    - **Update**: Modify existing bookings
-    - **Delete**: Delete bookings
-  </Accordion>
-  
-  <Accordion title="Customers">
-    - **Read**: Query customer information
-    - **Create**: Register new customers
-    - **Update**: Update customer data
-    - **Delete**: Delete customers (if they have no bookings)
-  </Accordion>
-  
-  <Accordion title="Agents">
-    - **Read**: Query agent list and their schedules
-  </Accordion>
-  
-  <Accordion title="Services">
-    - **Read**: Query available services and their configurations
-  </Accordion>
-  
-  <Accordion title="Availability">
-    - **Read**: Check schedule availability
-  </Accordion>
-</AccordionGroup>
-
 ## Using the API Key
 
 ### Authentication Header
@@ -96,7 +64,7 @@ response = requests.get(
 
 ```php PHP
 <?php
-$apiKey = 'lp_live_1234567890abcdef';
+$apiKey = 'lp_1234567890abcdef';
 $headers = [
     'X-API-Key: ' . $apiKey,
     'Content-Type: application/json'
@@ -128,97 +96,6 @@ lp_test_1234567890abcdef
 - Only work in development environments
 - Limited or simulated data
 - More permissive rate limiting
-
-### Production Keys (Live)
-
-For production environments, use keys that start with `lp_live_`:
-
-```
-lp_live_1234567890abcdef
-```
-
-**Features:**
-- Full access to real data
-- Strict rate limiting
-- Complete audit logs
-
-## Security and Best Practices
-
-### Secure Storage
-
-<Tip>
-  **Never** hardcode API Keys in your source code. Use environment variables.
-</Tip>
-
-**✅ Correct:**
-```javascript
-const apiKey = process.env.LATEPOINT_API_KEY;
-```
-
-**❌ Incorrect:**
-```javascript
-const apiKey = 'lp_live_1234567890abcdef'; // Never do this!
-```
-
-### Environment Variables
-
-Configure your API Keys as environment variables:
-
-```bash .env
-LATEPOINT_API_KEY=lp_live_1234567890abcdef
-LATEPOINT_BASE_URL=https://your-site.com/wp-json/latepoint-api/v1
-```
-
-### Key Rotation
-
-1. **Generate a new API Key** before the current one expires
-2. **Update your application** with the new key
-3. **Test** that everything works correctly
-4. **Revoke the previous key** once the change is confirmed
-
-### Monitoring and Logs
-
-LatePoint API Extension automatically logs:
-
-- All authenticated requests
-- Unauthorized access attempts
-- Usage by API Key
-- Authentication errors
-
-Access logs at **LatePoint > API Settings > Activity Logs**.
-
-## Rate Limiting
-
-### Default Limits
-
-| Key Type | Requests per Minute | Requests per Hour |
-|----------|--------------------|-----------------|
-| Test     | 100                | 1,000           |
-| Live     | 60                 | 3,600           |
-
-### Rate Limiting Headers
-
-Each response includes information about your current usage:
-
-```http
-X-RateLimit-Limit: 60
-X-RateLimit-Remaining: 45
-X-RateLimit-Reset: 1640995200
-```
-
-### Handling Exceeded Limits
-
-When you exceed the limit, you'll receive a `429 Too Many Requests` response:
-
-```json
-{
-  "error": {
-    "code": "rate_limit_exceeded",
-    "message": "Rate limit exceeded. Try again in 60 seconds.",
-    "retry_after": 60
-  }
-}
-```
 
 ## Authentication Errors
 
