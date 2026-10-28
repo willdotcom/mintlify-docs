@@ -1,0 +1,120 @@
+---
+title: "List Events"
+api: "GET /wp-json/latepoint-api/v1/events"
+description: "Retrieve a list of events with optional filtering, sorting and pagination."
+---
+
+## Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="10">
+  Number of events per page
+</ParamField>
+
+<ParamField query="search" type="string">
+  Search events by name or summary
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status. Available values: `draft`, `published`, `cancelled`, `completed`
+</ParamField>
+
+<ParamField query="category_id" type="integer">
+  Filter by event category ID
+</ParamField>
+
+<ParamField query="event_type" type="string">
+  Filter by event type. Available values: `in_person`, `online`
+</ParamField>
+
+<ParamField query="date_from" type="string">
+  Only events whose dates end on or after this day (YYYY-MM-DD, site timezone)
+</ParamField>
+
+<ParamField query="date_to" type="string">
+  Only events whose dates start on or before this day (YYYY-MM-DD, site timezone)
+</ParamField>
+
+<ParamField query="sort" type="string" default="start_datetime_utc">
+  Field to sort results by. Valid values: `id`, `name`, `start_datetime_utc`, `created_at`, `order_number`, `price`
+</ParamField>
+
+<ParamField query="order" type="string" default="asc">
+  Sort direction. Valid values: `asc`, `desc`
+</ParamField>
+
+<Note>
+  List items do not include the `dates` array. Use [Get Event](/api-reference/events/get) or [List Event Dates](/api-reference/events/dates-list) to get them. See [Dates and times](/api-reference/events/overview#dates-and-times) for the timezone rules.
+</Note>
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/events?status=published&date_from=2026-12-01&date_to=2026-12-31
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 2,
+      "name": "Yoga Retreat",
+      "slug": "yoga-retreat",
+      "summary": "Two mornings",
+      "description": null,
+      "status": "published",
+      "event_type": "in_person",
+      "online_url": null,
+      "category_id": 1,
+      "category": {
+        "id": 1,
+        "name": "Workshops"
+      },
+      "featured_image_id": null,
+      "featured_image_url": null,
+      "location_text": "Studio A",
+      "organizer_name": "Ana",
+      "price": 25,
+      "formatted_price": "$25.00",
+      "is_paid": true,
+      "charge_per_ticket": true,
+      "ask_ticket_quantity": false,
+      "start": "2026-12-05 09:00:00",
+      "end": "2026-12-06 12:00:00",
+      "start_utc": "2026-12-05 12:00:00",
+      "end_utc": "2026-12-06 15:00:00",
+      "registration_start": null,
+      "registration_end": "2026-12-01 18:00:00",
+      "registration_open": true,
+      "capacity": {
+        "unlimited": false,
+        "total": 10,
+        "booked": 0,
+        "available": 10,
+        "sold_out": false
+      },
+      "timezone": "America/Montevideo",
+      "order_number": 0,
+      "created_at": "2026-10-20 14:12:05",
+      "updated_at": "2026-10-27 09:41:30"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 1,
+    "total_pages": 1,
+    "has_next_page": false,
+    "has_previous_page": false
+  }
+}
+```
+
+When LatePoint Pro ticket types or waiting list are enabled, each event also includes `use_ticket_types`, `ticket_types` and `waiting_list`, as shown in [Get Event](/api-reference/events/get).

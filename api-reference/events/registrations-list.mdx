@@ -1,0 +1,167 @@
+---
+title: "List Event Registrations"
+api: "GET /wp-json/latepoint-api/v1/events/registrations"
+description: "Retrieve event registrations with optional filtering and pagination."
+---
+
+<Note>
+  Registrations are created by customers through LatePoint's booking form and checkout, not through the API. The API can read and [cancel](/api-reference/events/registrations-cancel) them.
+</Note>
+
+## Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="10">
+  Number of registrations per page
+</ParamField>
+
+<ParamField query="event_id" type="integer">
+  Filter by event ID
+</ParamField>
+
+<ParamField query="customer_id" type="integer">
+  Filter by customer ID
+</ParamField>
+
+<ParamField query="order_id" type="integer">
+  Filter by order ID
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status. Available values: `pending`, `confirmed`, `cancelled`, `checked_in`
+</ParamField>
+
+<ParamField query="payment_status" type="string">
+  Filter by payment status, for example `not_paid`, `partially_paid`, `fully_paid`
+</ParamField>
+
+<ParamField query="registration_code" type="string">
+  Filter by registration code (case-insensitive)
+</ParamField>
+
+<ParamField query="created_after" type="string">
+  Only registrations created on or after this moment (`YYYY-MM-DD HH:MM:SS`, UTC)
+</ParamField>
+
+<ParamField query="created_before" type="string">
+  Only registrations created on or before this moment (`YYYY-MM-DD HH:MM:SS`, UTC)
+</ParamField>
+
+<ParamField query="order" type="string" default="desc">
+  Sort direction by creation date. Valid values: `asc`, `desc`
+</ParamField>
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/events/registrations?event_id=3&status=confirmed
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "registration_code": "EAMDZKKG",
+      "event_id": 3,
+      "event_name": "Free Meetup",
+      "customer_id": 40,
+      "customer": {
+        "id": 40,
+        "first_name": "Api",
+        "last_name": "Tester",
+        "full_name": "Api Tester",
+        "email": "api.tester@example.com",
+        "phone": ""
+      },
+      "order_id": 89,
+      "order_item_id": 72,
+      "quantity": 2,
+      "status": "confirmed",
+      "status_label": "Confirmed",
+      "payment_status": "not_paid",
+      "notes": null,
+      "created_at": "2026-10-28 15:20:11",
+      "updated_at": "2026-10-28 15:20:11",
+      "ticket_types": []
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 1,
+    "total_pages": 1,
+    "has_next_page": false,
+    "has_previous_page": false
+  }
+}
+```
+
+## Response Fields
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the registration
+</ResponseField>
+
+<ResponseField name="registration_code" type="string">
+  Registration code shown to the customer
+</ResponseField>
+
+<ResponseField name="event_id" type="integer">
+  Event ID
+</ResponseField>
+
+<ResponseField name="event_name" type="string">
+  Event name
+</ResponseField>
+
+<ResponseField name="customer_id" type="integer">
+  Customer ID
+</ResponseField>
+
+<ResponseField name="customer" type="object">
+  Customer summary (`id`, `first_name`, `last_name`, `full_name`, `email`, `phone`)
+</ResponseField>
+
+<ResponseField name="order_id" type="integer">
+  Order ID. `null` for places given from the waiting list.
+</ResponseField>
+
+<ResponseField name="order_item_id" type="integer">
+  Order item ID
+</ResponseField>
+
+<ResponseField name="quantity" type="integer">
+  Number of places (attendees)
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  `pending`, `confirmed`, `cancelled` or `checked_in`
+</ResponseField>
+
+<ResponseField name="status_label" type="string">
+  Human-readable status
+</ResponseField>
+
+<ResponseField name="payment_status" type="string">
+  Payment status, for example `not_paid`, `partially_paid`, `fully_paid`
+</ResponseField>
+
+<ResponseField name="notes" type="string">
+  Notes
+</ResponseField>
+
+<ResponseField name="ticket_types" type="array">
+  **Pro.** Ticket types bought (`ticket_type_id`, `name`, `quantity`, `price`, `total`). Present when LatePoint Pro Features is installed; empty when the event does not use ticket types.
+</ResponseField>
+
+<ResponseField name="tickets" type="array">
+  **Pro.** E-tickets of the registration. Only included in [Get Event Registration](/api-reference/events/registrations-get).
+</ResponseField>

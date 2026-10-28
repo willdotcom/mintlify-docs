@@ -1,0 +1,53 @@
+---
+title: "Delete Event"
+api: "DELETE /wp-json/latepoint-api/v1/events/{id}"
+description: "Delete an event. Events with active registrations require force=true."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the event to delete
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="force" type="boolean" default="false">
+  Delete the event even if it has registrations that are not cancelled
+</ParamField>
+
+<Warning>
+  Deleting an event also deletes its registrations and dates and, with LatePoint Pro, its ticket types, e-tickets and waiting list. Orders are **not** deleted.
+</Warning>
+
+## Example Request
+
+```bash
+DELETE /wp-json/latepoint-api/v1/events/2?force=true
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Event deleted successfully"
+}
+```
+
+## Error Response
+
+If the event has registrations that are not cancelled and `force` is not `true`, you will receive an error:
+
+```json
+{
+  "code": "event_has_registrations",
+  "message": "Cannot delete event because it has active registrations. Use force=true to delete it with its registrations.",
+  "data": {
+    "status": 409
+  }
+}
+```
+
+Other errors: `404 event_not_found`, `503 feature_disabled` when Events is disabled in LatePoint settings.

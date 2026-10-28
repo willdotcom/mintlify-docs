@@ -1,0 +1,95 @@
+---
+title: "Cancel Event Registration"
+api: "POST /wp-json/latepoint-api/v1/events/registrations/{id}/cancel"
+description: "Cancel an event registration, the same way as the Cancel action in the LatePoint admin."
+---
+
+Cancelling a registration:
+
+- Sets its status to `cancelled`
+- Sends LatePoint's cancellation notification
+- Voids its e-tickets (LatePoint Pro)
+- Frees its places in the event
+
+Cancelling a registration that is already cancelled returns a successful response and changes nothing.
+
+<Warning>
+  Cancelling a registration does **not** cancel or refund its order. Use the [Orders](/api-reference/orders/update) and [Payments](/api-reference/payments/list) endpoints to handle the order.
+</Warning>
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the registration to cancel
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/registrations/1/cancel
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+Returns the registration, including its e-tickets:
+
+```json
+{
+  "success": true,
+  "message": "Registration cancelled",
+  "data": {
+    "id": 1,
+    "registration_code": "EAMDZKKG",
+    "event_id": 3,
+    "event_name": "Free Meetup",
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "order_id": 89,
+    "order_item_id": 72,
+    "quantity": 2,
+    "status": "cancelled",
+    "status_label": "Cancelled",
+    "payment_status": "not_paid",
+    "notes": null,
+    "created_at": "2026-10-28 15:20:11",
+    "updated_at": "2026-10-28 16:02:47",
+    "ticket_types": [],
+    "tickets": [
+      {
+        "id": 1,
+        "ticket_code": "JBA3NUH8JD",
+        "label": "Ticket 1 of 2",
+        "registration_id": 1,
+        "event_id": 3,
+        "customer_id": 40,
+        "ticket_number": 1,
+        "ticket_type": "individual",
+        "ticket_type_id": null,
+        "ticket_type_name": null,
+        "status": "void",
+        "checked_in_dates": [],
+        "last_scanned_at": null,
+        "public_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__show&code=JBA3NUH8JD",
+        "qr_image_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__qr_image&code=JBA3NUH8JD",
+        "pdf_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__download_pdf&code=JBA3NUH8JD",
+        "created_at": "2026-10-28 15:20:11"
+      }
+    ]
+  }
+}
+```
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `404` | `event_registration_not_found` | The registration does not exist |
+| `503` | `feature_disabled` | Events is disabled in LatePoint settings |

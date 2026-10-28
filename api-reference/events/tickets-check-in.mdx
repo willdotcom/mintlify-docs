@@ -1,0 +1,125 @@
+---
+title: "Check In E-Ticket"
+api: "POST /wp-json/latepoint-api/v1/events/tickets/check-in"
+description: "Validate an e-ticket and check it in, using LatePoint Pro's own ticket scanner."
+---
+
+<Note>
+  **LatePoint Pro feature.** E-Tickets require LatePoint Pro Features with E-Tickets enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+This endpoint runs the same validation as the LatePoint Pro ticket scanner, so you can use it to build your own door-check app.
+
+- A ticket can be checked in **once per calendar day**. On multi-day events the same ticket can be checked in again on each event day.
+- A **group** ticket checks in all remaining attendees of its registration.
+- When every attendee of a registration is checked in for the day, the registration status becomes `checked_in`.
+
+## Request Body Parameters
+
+Send either `code` or `ticket_id`.
+
+<ParamField body="code" type="string">
+  Ticket to check in. Accepts the raw ticket code, the ticket URL or the content of its QR code.
+</ParamField>
+
+<ParamField body="ticket_id" type="integer">
+  ID of the ticket to check in
+</ParamField>
+
+<ParamField body="date" type="string">
+  Day to check in for (`YYYY-MM-DD`). Defaults to today in the site timezone.
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/tickets/check-in
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "code": "JBA3NUH8JD"
+}
+```
+
+## Response
+
+The response tells you whether the attendee may enter (`admitted`) and why (`verdict`). `data` is the ticket after the check-in.
+
+```json
+{
+  "success": true,
+  "admitted": true,
+  "verdict": "valid",
+  "message": "Ticket valid — checked in.",
+  "data": {
+    "id": 1,
+    "ticket_code": "JBA3NUH8JD",
+    "label": "Ticket 1 of 2",
+    "registration_id": 1,
+    "event_id": 3,
+    "customer_id": 40,
+    "ticket_number": 1,
+    "ticket_type": "individual",
+    "ticket_type_id": null,
+    "ticket_type_name": null,
+    "status": "checked_in",
+    "checked_in_dates": [
+      {
+        "date": "2026-10-28",
+        "at": "2026-10-28 15:29:24",
+        "by": 0
+      }
+    ],
+    "last_scanned_at": "2026-10-28 15:29:24",
+    "public_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__show&code=JBA3NUH8JD",
+    "qr_image_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__qr_image&code=JBA3NUH8JD",
+    "pdf_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__download_pdf&code=JBA3NUH8JD",
+    "created_at": "2026-10-28 15:20:11"
+  }
+}
+```
+
+## Verdicts
+
+A rejected ticket still returns HTTP `200` with `admitted: false`, except `not_found`.
+
+| Verdict | `admitted` | Meaning |
+|---------|------------|---------|
+| `valid` | `true` | Ticket checked in (for a group ticket, all its attendees) |
+| `group_partially_scanned` | `true` | Group ticket: some attendees were already checked in today, the remaining ones are checked in now |
+| `already_scanned` | `false` | The ticket was already checked in for this day |
+| `all_already_scanned` | `false` | Every attendee of the group ticket was already checked in for this day |
+| `void` | `false` | The ticket is void |
+| `registration_cancelled` | `false` | The registration was cancelled |
+| `event_cancelled` | `false` | The event was cancelled |
+| `not_valid_for_date` | `false` | The check-in day is not one of the event's days |
+| `not_found` | `false` | No ticket matches. Returned with HTTP `404` and `data: null` |
+
+```json
+{
+  "success": true,
+  "admitted": false,
+  "verdict": "already_scanned",
+  "message": "This ticket has already been checked in today.",
+  "data": {
+    "id": 1,
+    "ticket_code": "JBA3NUH8JD",
+    "status": "checked_in"
+  }
+}
+```
+
+The `data` object above is shortened; the actual response contains the full ticket.
+
+<Note>
+  The `message` text comes from LatePoint Pro and may vary with its version and the site language. Use `verdict` and `admitted` in your code.
+</Note>
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `400` | `missing_field` | Neither `code` nor `ticket_id` was sent |
+| `400` | `invalid_date` | `date` is not in `YYYY-MM-DD` format |
+| `503` | `feature_disabled` | Events or E-Tickets is disabled in LatePoint settings |

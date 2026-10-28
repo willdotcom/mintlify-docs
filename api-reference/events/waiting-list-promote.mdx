@@ -1,0 +1,103 @@
+---
+title: "Promote From Waiting List"
+api: "POST /wp-json/latepoint-api/v1/events/waiting-list/{id}/promote"
+description: "Register a waiting list customer directly. Free events only."
+---
+
+<Note>
+  **LatePoint Pro feature.** The waiting list requires LatePoint Pro Features with Waiting List enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+Promoting gives the place directly: LatePoint creates a confirmed registration for the customer (and its e-tickets, when E-Tickets is enabled) without going through checkout. The entry's status becomes `converted`.
+
+Promote only works for **free** places. For paid events use [Invite From Waiting List](/api-reference/events/waiting-list-invite) so the customer pays at checkout.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the waiting list entry
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/waiting-list/1/promote
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+The response includes the new registration in `registration`. It has no order, so `order_id` is `null`.
+
+```json
+{
+  "success": true,
+  "message": "A place has been given and the customer is now registered",
+  "data": {
+    "id": 1,
+    "event_id": 3,
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "ticket_type_id": null,
+    "ticket_type_name": null,
+    "quantity": 1,
+    "status": "converted",
+    "status_label": "Registered",
+    "position": null,
+    "invited_at": null,
+    "invite_expires_at": null,
+    "converted_registration_id": 5,
+    "converted_order_id": null,
+    "created_at": "2026-10-28 16:10:05",
+    "updated_at": "2026-10-28 19:50:12"
+  },
+  "registration": {
+    "id": 5,
+    "registration_code": "K4TQW8RZ",
+    "event_id": 3,
+    "event_name": "Free Meetup",
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "order_id": null,
+    "order_item_id": null,
+    "quantity": 1,
+    "status": "confirmed",
+    "status_label": "Confirmed",
+    "payment_status": "not_paid",
+    "notes": null,
+    "created_at": "2026-10-28 19:50:12",
+    "updated_at": "2026-10-28 19:50:12",
+    "ticket_types": []
+  }
+}
+```
+
+## Error Responses
+
+When LatePoint cannot give the place (the place is paid, the event is still full, the entry is no longer active...), the request fails with `409` and LatePoint's own explanation:
+
+```json
+{
+  "code": "waiting_list_action_failed",
+  "message": "This place is paid, so the customer has to be invited to check out rather than given a place directly.",
+  "data": {
+    "status": 409
+  }
+}
+```
+
+Other errors: `404 waiting_list_entry_not_found`, `503 feature_disabled`.

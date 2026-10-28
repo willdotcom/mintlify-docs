@@ -34,7 +34,7 @@ Authorization: Bearer YOUR_API_KEY
   "customer_comment": null,
   "created_at": "2024-12-21 17:45:32",
   "updated_at": "2024-12-21 17:45:32",
-  "items": [
+  "order_items": [
     {
       "id": 38,
       "variant": "booking",
@@ -46,6 +46,48 @@ Authorization: Bearer YOUR_API_KEY
   ]
 }
 ```
+
+## Event Items
+
+Order items with `variant: "event_registration"` (event tickets bought through LatePoint's booking form) include an `event_registration` object with the related [event registration](/api-reference/events/registrations-get). E-tickets are not included; get them with [Get Event Registration](/api-reference/events/registrations-get).
+
+```json
+{
+  "id": 72,
+  "variant": "event_registration",
+  "subtotal": "0.00",
+  "total": "0.00",
+  "event_registration": {
+    "id": 1,
+    "registration_code": "EAMDZKKG",
+    "event_id": 3,
+    "event_name": "Free Meetup",
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "order_id": 89,
+    "order_item_id": 72,
+    "quantity": 2,
+    "status": "confirmed",
+    "status_label": "Confirmed",
+    "payment_status": "not_paid",
+    "notes": null,
+    "created_at": "2026-10-28 15:20:11",
+    "updated_at": "2026-10-28 15:20:11",
+    "ticket_types": []
+  }
+}
+```
+
+<Note>
+  The item above is shortened to its main fields; the other item fields are the same as for booking items.
+</Note>
 
 ## Related Endpoints
 

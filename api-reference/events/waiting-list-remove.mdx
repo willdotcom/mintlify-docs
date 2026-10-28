@@ -1,0 +1,66 @@
+---
+title: "Remove From Waiting List"
+api: "POST /wp-json/latepoint-api/v1/events/waiting-list/{id}/remove"
+description: "Take an entry off the waiting list."
+---
+
+<Note>
+  **LatePoint Pro feature.** The waiting list requires LatePoint Pro Features with Waiting List enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+Removes the entry from the queue. Its status becomes `removed` and any pending invitation stops working. No email is sent to the customer. The entry stays available with `include_history=true` in [List Waiting List Entries](/api-reference/events/waiting-list-list).
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the waiting list entry
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/waiting-list/1/remove
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Removed from the waiting list",
+  "data": {
+    "id": 1,
+    "event_id": 3,
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "ticket_type_id": null,
+    "ticket_type_name": null,
+    "quantity": 1,
+    "status": "removed",
+    "status_label": "Removed",
+    "position": null,
+    "invited_at": null,
+    "invite_expires_at": null,
+    "converted_registration_id": null,
+    "converted_order_id": null,
+    "created_at": "2026-10-28 16:10:05",
+    "updated_at": "2026-10-28 19:52:40"
+  }
+}
+```
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `404` | `waiting_list_entry_not_found` | The entry does not exist |
+| `409` | `waiting_list_action_failed` | LatePoint could not remove the entry |
+| `503` | `feature_disabled` | Events or Waiting List is disabled in LatePoint settings |

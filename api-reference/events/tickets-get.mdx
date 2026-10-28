@@ -1,0 +1,63 @@
+---
+title: "Get E-Ticket"
+api: "GET /wp-json/latepoint-api/v1/events/tickets/{id}"
+description: "Retrieve a specific e-ticket by ID."
+---
+
+<Note>
+  **LatePoint Pro feature.** E-Tickets require LatePoint Pro Features with E-Tickets enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the ticket to retrieve
+</ParamField>
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/events/tickets/1
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 1,
+    "ticket_code": "JBA3NUH8JD",
+    "label": "Ticket 1 of 2",
+    "registration_id": 1,
+    "event_id": 3,
+    "customer_id": 40,
+    "ticket_number": 1,
+    "ticket_type": "individual",
+    "ticket_type_id": null,
+    "ticket_type_name": null,
+    "status": "issued",
+    "checked_in_dates": [],
+    "last_scanned_at": null,
+    "public_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__show&code=JBA3NUH8JD",
+    "qr_image_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__qr_image&code=JBA3NUH8JD",
+    "pdf_url": "https://example.com/wp-admin/admin-post.php?action=latepoint_route_call&route_name=event_tickets__download_pdf&code=JBA3NUH8JD",
+    "created_at": "2026-10-28 15:20:11"
+  }
+}
+```
+
+See [List E-Tickets](/api-reference/events/tickets-list#response-fields) for the description of every field.
+
+## Error Response
+
+```json
+{
+  "code": "event_ticket_not_found",
+  "message": "Event ticket not found",
+  "data": {
+    "status": 404
+  }
+}
+```

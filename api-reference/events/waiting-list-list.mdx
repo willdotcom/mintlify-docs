@@ -1,0 +1,159 @@
+---
+title: "List Waiting List Entries"
+api: "GET /wp-json/latepoint-api/v1/events/waiting-list"
+description: "Retrieve the waiting list of sold-out events, in queue order."
+---
+
+<Note>
+  **LatePoint Pro feature.** The waiting list requires LatePoint Pro Features with Waiting List enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+Customers join the waiting list from LatePoint's booking form when an event is sold out; entries cannot be created through the API. When a place becomes free you can [invite](/api-reference/events/waiting-list-invite) the customer, [promote](/api-reference/events/waiting-list-promote) them directly (free events), or [remove](/api-reference/events/waiting-list-remove) the entry.
+
+## Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  Page number for pagination
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="10">
+  Number of entries per page
+</ParamField>
+
+<ParamField query="event_id" type="integer">
+  Filter by event ID
+</ParamField>
+
+<ParamField query="customer_id" type="integer">
+  Filter by customer ID
+</ParamField>
+
+<ParamField query="ticket_type_id" type="integer">
+  Filter by ticket type ID
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by status. Available values: `waiting`, `invited`, `converted`, `removed`, `expired`
+</ParamField>
+
+<ParamField query="include_history" type="boolean" default="false">
+  By default only live entries (`waiting` and `invited`) are returned. Set to `true` to also include `converted`, `removed` and `expired` entries. Ignored when `status` is sent.
+</ParamField>
+
+Entries are ordered by the time they joined the queue (oldest first).
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/events/waiting-list?event_id=3
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": 1,
+      "event_id": 3,
+      "customer_id": 40,
+      "customer": {
+        "id": 40,
+        "first_name": "Api",
+        "last_name": "Tester",
+        "full_name": "Api Tester",
+        "email": "api.tester@example.com",
+        "phone": ""
+      },
+      "ticket_type_id": null,
+      "ticket_type_name": null,
+      "quantity": 1,
+      "status": "waiting",
+      "status_label": "Waiting",
+      "position": 1,
+      "invited_at": null,
+      "invite_expires_at": null,
+      "converted_registration_id": null,
+      "converted_order_id": null,
+      "created_at": "2026-10-28 16:10:05",
+      "updated_at": "2026-10-28 16:10:05"
+    }
+  ],
+  "pagination": {
+    "page": 1,
+    "per_page": 10,
+    "total": 1,
+    "total_pages": 1,
+    "has_next_page": false,
+    "has_previous_page": false
+  }
+}
+```
+
+## Response Fields
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the entry
+</ResponseField>
+
+<ResponseField name="event_id" type="integer">
+  Event ID
+</ResponseField>
+
+<ResponseField name="customer_id" type="integer">
+  Customer ID
+</ResponseField>
+
+<ResponseField name="customer" type="object">
+  Customer summary (`id`, `first_name`, `last_name`, `full_name`, `email`, `phone`)
+</ResponseField>
+
+<ResponseField name="ticket_type_id" type="integer">
+  Requested ticket type, when the event uses ticket types
+</ResponseField>
+
+<ResponseField name="ticket_type_name" type="string">
+  Requested ticket type name
+</ResponseField>
+
+<ResponseField name="quantity" type="integer">
+  Number of places requested
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  `waiting`, `invited`, `converted`, `removed` or `expired`
+</ResponseField>
+
+<ResponseField name="status_label" type="string">
+  Human-readable status
+</ResponseField>
+
+<ResponseField name="position" type="integer">
+  Position in the queue. `null` when the entry is no longer live.
+</ResponseField>
+
+<ResponseField name="invited_at" type="string">
+  When the customer was invited (UTC)
+</ResponseField>
+
+<ResponseField name="invite_expires_at" type="string">
+  When the invitation expires (UTC)
+</ResponseField>
+
+<ResponseField name="converted_registration_id" type="integer">
+  Registration created from this entry
+</ResponseField>
+
+<ResponseField name="converted_order_id" type="integer">
+  Order created from this entry
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  When the customer joined the queue
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Last update timestamp
+</ResponseField>

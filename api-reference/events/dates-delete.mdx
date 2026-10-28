@@ -1,0 +1,47 @@
+---
+title: "Delete Event Date"
+api: "DELETE /wp-json/latepoint-api/v1/events/{id}/dates/{date_id}"
+description: "Remove a date from an event."
+---
+
+The event's overall `start` and `end` are recalculated after the date is removed.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the event
+</ParamField>
+
+<ParamField path="date_id" type="integer" required>
+  The ID of the date to delete
+</ParamField>
+
+## Example Request
+
+```bash
+DELETE /wp-json/latepoint-api/v1/events/2/dates/3
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Event date deleted successfully"
+}
+```
+
+## Error Response
+
+If the date does not exist or belongs to another event, you will receive an error:
+
+```json
+{
+  "code": "event_date_not_found",
+  "message": "Event date not found",
+  "data": {
+    "status": 404
+  }
+}
+```

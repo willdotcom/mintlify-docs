@@ -1,0 +1,123 @@
+---
+title: "Get Event"
+api: "GET /wp-json/latepoint-api/v1/events/{id}"
+description: "Retrieve a specific event by ID, including its dates."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the event to retrieve
+</ParamField>
+
+## Example Request
+
+```bash
+GET /wp-json/latepoint-api/v1/events/2
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 2,
+    "name": "Yoga Retreat",
+    "slug": "yoga-retreat",
+    "summary": "Two mornings",
+    "description": null,
+    "status": "published",
+    "event_type": "in_person",
+    "online_url": null,
+    "category_id": 1,
+    "category": {
+      "id": 1,
+      "name": "Workshops"
+    },
+    "featured_image_id": null,
+    "featured_image_url": null,
+    "location_text": "Studio A",
+    "organizer_name": "Ana",
+    "price": 25,
+    "formatted_price": "$25.00",
+    "is_paid": true,
+    "charge_per_ticket": true,
+    "ask_ticket_quantity": false,
+    "start": "2026-12-05 09:00:00",
+    "end": "2026-12-06 12:00:00",
+    "start_utc": "2026-12-05 12:00:00",
+    "end_utc": "2026-12-06 15:00:00",
+    "registration_start": null,
+    "registration_end": "2026-12-01 18:00:00",
+    "registration_open": true,
+    "capacity": {
+      "unlimited": false,
+      "total": 10,
+      "booked": 0,
+      "available": 10,
+      "sold_out": false
+    },
+    "timezone": "America/Montevideo",
+    "order_number": 0,
+    "created_at": "2026-10-20 14:12:05",
+    "updated_at": "2026-10-27 09:41:30",
+    "dates": [
+      {
+        "id": 1,
+        "event_id": 2,
+        "start": "2026-12-05 09:00:00",
+        "end": "2026-12-05 12:00:00",
+        "start_utc": "2026-12-05 12:00:00",
+        "end_utc": "2026-12-05 15:00:00"
+      },
+      {
+        "id": 2,
+        "event_id": 2,
+        "start": "2026-12-06 09:00:00",
+        "end": "2026-12-06 12:00:00",
+        "start_utc": "2026-12-06 12:00:00",
+        "end_utc": "2026-12-06 15:00:00"
+      }
+    ],
+    "use_ticket_types": true,
+    "ticket_types": [
+      {
+        "id": 1,
+        "event_id": 2,
+        "name": "General",
+        "price": 20,
+        "formatted_price": "$20.00",
+        "capacity": 8,
+        "booked": 0,
+        "available": 8,
+        "sold_out": false,
+        "status": "active",
+        "order_number": 0
+      }
+    ],
+    "waiting_list": {
+      "enabled": true,
+      "capacity": 5,
+      "queue_count": 0
+    }
+  }
+}
+```
+
+<Note>
+  `use_ticket_types` and `ticket_types` are only present when LatePoint Pro **Ticket Types** is enabled, and `waiting_list` only when LatePoint Pro **Waiting List** is enabled. See the [Event Object](/api-reference/events/overview#event-object) for every field and [Dates and times](/api-reference/events/overview#dates-and-times) for the timezone rules.
+</Note>
+
+## Error Response
+
+```json
+{
+  "code": "event_not_found",
+  "message": "Event not found",
+  "data": {
+    "status": 404
+  }
+}
+```

@@ -1,0 +1,254 @@
+---
+title: "Events Overview"
+description: "Manage LatePoint events, their dates, categories, registrations, e-tickets and waiting lists through the API."
+---
+
+The Events endpoints give you access to LatePoint's events module: events and their dates, event categories, registrations, and the LatePoint Pro e-tickets and waiting list.
+
+All Events endpoints live under `/wp-json/latepoint-api/v1/events` and use the same [authentication](/authentication) and response format as the rest of the API.
+
+## Requirements
+
+- **LatePoint 5.7 or newer.** On older versions every Events endpoint returns `503 feature_not_available`.
+- **"Enable Events" setting.** Write operations (create, update, delete, cancel, check-in and waiting list actions) return `503 feature_disabled` when Events is turned off in LatePoint settings. Read operations keep working.
+- **LatePoint Pro Features** for ticket types, e-tickets and the waiting list (see [Pro features](#pro-features)).
+
+## Endpoints
+
+| Resource | Endpoints |
+|----------|-----------|
+| Events | [List](/api-reference/events/list), [Get](/api-reference/events/get), [Create](/api-reference/events/create), [Update](/api-reference/events/update), [Delete](/api-reference/events/delete) |
+| Event dates | [List](/api-reference/events/dates-list), [Create](/api-reference/events/dates-create), [Update](/api-reference/events/dates-update), [Delete](/api-reference/events/dates-delete) |
+| Event categories | [List](/api-reference/events/categories-list), [Get](/api-reference/events/categories-get), [Create](/api-reference/events/categories-create), [Update](/api-reference/events/categories-update), [Delete](/api-reference/events/categories-delete) |
+| Registrations | [List](/api-reference/events/registrations-list), [Get](/api-reference/events/registrations-get), [Cancel](/api-reference/events/registrations-cancel) |
+| E-Tickets (Pro) | [List](/api-reference/events/tickets-list), [Get](/api-reference/events/tickets-get), [Check-in](/api-reference/events/tickets-check-in) |
+| Waiting list (Pro) | [List](/api-reference/events/waiting-list-list), [Get](/api-reference/events/waiting-list-get), [Invite](/api-reference/events/waiting-list-invite), [Promote](/api-reference/events/waiting-list-promote), [Remove](/api-reference/events/waiting-list-remove) |
+
+## Dates and times
+
+Event dates and times follow one rule:
+
+- **Request values** and the response fields `start`, `end`, `registration_start` and `registration_end` are in the **site timezone** (the timezone configured in WordPress), formatted as `YYYY-MM-DD HH:MM`. Seconds are optional, and a date alone (`YYYY-MM-DD`) means `00:00`.
+- Fields ending in **`_utc`** (`start_utc`, `end_utc`) are in **UTC**.
+- Every event includes a `timezone` field with the site timezone name, for example `America/Montevideo`.
+
+```json
+{
+  "start": "2026-12-05 09:00:00",
+  "start_utc": "2026-12-05 12:00:00",
+  "timezone": "America/Montevideo"
+}
+```
+
+An event can have several dates (for example a two-day retreat). The event's overall `start` and `end` are calculated from its dates: `start` is the earliest date start and `end` is the latest date end. They are recalculated every time a date is added, changed or removed.
+
+<Note>
+  The `created_after` and `created_before` filters of [List Registrations](/api-reference/events/registrations-list) are an exception: they compare against the stored `created_at` value and are expressed in UTC (`YYYY-MM-DD HH:MM:SS`).
+</Note>
+
+## Registrations
+
+Registrations are created by customers through LatePoint's booking form and checkout, not through the API. The API lets you read registrations and cancel them.
+
+Cancelling a registration works like the **Cancel** action in the LatePoint admin. It does **not** cancel or refund the order the registration belongs to. Manage the order separately with the [Orders](/api-reference/orders/get) and [Payments](/api-reference/payments/list) endpoints.
+
+Order items for events have `variant: "event_registration"`. [Get Order](/api-reference/orders/get) includes the related registration in each of those items.
+
+## Pro features
+
+Some event features come from **LatePoint Pro Features** and must also be enabled in LatePoint settings:
+
+| Feature | Where it appears in the API |
+|---------|------------------------------|
+| Ticket types | `use_ticket_types` and `ticket_types` fields on events; `ticket_types` on registrations |
+| E-Tickets | `/events/tickets` endpoints; `tickets` on registration details |
+| Waiting list | `/events/waiting-list` endpoints; `waiting_list` settings on events |
+
+Pro fields are only included in event responses when the feature is enabled, and Pro request fields are ignored when it is not. Pro endpoints return one of these errors when the feature is unavailable:
+
+```json
+{
+  "code": "feature_not_available",
+  "message": "E-Tickets requires LatePoint Pro Features",
+  "data": {
+    "status": 503
+  }
+}
+```
+
+```json
+{
+  "code": "feature_disabled",
+  "message": "Waiting List is disabled in LatePoint settings",
+  "data": {
+    "status": 503
+  }
+}
+```
+
+## Availability Errors
+
+| Status | Code | When |
+|--------|------|------|
+| `503` | `feature_not_available` | LatePoint is older than 5.7 (`Events require LatePoint 5.7 or newer`), or a Pro endpoint is called without LatePoint Pro Features |
+| `503` | `feature_disabled` | A write operation is called while Events is disabled, or a Pro endpoint is called while that Pro feature is disabled |
+
+## Event Object
+
+<ResponseField name="id" type="integer">
+  Unique identifier for the event
+</ResponseField>
+
+<ResponseField name="name" type="string">
+  Event name
+</ResponseField>
+
+<ResponseField name="slug" type="string">
+  URL slug
+</ResponseField>
+
+<ResponseField name="summary" type="string">
+  Short summary
+</ResponseField>
+
+<ResponseField name="description" type="string">
+  Full description (HTML)
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  One of `draft`, `published`, `cancelled`, `completed`
+</ResponseField>
+
+<ResponseField name="event_type" type="string">
+  `in_person` or `online`
+</ResponseField>
+
+<ResponseField name="online_url" type="string">
+  Meeting URL for online events
+</ResponseField>
+
+<ResponseField name="category_id" type="integer">
+  Event category ID, or `null`
+</ResponseField>
+
+<ResponseField name="category" type="object">
+  Category summary (`id`, `name`), or `null`
+</ResponseField>
+
+<ResponseField name="featured_image_id" type="integer">
+  WordPress media attachment ID of the featured image, or `null`
+</ResponseField>
+
+<ResponseField name="featured_image_url" type="string">
+  Featured image URL, or `null`
+</ResponseField>
+
+<ResponseField name="location_text" type="string">
+  Location shown for the event
+</ResponseField>
+
+<ResponseField name="organizer_name" type="string">
+  Organizer shown for the event
+</ResponseField>
+
+<ResponseField name="price" type="number">
+  Price per ticket (`0` = free)
+</ResponseField>
+
+<ResponseField name="formatted_price" type="string">
+  Price formatted with the site currency
+</ResponseField>
+
+<ResponseField name="is_paid" type="boolean">
+  Whether the event is paid
+</ResponseField>
+
+<ResponseField name="charge_per_ticket" type="boolean">
+  Whether the price is multiplied by the number of tickets
+</ResponseField>
+
+<ResponseField name="ask_ticket_quantity" type="boolean">
+  Whether the booking form asks for a ticket quantity
+</ResponseField>
+
+<ResponseField name="start" type="string">
+  Overall start, site timezone
+</ResponseField>
+
+<ResponseField name="end" type="string">
+  Overall end, site timezone
+</ResponseField>
+
+<ResponseField name="start_utc" type="string">
+  Overall start, UTC
+</ResponseField>
+
+<ResponseField name="end_utc" type="string">
+  Overall end, UTC
+</ResponseField>
+
+<ResponseField name="registration_start" type="string">
+  When registration opens, site timezone. `null` = opens immediately
+</ResponseField>
+
+<ResponseField name="registration_end" type="string">
+  When registration closes, site timezone. `null` = closes when the event starts
+</ResponseField>
+
+<ResponseField name="registration_open" type="boolean">
+  Whether registration is currently open
+</ResponseField>
+
+<ResponseField name="capacity" type="object">
+  Capacity summary
+
+  <Expandable title="properties">
+    <ResponseField name="unlimited" type="boolean">
+      `true` when the event has no capacity limit
+    </ResponseField>
+    <ResponseField name="total" type="integer">
+      Total places (`null` when unlimited)
+    </ResponseField>
+    <ResponseField name="booked" type="integer">
+      Places booked
+    </ResponseField>
+    <ResponseField name="available" type="integer">
+      Places left (`null` when unlimited)
+    </ResponseField>
+    <ResponseField name="sold_out" type="boolean">
+      Whether the event is sold out
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="timezone" type="string">
+  Site timezone name
+</ResponseField>
+
+<ResponseField name="order_number" type="integer">
+  Display order
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  Creation timestamp
+</ResponseField>
+
+<ResponseField name="updated_at" type="string">
+  Last update timestamp
+</ResponseField>
+
+<ResponseField name="dates" type="array">
+  Event dates (`id`, `event_id`, `start`, `end`, `start_utc`, `end_utc`). Only included when getting a single event.
+</ResponseField>
+
+<ResponseField name="use_ticket_types" type="boolean">
+  **Pro.** Whether the event sells ticket types. Only present when Ticket Types is enabled.
+</ResponseField>
+
+<ResponseField name="ticket_types" type="array">
+  **Pro.** Ticket types (`id`, `event_id`, `name`, `price`, `formatted_price`, `capacity`, `booked`, `available`, `sold_out`, `status`, `order_number`). A `capacity` or `available` of `null` means unlimited. Only present when Ticket Types is enabled.
+</ResponseField>
+
+<ResponseField name="waiting_list" type="object">
+  **Pro.** Waiting list settings: `enabled`, `capacity` (`null` = unlimited) and `queue_count` (people currently in the queue). Only present when Waiting List is enabled.
+</ResponseField>

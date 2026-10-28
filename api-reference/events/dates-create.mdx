@@ -1,0 +1,65 @@
+---
+title: "Create Event Date"
+api: "POST /wp-json/latepoint-api/v1/events/{id}/dates"
+description: "Add a date to an event."
+---
+
+The event's overall `start` and `end` are recalculated after the date is added.
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the event
+</ParamField>
+
+## Request Body Parameters
+
+<ParamField body="start" type="string" required>
+  Start of the date, `YYYY-MM-DD HH:MM` in the site timezone. See [Dates and times](/api-reference/events/overview#dates-and-times).
+</ParamField>
+
+<ParamField body="end" type="string">
+  End of the date, `YYYY-MM-DD HH:MM` in the site timezone. Must be on or after `start`. Defaults to `start`.
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/2/dates
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "start": "2026-12-07 09:00",
+  "end": "2026-12-07 12:00"
+}
+```
+
+## Response
+
+Returns `201 Created`:
+
+```json
+{
+  "success": true,
+  "message": "Event date created successfully",
+  "data": {
+    "id": 3,
+    "event_id": 2,
+    "start": "2026-12-07 09:00:00",
+    "end": "2026-12-07 12:00:00",
+    "start_utc": "2026-12-07 12:00:00",
+    "end_utc": "2026-12-07 15:00:00"
+  }
+}
+```
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `400` | `invalid_dates` | `start` is missing, or `end` is before `start` |
+| `400` | `invalid_datetime` | A value is not in `YYYY-MM-DD HH:MM` format |
+| `404` | `event_not_found` | The event does not exist |
+| `422` | `save_error` | LatePoint could not save the date |
+| `503` | `feature_disabled` | Events is disabled in LatePoint settings |

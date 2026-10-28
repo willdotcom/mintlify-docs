@@ -1,0 +1,138 @@
+---
+title: "Update Event"
+api: "PUT /wp-json/latepoint-api/v1/events/{id}"
+description: "Update an existing event."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the event to update
+</ParamField>
+
+## Request Body Parameters
+
+All parameters are optional. Only provided fields will be updated; omitted fields and settings keep their current values.
+
+Accepts the same parameters as [Create Event](/api-reference/events/create), including the Pro parameters, except `dates`. To add, change or remove dates use the [Event Dates](/api-reference/events/dates-list) endpoints.
+
+<ParamField body="name" type="string">
+  Event name. Cannot be empty.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Event status. Available values: `draft`, `published`, `cancelled`, `completed`
+</ParamField>
+
+<ParamField body="price" type="number">
+  Price per ticket (`0` = free event)
+</ParamField>
+
+<ParamField body="capacity" type="integer">
+  Maximum number of places. `0` or empty = unlimited.
+</ParamField>
+
+<ParamField body="registration_end" type="string">
+  When registration closes (`YYYY-MM-DD HH:MM`, site timezone). Send `null` to close registration when the event starts.
+</ParamField>
+
+<ParamField body="ticket_types" type="array">
+  **Pro.** Replaces the whole list of ticket types. Include the `id` of every ticket type you want to keep; types left out are deleted if they were never sold, otherwise they are set to `disabled`.
+</ParamField>
+
+<Warning>
+  When you send `ticket_types`, always send the complete list. A partial list removes (or disables) the ticket types you leave out.
+</Warning>
+
+## Example Request
+
+```bash
+PUT /wp-json/latepoint-api/v1/events/2
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "capacity": 12,
+  "registration_end": "2026-12-03 18:00",
+  "ticket_types": [
+    { "id": 1, "name": "General", "price": 20, "capacity": 8 },
+    { "name": "VIP", "price": 40, "capacity": 4 }
+  ]
+}
+```
+
+## Response
+
+Returns the full updated event, including `dates`. See [Get Event](/api-reference/events/get) for the complete object.
+
+```json
+{
+  "success": true,
+  "message": "Event updated successfully",
+  "data": {
+    "id": 2,
+    "name": "Yoga Retreat",
+    "status": "published",
+    "price": 25,
+    "formatted_price": "$25.00",
+    "start": "2026-12-05 09:00:00",
+    "end": "2026-12-06 12:00:00",
+    "start_utc": "2026-12-05 12:00:00",
+    "end_utc": "2026-12-06 15:00:00",
+    "registration_start": null,
+    "registration_end": "2026-12-03 18:00:00",
+    "registration_open": true,
+    "capacity": {
+      "unlimited": false,
+      "total": 12,
+      "booked": 0,
+      "available": 12,
+      "sold_out": false
+    },
+    "timezone": "America/Montevideo",
+    "use_ticket_types": true,
+    "ticket_types": [
+      {
+        "id": 1,
+        "event_id": 2,
+        "name": "General",
+        "price": 20,
+        "formatted_price": "$20.00",
+        "capacity": 8,
+        "booked": 0,
+        "available": 8,
+        "sold_out": false,
+        "status": "active",
+        "order_number": 0
+      },
+      {
+        "id": 2,
+        "event_id": 2,
+        "name": "VIP",
+        "price": 40,
+        "formatted_price": "$40.00",
+        "capacity": 4,
+        "booked": 0,
+        "available": 4,
+        "sold_out": false,
+        "status": "active",
+        "order_number": 1
+      }
+    ]
+  }
+}
+```
+
+<Note>
+  The response above is shortened. The actual response contains every field of the [Event Object](/api-reference/events/overview#event-object).
+</Note>
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `400` | `invalid_field` | `name` is sent empty |
+| `400` | `invalid_status`, `invalid_event_type`, `invalid_datetime`, `invalid_category` | Same validation as [Create Event](/api-reference/events/create) |
+| `404` | `event_not_found` | The event does not exist |
+| `422` | `save_error` | LatePoint could not save the event |
+| `503` | `feature_disabled` | Events is disabled in LatePoint settings |

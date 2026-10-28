@@ -1,0 +1,76 @@
+---
+title: "Invite From Waiting List"
+api: "POST /wp-json/latepoint-api/v1/events/waiting-list/{id}/invite"
+description: "Offer a free place to a customer on the waiting list. Use this for paid events."
+---
+
+<Note>
+  **LatePoint Pro feature.** The waiting list requires LatePoint Pro Features with Waiting List enabled in LatePoint settings. Otherwise this endpoint returns `503` (`feature_not_available` or `feature_disabled`). See [Pro features](/api-reference/events/overview#pro-features).
+</Note>
+
+Inviting offers the place to the customer: LatePoint emails them a link to claim it, and they complete the checkout (and payment) themselves. The invitation expires after 2 days, or when registration for the event closes if that is sooner.
+
+The entry's status becomes `invited`. For free events you can also give the place directly with [Promote From Waiting List](/api-reference/events/waiting-list-promote).
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the waiting list entry
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events/waiting-list/1/invite
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Invitation sent",
+  "data": {
+    "id": 1,
+    "event_id": 3,
+    "customer_id": 40,
+    "customer": {
+      "id": 40,
+      "first_name": "Api",
+      "last_name": "Tester",
+      "full_name": "Api Tester",
+      "email": "api.tester@example.com",
+      "phone": ""
+    },
+    "ticket_type_id": null,
+    "ticket_type_name": null,
+    "quantity": 1,
+    "status": "invited",
+    "status_label": "Invited",
+    "position": 1,
+    "invited_at": "2026-10-28 19:45:00",
+    "invite_expires_at": "2026-10-30 19:45:00",
+    "converted_registration_id": null,
+    "converted_order_id": null,
+    "created_at": "2026-10-28 16:10:05",
+    "updated_at": "2026-10-28 19:45:00"
+  }
+}
+```
+
+## Error Responses
+
+When LatePoint cannot offer the place (the event is still full, registration has closed, the entry is no longer active...), the request fails with `409` and LatePoint's own explanation:
+
+```json
+{
+  "code": "waiting_list_action_failed",
+  "message": "This event is full. Increase the event capacity by at least 1 place, then offer it again.",
+  "data": {
+    "status": 409
+  }
+}
+```
+
+Other errors: `404 waiting_list_entry_not_found`, `503 feature_disabled`.

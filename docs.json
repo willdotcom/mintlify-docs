@@ -115,6 +115,62 @@
             ]
           },
           {
+            "group": "Events",
+            "pages": [
+              "api-reference/events/overview",
+              "api-reference/events/list",
+              "api-reference/events/create",
+              "api-reference/events/get",
+              "api-reference/events/update",
+              "api-reference/events/delete",
+              {
+                "group": "Event Dates",
+                "pages": [
+                  "api-reference/events/dates-list",
+                  "api-reference/events/dates-create",
+                  "api-reference/events/dates-update",
+                  "api-reference/events/dates-delete"
+                ]
+              },
+              {
+                "group": "Event Categories",
+                "pages": [
+                  "api-reference/events/categories-list",
+                  "api-reference/events/categories-create",
+                  "api-reference/events/categories-get",
+                  "api-reference/events/categories-update",
+                  "api-reference/events/categories-delete"
+                ]
+              },
+              {
+                "group": "Registrations",
+                "pages": [
+                  "api-reference/events/registrations-list",
+                  "api-reference/events/registrations-get",
+                  "api-reference/events/registrations-cancel"
+                ]
+              },
+              {
+                "group": "E-Tickets (Pro)",
+                "pages": [
+                  "api-reference/events/tickets-list",
+                  "api-reference/events/tickets-get",
+                  "api-reference/events/tickets-check-in"
+                ]
+              },
+              {
+                "group": "Waiting List (Pro)",
+                "pages": [
+                  "api-reference/events/waiting-list-list",
+                  "api-reference/events/waiting-list-get",
+                  "api-reference/events/waiting-list-invite",
+                  "api-reference/events/waiting-list-promote",
+                  "api-reference/events/waiting-list-remove"
+                ]
+              }
+            ]
+          },
+          {
             "group": "Locations",
             "pages": [
               "api-reference/locations/list",

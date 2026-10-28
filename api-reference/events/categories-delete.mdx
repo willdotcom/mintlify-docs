@@ -1,0 +1,43 @@
+---
+title: "Delete Event Category"
+api: "DELETE /wp-json/latepoint-api/v1/events/categories/{id}"
+description: "Delete an event category. Its events are kept without a category."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the category to delete
+</ParamField>
+
+<Note>
+  Events in the deleted category are not deleted. They are left without a category.
+</Note>
+
+## Example Request
+
+```bash
+DELETE /wp-json/latepoint-api/v1/events/categories/2
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Event category deleted successfully"
+}
+```
+
+## Error Response
+
+```json
+{
+  "code": "event_category_not_found",
+  "message": "Event category not found",
+  "data": {
+    "status": 404
+  }
+}
+```

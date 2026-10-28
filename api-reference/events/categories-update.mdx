@@ -1,0 +1,70 @@
+---
+title: "Update Event Category"
+api: "PUT /wp-json/latepoint-api/v1/events/categories/{id}"
+description: "Update an existing event category."
+---
+
+## Path Parameters
+
+<ParamField path="id" type="integer" required>
+  The ID of the category to update
+</ParamField>
+
+## Request Body Parameters
+
+All parameters are optional. Only provided fields will be updated.
+
+<ParamField body="name" type="string">
+  Category name
+</ParamField>
+
+<ParamField body="short_description" type="string">
+  Brief description of the category
+</ParamField>
+
+<ParamField body="order_number" type="integer">
+  Display order
+</ParamField>
+
+<ParamField body="status" type="string">
+  Category status
+</ParamField>
+
+## Example Request
+
+```bash
+PUT /wp-json/latepoint-api/v1/events/categories/1
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "short_description": "Small-group, hands-on sessions",
+  "order_number": 2
+}
+```
+
+## Response
+
+```json
+{
+  "success": true,
+  "message": "Event category updated successfully",
+  "data": {
+    "id": 1,
+    "name": "Workshops",
+    "short_description": "Small-group, hands-on sessions",
+    "order_number": 2,
+    "status": "active",
+    "created_at": "2026-10-20 14:05:10",
+    "updated_at": "2026-10-28 11:20:03"
+  }
+}
+```
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `404` | `event_category_not_found` | The category does not exist |
+| `422` | `save_error` | LatePoint could not save the category |
+| `503` | `feature_disabled` | Events is disabled in LatePoint settings |

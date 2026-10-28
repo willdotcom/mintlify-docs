@@ -1,0 +1,264 @@
+---
+title: "Create Event"
+api: "POST /wp-json/latepoint-api/v1/events"
+description: "Create a new event, optionally with its dates."
+---
+
+All dates and times in the request are in the site timezone. See [Dates and times](/api-reference/events/overview#dates-and-times).
+
+## Required Parameters
+
+<ParamField body="name" type="string" required>
+  Event name
+</ParamField>
+
+## Optional Parameters
+
+<ParamField body="slug" type="string">
+  URL slug
+</ParamField>
+
+<ParamField body="summary" type="string">
+  Short summary
+</ParamField>
+
+<ParamField body="description" type="string">
+  Full description. HTML is allowed.
+</ParamField>
+
+<ParamField body="status" type="string" default="draft">
+  Event status. Available values: `draft`, `published`, `cancelled`, `completed`
+</ParamField>
+
+<ParamField body="event_type" type="string" default="in_person">
+  Event type. Available values: `in_person`, `online`
+</ParamField>
+
+<ParamField body="online_url" type="string">
+  Meeting URL for online events
+</ParamField>
+
+<ParamField body="category_id" type="integer">
+  Event category ID. Must be an existing [event category](/api-reference/events/categories-list).
+</ParamField>
+
+<ParamField body="featured_image_id" type="integer">
+  WordPress media attachment ID to use as the featured image
+</ParamField>
+
+<ParamField body="price" type="number" default="0">
+  Price per ticket (`0` = free event)
+</ParamField>
+
+<ParamField body="capacity" type="integer" default="0">
+  Maximum number of places. `0` or empty = unlimited. Negative values are saved as `1`.
+</ParamField>
+
+<ParamField body="location_text" type="string">
+  Location shown for the event
+</ParamField>
+
+<ParamField body="organizer_name" type="string">
+  Organizer shown for the event
+</ParamField>
+
+<ParamField body="charge_per_ticket" type="boolean" default="true">
+  Multiply the price by the number of tickets
+</ParamField>
+
+<ParamField body="ask_ticket_quantity" type="boolean" default="true">
+  Ask for a ticket quantity in the booking form
+</ParamField>
+
+<ParamField body="registration_start" type="string">
+  When registration opens (`YYYY-MM-DD HH:MM`). `null` = opens immediately.
+</ParamField>
+
+<ParamField body="registration_end" type="string">
+  When registration closes (`YYYY-MM-DD HH:MM`). `null` = closes when the event starts.
+</ParamField>
+
+<ParamField body="order_number" type="integer">
+  Display order
+</ParamField>
+
+<ParamField body="dates" type="array">
+  Event dates. Each item is an object with:
+  - `start` (required): `YYYY-MM-DD HH:MM`
+  - `end` (optional): `YYYY-MM-DD HH:MM`, must be on or after `start`. Defaults to `start`.
+</ParamField>
+
+## Pro Parameters
+
+<Note>
+  These parameters require **LatePoint Pro Features** and are only applied when the corresponding feature (Ticket Types or Waiting List) is enabled in LatePoint settings. Otherwise they are ignored.
+</Note>
+
+<ParamField body="use_ticket_types" type="boolean">
+  Sell the event through ticket types instead of a single price
+</ParamField>
+
+<ParamField body="ticket_types" type="array">
+  Ticket types, each with `name`, `price` and `capacity` (`0` = unlimited). Send `id` to keep or update an existing ticket type.
+
+  This list **replaces** the event's ticket types: types you leave out are deleted if they were never sold, otherwise they are set to `disabled`.
+</ParamField>
+
+<ParamField body="waiting_list_enabled" type="boolean">
+  Enable the waiting list for the event
+</ParamField>
+
+<ParamField body="waiting_list_capacity" type="integer">
+  Maximum number of people in the waiting list (`0` = unlimited)
+</ParamField>
+
+<ParamField body="waiting_list_capacity_by_type" type="object">
+  Waiting list places per ticket type, as `{ "ticket_type_id": places }`
+</ParamField>
+
+## Example Request
+
+```bash
+POST /wp-json/latepoint-api/v1/events
+Authorization: Bearer YOUR_API_KEY
+Content-Type: application/json
+
+{
+  "name": "Yoga Retreat",
+  "summary": "Two mornings",
+  "status": "published",
+  "event_type": "in_person",
+  "category_id": 1,
+  "price": 25,
+  "capacity": 10,
+  "location_text": "Studio A",
+  "organizer_name": "Ana",
+  "ask_ticket_quantity": false,
+  "registration_end": "2026-12-01 18:00",
+  "dates": [
+    { "start": "2026-12-05 09:00", "end": "2026-12-05 12:00" },
+    { "start": "2026-12-06 09:00", "end": "2026-12-06 12:00" }
+  ],
+  "use_ticket_types": true,
+  "ticket_types": [
+    { "name": "General", "price": 20, "capacity": 8 }
+  ],
+  "waiting_list_enabled": true,
+  "waiting_list_capacity": 5
+}
+```
+
+## Response
+
+Returns `201 Created` with the full event, including `dates`:
+
+```json
+{
+  "success": true,
+  "message": "Event created successfully",
+  "data": {
+    "id": 2,
+    "name": "Yoga Retreat",
+    "slug": "yoga-retreat",
+    "summary": "Two mornings",
+    "description": null,
+    "status": "published",
+    "event_type": "in_person",
+    "online_url": null,
+    "category_id": 1,
+    "category": {
+      "id": 1,
+      "name": "Workshops"
+    },
+    "featured_image_id": null,
+    "featured_image_url": null,
+    "location_text": "Studio A",
+    "organizer_name": "Ana",
+    "price": 25,
+    "formatted_price": "$25.00",
+    "is_paid": true,
+    "charge_per_ticket": true,
+    "ask_ticket_quantity": false,
+    "start": "2026-12-05 09:00:00",
+    "end": "2026-12-06 12:00:00",
+    "start_utc": "2026-12-05 12:00:00",
+    "end_utc": "2026-12-06 15:00:00",
+    "registration_start": null,
+    "registration_end": "2026-12-01 18:00:00",
+    "registration_open": true,
+    "capacity": {
+      "unlimited": false,
+      "total": 10,
+      "booked": 0,
+      "available": 10,
+      "sold_out": false
+    },
+    "timezone": "America/Montevideo",
+    "order_number": 0,
+    "created_at": "2026-10-28 13:05:42",
+    "updated_at": "2026-10-28 13:05:42",
+    "dates": [
+      {
+        "id": 1,
+        "event_id": 2,
+        "start": "2026-12-05 09:00:00",
+        "end": "2026-12-05 12:00:00",
+        "start_utc": "2026-12-05 12:00:00",
+        "end_utc": "2026-12-05 15:00:00"
+      },
+      {
+        "id": 2,
+        "event_id": 2,
+        "start": "2026-12-06 09:00:00",
+        "end": "2026-12-06 12:00:00",
+        "start_utc": "2026-12-06 12:00:00",
+        "end_utc": "2026-12-06 15:00:00"
+      }
+    ],
+    "use_ticket_types": true,
+    "ticket_types": [
+      {
+        "id": 1,
+        "event_id": 2,
+        "name": "General",
+        "price": 20,
+        "formatted_price": "$20.00",
+        "capacity": 8,
+        "booked": 0,
+        "available": 8,
+        "sold_out": false,
+        "status": "active",
+        "order_number": 0
+      }
+    ],
+    "waiting_list": {
+      "enabled": true,
+      "capacity": 5,
+      "queue_count": 0
+    }
+  }
+}
+```
+
+## Error Responses
+
+| Status | Code | Description |
+|--------|------|-------------|
+| `400` | `missing_field` | `name` is missing |
+| `400` | `invalid_status` | `status` is not one of the allowed values |
+| `400` | `invalid_event_type` | `event_type` is not `in_person` or `online` |
+| `400` | `invalid_dates` | `dates` is not an array, a date has no `start`, or `end` is before `start` |
+| `400` | `invalid_datetime` | A date or time is not in `YYYY-MM-DD HH:MM` format |
+| `400` | `invalid_category` | `category_id` does not match an existing event category |
+| `422` | `save_error` | LatePoint could not save the event |
+| `503` | `feature_disabled` | Events is disabled in LatePoint settings |
+
+```json
+{
+  "code": "invalid_dates",
+  "message": "dates[0].end must be on or after its start",
+  "data": {
+    "status": 400
+  }
+}
+```
